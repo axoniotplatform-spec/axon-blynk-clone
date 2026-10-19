@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1039278,
+    "name": "BLINKING LED",
+    "token": "yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk",
+    "status": "Inactive",
+    "orgId": 334762,
+    "orgName": "My organization - 2257TU",
+    "ownerEmail": "samblynkk@gmail.com",
+    "ownerName": "Sam",
+    "templateId": "TMPL2yjltoB57",
+    "templateName": "BLINKING LED",
+    "firmwareVersion": "0.0.0",
+    "libraryVersion": "1.3.5",
+    "lastReportedAt": 1782310892000,
+    "lastConnectedAt": 1782310846214,
+    "activatedAt": 1782302154635
+  }
+]

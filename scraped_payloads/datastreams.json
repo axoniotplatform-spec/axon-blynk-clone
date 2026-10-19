@@ -1,0 +1,19 @@
+[
+  {
+    "id": 1,
+    "name": "LED CONTROL",
+    "pin": 0,
+    "pinType": "VIRTUAL",
+    "type": "INT",
+    "units": "None",
+    "min": 0,
+    "max": 1,
+    "step": 1,
+    "defaultValue": "0",
+    "value": "0",
+    "color": "#b2d9af",
+    "isSmartUnitScalingEnabled": false,
+    "aggregationFunctionType": "AVG",
+    "valueUpdatedAt": 1782310892000
+  }
+]

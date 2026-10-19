@@ -1,0 +1,76 @@
+{
+  "id": 1039278,
+  "name": "BLINKING LED",
+  "token": "yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk",
+  "status": "OFFLINE",
+  "lifecycleStatus": {
+    "name": "Inactive",
+    "type": "CUSTOM_1",
+    "color": "#ababad",
+    "icon": "e8ba"
+  },
+  "orgId": 334762,
+  "orgName": "My organization - 2257TU",
+  "ownerId": 433909,
+  "ownerEmail": "samblynkk@gmail.com",
+  "ownerName": "Sam",
+  "productId": 742615,
+  "productName": "BLINKING LED",
+  "templateId": "TMPL2yjltoB57",
+  "connectionType": "WI_FI",
+  "protocol": -1,
+  "color": 0,
+  "iconName": "e874",
+  "hardwareInfo": {
+    "blynkVersion": "1.3.5",
+    "boardType": "Other",
+    "build": "Jun 24 2026 12:44:15",
+    "fwType": "TMPL2yjltoB57",
+    "heartbeatInterval": 40,
+    "templateId": "TMPL2yjltoB57",
+    "type": "MCU",
+    "version": "0.0.0",
+    "buffIn": 1024
+  },
+  "ipInfo": {
+    "country": "United States",
+    "isoStateCode": "CA",
+    "ip": "216.246.100.113",
+    "lat": 37.3388,
+    "lon": -121.8916
+  },
+  "metaFields": [
+    {
+      "id": 1,
+      "name": "Device Name",
+      "type": "DeviceName",
+      "value": "BLINKING LED",
+      "isMandatory": true,
+      "isDefault": true,
+      "icon": "e874"
+    },
+    {
+      "id": 2,
+      "name": "Device Owner",
+      "type": "DeviceOwner",
+      "value": "samblynkk@gmail.com",
+      "userId": 433909,
+      "isMandatory": true,
+      "isDefault": true,
+      "icon": "e71e"
+    },
+    {
+      "id": 3,
+      "name": "Hotspot Name",
+      "type": "HotspotName",
+      "isMandatory": false,
+      "isDefault": true,
+      "icon": "e8b7"
+    }
+  ],
+  "activatedAt": 1782302154635,
+  "connectTime": 1782310846214,
+  "disconnectTime": 1782310906214,
+  "lastReportedAt": 1782310892000,
+  "tz": "Africa/Lagos"
+}

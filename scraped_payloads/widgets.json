@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "type": "WEB_STYLED_BUTTON",
+    "label": " LED CONTROL",
+    "x": 1,
+    "y": 0,
+    "width": 4,
+    "height": 1,
+    "style": "SOLID",
+    "edge": "ROUNDED",
+    "fontSize": "MEDIUM",
+    "iconStyle": "NONE",
+    "lockSize": true,
+    "pushMode": false,
+    "isDisabled": false,
+    "isHidden": false,
+    "onButtonState": {
+      "text": "ON",
+      "textColor": "#fe0f00",
+      "backgroundColor": "#0375de",
+      "icon": "cube"
+    },
+    "offButtonState": {
+      "text": "OFF",
+      "textColor": "#10f17f",
+      "backgroundColor": "#fe0f00",
+      "icon": "cube"
+    },
+    "sources": [
+      {
+        "alias": " LED CONTROL",
+        "label": "BLINKING LED",
+        "override": false,
+        "autoscale": false,
+        "enableYAxis": false,
+        "dataStreamId": 1,
+        "dataStream": {
+          "id": 1,
+          "name": "LED CONTROL",
+          "pin": 0,
+          "pinType": "VIRTUAL",
+          "type": "INT",
+          "units": "None",
+          "min": 0,
+          "max": 1,
+          "step": 1,
+          "defaultValue": "0",
+          "value": "0",
+          "color": "#b2d9af",
+          "isSmartUnitScalingEnabled": false,
+          "aggregationFunctionType": "AVG",
+          "valueUpdatedAt": 1782310892000
+        }
+      }
+    ]
+  }
+]

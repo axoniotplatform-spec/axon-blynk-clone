@@ -1,0 +1,186 @@
+// ==============================================================================
+// Axon IoT Platform - Prisma ORM Schema
+// Models exact 1:1 relational topology of Blynk Cloud IoT Engine
+// ==============================================================================
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum PinType {
+  VIRTUAL
+  DIGITAL
+  ANALOG
+}
+
+enum DataType {
+  INT
+  DOUBLE
+  STRING
+  ENUM
+}
+
+enum DeviceStatus {
+  ONLINE
+  OFFLINE
+  INACTIVE
+}
+
+model Organization {
+  id              BigInt           @id
+  name            String
+  parentId        BigInt?
+  timezone        String           @default("UTC")
+  planTier        String           @default("FREE")
+  primaryColor    String           @default("#0375de")
+  secondaryColor  String           @default("#979282")
+  logoUrl         String?
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+
+  users           User[]
+  deviceTemplates DeviceTemplate[]
+  devices         Device[]
+
+  @@map("organizations")
+}
+
+model User {
+  id             BigInt        @id
+  organizationId BigInt
+  email          String        @unique
+  name           String?
+  role           String        @default("Admin")
+  isActive       Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  devices        Device[]
+
+  @@map("users")
+}
+
+model DeviceTemplate {
+  id             String        @id
+  organizationId BigInt
+  name           String
+  hardwareType   String        @default("MCU")
+  connectionType String        @default("WI_FI")
+  iconName       String        @default("e874")
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  organization   Organization  @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  devices        Device[]
+
+  @@map("device_templates")
+}
+
+model Device {
+  id                BigInt            @id
+  organizationId    BigInt
+  ownerId           BigInt?
+  templateId        String?
+  name              String
+  authToken         String            @unique
+  status            DeviceStatus      @default(OFFLINE)
+  connectionType    String            @default("WI_FI")
+  ipAddress         String?
+  country           String?
+  latitude          Decimal?          @db.Decimal(9, 6)
+  longitude         Decimal?          @db.Decimal(9, 6)
+  firmwareVersion   String            @default("0.0.0")
+  libraryVersion    String            @default("1.3.5")
+  heartbeatInterval Int               @default(40)
+  activatedAt       DateTime?
+  lastReportedAt    DateTime?
+  lastConnectedAt   DateTime?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  organization      Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  owner             User?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  template          DeviceTemplate?   @relation(fields: [templateId], references: [id], onDelete: SetNull)
+  datastreams       Datastream[]
+  widgets           Widget[]
+  telemetry         TelemetryTimeSeries[]
+
+  @@index([organizationId])
+  @@index([authToken])
+  @@map("devices")
+}
+
+model Datastream {
+  id                      BigInt               @id
+  deviceId                BigInt
+  pin                     Int
+  pinType                 PinType              @default(VIRTUAL)
+  name                    String
+  dataType                DataType             @default(INT)
+  units                   String               @default("None")
+  minValue                Decimal              @default(0) @db.Decimal(12, 4)
+  maxValue                Decimal              @default(1) @db.Decimal(12, 4)
+  stepValue               Decimal              @default(1) @db.Decimal(12, 4)
+  defaultValue            String               @default("0")
+  currentValue            String               @default("0")
+  color                   String               @default("#b2d9af")
+  aggregationType         String               @default("AVG")
+  valueUpdatedAt          DateTime             @default(now())
+
+  device                  Device               @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  widgets                 Widget[]
+  telemetry               TelemetryTimeSeries[]
+
+  @@unique([deviceId, pin, pinType])
+  @@index([deviceId])
+  @@map("datastreams")
+}
+
+model Widget {
+  id              BigInt       @id
+  deviceId        BigInt
+  datastreamId    BigInt?
+  type            String
+  label           String?
+  posX            Int          @default(0)
+  posY            Int          @default(0)
+  width           Int          @default(4)
+  height          Int          @default(1)
+  style           String       @default("SOLID")
+  edge            String       @default("ROUNDED")
+  fontSize        String       @default("MEDIUM")
+  onButtonState   Json?
+  offButtonState  Json?
+  configJson      Json?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  device          Device       @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  datastream      Datastream?  @relation(fields: [datastreamId], references: [id], onDelete: SetNull)
+
+  @@index([deviceId])
+  @@map("widgets")
+}
+
+model TelemetryTimeSeries {
+  id            BigInt      @id @default(autoincrement())
+  deviceId      BigInt
+  datastreamId  BigInt
+  pin           Int
+  valueNumeric  Decimal?    @db.Decimal(16, 6)
+  valueString   String?
+  recordedAt    DateTime    @default(now())
+
+  device        Device      @relation(fields: [deviceId], references: [id], onDelete: Cascade)
+  datastream    Datastream  @relation(fields: [datastreamId], references: [id], onDelete: Cascade)
+
+  @@index([deviceId, recordedAt(sort: Desc)])
+  @@index([deviceId, pin, recordedAt(sort: Desc)])
+  @@map("telemetry_time_series")
+}
