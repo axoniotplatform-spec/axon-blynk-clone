@@ -541,3 +541,78 @@ body {
 .app-footer a:hover {
   color: var(--text-main);
 }
+
+/* Subtabs Navigation (Template Details) */
+.subtabs-bar {
+  display: flex;
+  gap: 28px;
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+}
+
+.subtab-item {
+  padding: 10px 0;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-secondary);
+  cursor: pointer;
+  position: relative;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.subtab-item:hover {
+  color: var(--text-main);
+}
+
+.subtab-item.active {
+  color: var(--text-main);
+  border-bottom-color: #000000;
+}
+
+/* Template Code Snippet Box */
+.code-box {
+  background: #0d1117;
+  color: #c9d1d9;
+  border-radius: 8px;
+  padding: 16px;
+  font-family: monospace;
+  font-size: 12.5px;
+  position: relative;
+  overflow-x: auto;
+  line-height: 1.6;
+}
+
+/* Widget Box Drawer */
+.widget-box-palette {
+  width: 260px;
+  background: var(--bg-white);
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.widget-box-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  background: #f8fafd;
+  border: 1px solid var(--border-light);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: grab;
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.widget-box-item:hover {
+  border-color: #0375de;
+  background: #ffffff;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+}

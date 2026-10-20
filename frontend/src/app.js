@@ -59,9 +59,10 @@ function renderWidgets(widgets, datastreams) {
     card.style.flexDirection = "column";
     card.style.gridColumn = `span ${w.grid?.w || 4}`;
 
+    const wType = w.widgetType || w.type;
     let widgetContent = "";
 
-    if (w.widgetType === "WEB_STYLED_BUTTON") {
+    if (wType === "WEB_STYLED_BUTTON") {
       const isOn = String(w.currentValue) === "1";
       widgetContent = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -75,7 +76,7 @@ function renderWidgets(widgets, datastreams) {
           </button>
         </div>
       `;
-    } else if (w.widgetType === "SLIDER") {
+    } else if (wType === "SLIDER") {
       const min = w.settings?.min ?? 0;
       const max = w.settings?.max ?? 255;
       const step = w.settings?.step ?? 1;
@@ -93,7 +94,7 @@ function renderWidgets(widgets, datastreams) {
                  oninput="onSliderChange('${w.pin}', this.value)" />
         </div>
       `;
-    } else if (w.widgetType === "GAUGE") {
+    } else if (wType === "GAUGE") {
       const units = w.settings?.units || "°C";
       const val = parseFloat(w.currentValue) || 28.4;
       const percent = Math.min(Math.max((val + 20) / 120, 0), 1);
@@ -116,7 +117,7 @@ function renderWidgets(widgets, datastreams) {
           </div>
         </div>
       `;
-    } else if (w.widgetType === "SWITCH") {
+    } else if (wType === "SWITCH") {
       const isOn = String(w.currentValue) === "1";
       widgetContent = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -133,7 +134,7 @@ function renderWidgets(widgets, datastreams) {
           <span id="switch-lbl-${w.pin}" style="font-weight:700;font-size:14px;color:${isOn ? '#10f17f' : '#8b98a5'};">${isOn ? 'ON' : 'OFF'}</span>
         </div>
       `;
-    } else if (w.widgetType === "NUMBER_INPUT") {
+    } else if (wType === "NUMBER_INPUT") {
       const val = parseFloat(w.currentValue) || 24.0;
       const step = w.settings?.step || 0.5;
       widgetContent = `
@@ -147,7 +148,7 @@ function renderWidgets(widgets, datastreams) {
           <button onclick="stepNumber('${w.pin}', ${step})" style="width:36px;height:36px;border-radius:6px;border:1px solid #d0d7de;background:#fff;font-size:18px;cursor:pointer;font-weight:700;">+</button>
         </div>
       `;
-    } else if (w.widgetType === "RADIAL_GAUGE") {
+    } else if (wType === "RADIAL_GAUGE") {
       const val = parseInt(w.currentValue) || 62;
       const offset = 180 - (val / 100 * 180);
       widgetContent = `
@@ -167,7 +168,7 @@ function renderWidgets(widgets, datastreams) {
           </div>
         </div>
       `;
-    } else if (w.widgetType === "LED") {
+    } else if (wType === "LED") {
       const isOn = String(w.currentValue) === "1";
       widgetContent = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
@@ -179,7 +180,7 @@ function renderWidgets(widgets, datastreams) {
           <span id="led-status-${w.pin}" style="font-size:12px;font-weight:700;color:${isOn ? '#fe0f00' : '#8b98a5'};">${isOn ? 'ALARM ACTIVE' : 'NORMAL'}</span>
         </div>
       `;
-    } else if (w.widgetType === "SUPERGRAPH") {
+    } else if (wType === "SUPERGRAPH") {
       widgetContent = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
           <div>
@@ -200,7 +201,7 @@ function renderWidgets(widgets, datastreams) {
           <canvas id="supergraph-canvas" style="width:100%;height:100%;"></canvas>
         </div>
       `;
-    } else if (w.widgetType === "TERMINAL") {
+    } else if (wType === "TERMINAL") {
       widgetContent = `
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
           <span style="font-weight:600;font-size:13.5px;color:var(--text-main);">${w.label}</span>

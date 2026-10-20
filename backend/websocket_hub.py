@@ -92,6 +92,7 @@ class ShellBridgeHub:
                                 {
                                     "id": w.id,
                                     "type": w.widget_type,
+                                    "widgetType": w.widget_type,
                                     "label": w.label,
                                     "pin": w.pin,
                                     "currentValue": ds_map.get(w.pin, "0"),

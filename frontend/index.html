@@ -203,37 +203,209 @@
 
       <!-- TAB 3: DEVELOPER ZONE (TEMPLATES) -->
       <section id="pane-developer-zone" class="tab-pane">
-        <div class="view-header">
-          <h1 class="view-title">Templates</h1>
-          <button class="btn-blynk-primary" onclick="alert('Creating template...')">+ New Template</button>
+        <!-- List View -->
+        <div id="template-list-view">
+          <div class="view-header">
+            <h1 class="view-title">Templates</h1>
+            <button class="btn-blynk-primary" onclick="alert('Creating new template...')">+ New Template</button>
+          </div>
+
+          <div class="template-grid">
+            <div class="template-card" onclick="openTemplateDetail(1)">
+              <div class="template-card-header">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
+              </div>
+              <div class="template-card-body">
+                <div>
+                  <div>BLINKING LED</div>
+                  <div class="template-card-sub">1 Device • ESP32</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+
+            <div class="template-card" onclick="openTemplateDetail(2)">
+              <div class="template-card-header">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
+              </div>
+              <div class="template-card-body">
+                <div>
+                  <div>test</div>
+                  <div class="template-card-sub">No devices • ESP8266</div>
+                </div>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <div class="template-grid">
-          <div class="template-card" onclick="switchTab('dashboards')">
-            <div class="template-card-header">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
+        <!-- Template Detail View -->
+        <div id="template-detail-view" style="display: none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button class="filter-btn" onclick="closeTemplateDetail()">← Back to Templates</button>
+              <h2 id="tmpl-detail-name" style="font-size:20px; font-weight:700; margin:0;">BLINKING LED</h2>
+              <span id="tmpl-detail-id" style="font-family:monospace; font-size:12px; background:#f0f2f5; padding:3px 8px; border-radius:4px;">TMPL2yjltoB57</span>
+              <span style="font-size:12px; font-weight:600; padding:3px 8px; border-radius:4px; background:#eef2ff; color:#4f46e5;">ESP32</span>
             </div>
-            <div class="template-card-body">
-              <div>
-                <div>BLINKING LED</div>
-                <div class="template-card-sub">1 Device • ESP32</div>
-              </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            <div style="display:flex; gap:10px;">
+              <button class="btn-blynk-primary" onclick="openNewDatastreamModal()">+ New Datastream</button>
             </div>
           </div>
 
-          <div class="template-card">
-            <div class="template-card-header">
-              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
-            </div>
-            <div class="template-card-body">
-              <div>
-                <div>test</div>
-                <div class="template-card-sub">No devices • ESP8266</div>
+          <!-- Subtabs Bar -->
+          <div class="subtabs-bar">
+            <div class="subtab-item active" onclick="switchTemplateSubTab('home', this)">Home</div>
+            <div class="subtab-item" onclick="switchTemplateSubTab('datastreams', this)">Datastreams</div>
+            <div class="subtab-item" onclick="switchTemplateSubTab('web-dashboard', this)">Web Dashboard</div>
+            <div class="subtab-item" onclick="switchTemplateSubTab('metadata', this)">Metadata</div>
+          </div>
+
+          <!-- Subtab 1: Home -->
+          <div id="tmpl-subpane-home" class="tmpl-subpane">
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+              <div class="table-card" style="padding:24px;">
+                <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Template Configuration</h3>
+                <div style="display:flex; flex-direction:column; gap:14px; font-size:13.5px;">
+                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                    <span style="color:var(--text-muted);">Hardware MCU</span>
+                    <span style="font-weight:600;">ESP32 (Wi-Fi)</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                    <span style="color:var(--text-muted);">Connection Type</span>
+                    <span style="font-weight:600;">Wi-Fi</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                    <span style="color:var(--text-muted);">Firmware Auth</span>
+                    <span style="font-weight:600;">Device Auth Token</span>
+                  </div>
+                  <div style="display:flex; justify-content:space-between;">
+                    <span style="color:var(--text-muted);">Data Retention</span>
+                    <span style="font-weight:600;">3 Months (High-Res 1s)</span>
+                  </div>
+                </div>
               </div>
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+
+              <div class="table-card" style="padding:24px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                  <h3 style="font-size:16px; font-weight:700; margin:0;">Firmware Configuration</h3>
+                  <button class="filter-btn" style="padding:4px 10px; font-size:11.5px;" onclick="navigator.clipboard.writeText(document.getElementById('firmware-snippet').innerText); alert('Copied to clipboard!');">Copy Code</button>
+                </div>
+                <pre id="firmware-snippet" class="code-box"><code>#define BLYNK_TEMPLATE_ID "TMPL2yjltoB57"
+#define BLYNK_TEMPLATE_NAME "BLINKING LED"
+#define BLYNK_AUTH_TOKEN "yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk"
+
+#define BLYNK_PRINT Serial
+#include &lt;WiFi.h&gt;
+#include &lt;BlynkSimpleEsp32.h&gt;
+
+char auth[] = BLYNK_AUTH_TOKEN;
+char ssid[] = "YourNetworkName";
+char pass[] = "YourPassword";
+
+void setup() {
+  Serial.begin(115200);
+  Blynk.begin(auth, ssid, pass);
+}
+
+void loop() {
+  Blynk.run();
+}</code></pre>
+              </div>
             </div>
           </div>
+
+          <!-- Subtab 2: Datastreams -->
+          <div id="tmpl-subpane-datastreams" class="tmpl-subpane" style="display:none;">
+            <div class="table-card">
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>PIN</th>
+                    <th>NAME</th>
+                    <th>DATA TYPE</th>
+                    <th>MIN</th>
+                    <th>MAX</th>
+                    <th>STEP</th>
+                    <th>UNITS</th>
+                    <th>COLOR</th>
+                  </tr>
+                </thead>
+                <tbody id="datastreams-table-body">
+                  <!-- Populated dynamically -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Subtab 3: Web Dashboard -->
+          <div id="tmpl-subpane-web-dashboard" class="tmpl-subpane" style="display:none;">
+            <div style="display:flex; gap:20px;">
+              <!-- Widget Box -->
+              <div class="widget-box-palette">
+                <div style="font-size:13px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Widget Box</div>
+                <div class="widget-box-item">🔘 Button</div>
+                <div class="widget-box-item">🎚️ Slider</div>
+                <div class="widget-box-item">🔌 Switch</div>
+                <div class="widget-box-item">⏲️ Gauge</div>
+                <div class="widget-box-item">⭕ Radial Gauge</div>
+                <div class="widget-box-item">🔢 Number Input</div>
+                <div class="widget-box-item">🚨 LED Indicator</div>
+                <div class="widget-box-item">📈 SuperGraph</div>
+                <div class="widget-box-item">💻 Terminal</div>
+                <div class="widget-box-item">📍 GPS Map</div>
+                <div class="widget-box-item">📊 Value Display</div>
+              </div>
+
+              <!-- Dashboard Canvas Preview -->
+              <div style="flex:1;">
+                <div style="background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:24px; min-height:400px;">
+                  <div style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--text-muted);">Canvas Preview (Active Widgets on Template)</div>
+                  <div class="widget-grid" id="template-widget-preview-grid">
+                    <!-- Cloned from active widgets -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtab 4: Metadata -->
+          <div id="tmpl-subpane-metadata" class="tmpl-subpane" style="display:none;">
+            <div class="table-card" style="padding:24px;">
+              <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Device Metadata Fields</h3>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>FIELD NAME</th>
+                    <th>TYPE</th>
+                    <th>DEFAULT VALUE</th>
+                    <th>EDITABLE BY USER</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:600;">Device Location</td>
+                    <td>STRING</td>
+                    <td>Factory Floor Unit 1</td>
+                    <td>Yes</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:600;">Firmware Version</td>
+                    <td>STRING</td>
+                    <td>v1.0.4-prod</td>
+                    <td>No</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:600;">Hardware Serial</td>
+                    <td>STRING</td>
+                    <td>AXN-ESP32-88219</td>
+                    <td>No</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </section>
 
@@ -241,29 +413,51 @@
       <section id="pane-automations" class="tab-pane">
         <div class="view-header">
           <h1 class="view-title">Automations</h1>
-          <button class="btn-blynk-primary">+ Create Automation</button>
+          <button class="btn-blynk-primary" onclick="openNewAutomationModal()">+ Create Automation</button>
         </div>
 
-        <div style="background:#fff;border:1px solid var(--border-color);border-radius:8px;padding:32px;max-width:800px;">
-          <h3 style="font-size:18px;margin-bottom:8px;">Choose Condition</h3>
-          <p style="color:var(--text-muted);font-size:13px;margin-bottom:24px;">Automations let you set up actions that start when a certain trigger happens.</p>
+        <div class="table-card" style="margin-bottom: 24px;">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>NAME</th>
+                <th>TRIGGER / CONDITION</th>
+                <th>ACTION</th>
+                <th>STATUS</th>
+                <th>LAST TRIGGERED</th>
+              </tr>
+            </thead>
+            <tbody id="automations-table-body">
+              <tr>
+                <td style="font-weight:600;">High Temp Cooling Trigger</td>
+                <td>When Temperature (V2) &gt; 30 °C</td>
+                <td>Turn Fan Relay (V3) ON</td>
+                <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                <td>Today at 10:14 AM</td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">Daily System Diagnostic</td>
+                <td>Schedule: Everyday at 08:00 AM</td>
+                <td>Log Status to Terminal (V7)</td>
+                <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                <td>Yesterday at 08:00 AM</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:8px;padding:24px;">
+          <h3 style="font-size:16px;margin-bottom:6px;font-weight:700;">Automation Triggers Palette</h3>
+          <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">Automations execute actions on physical hardware or send alerts when event conditions are satisfied.</p>
           
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
-              <h4 style="font-size:14px;margin-bottom:4px;">⏱️ Schedule</h4>
-              <p style="font-size:12px;color:var(--text-muted);">Automation will start at a specific time of day.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:14px;cursor:pointer;" onclick="openNewAutomationModal()">
+              <h4 style="font-size:13.5px;margin-bottom:4px;">⏱️ Schedule Trigger</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Automation will start at a specific time of day or recurring cron pattern.</p>
             </div>
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
-              <h4 style="font-size:14px;margin-bottom:4px;">⚡ Device State</h4>
-              <p style="font-size:12px;color:var(--text-muted);">Trigger automation by a certain state of the device.</p>
-            </div>
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
-              <h4 style="font-size:14px;margin-bottom:4px;">🌅 Sunset/Sunrise</h4>
-              <p style="font-size:12px;color:var(--text-muted);">Automation will start based on the sun position.</p>
-            </div>
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
-              <h4 style="font-size:14px;margin-bottom:4px;">🎬 Scene</h4>
-              <p style="font-size:12px;color:var(--text-muted);">Trigger automation manually with one tap.</p>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:14px;cursor:pointer;" onclick="openNewAutomationModal()">
+              <h4 style="font-size:13.5px;margin-bottom:4px;">⚡ Device State Condition</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger automation when datastream crosses threshold (e.g. Temp &gt; 30°C).</p>
             </div>
           </div>
         </div>
@@ -388,6 +582,219 @@
       rows.forEach(r => {
         r.style.display = r.innerText.toLowerCase().includes(query) ? '' : 'none';
       });
+    }
+  </script>
+  <!-- New Datastream Modal Dialog -->
+  <div id="new-datastream-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">New Datastream</h3>
+        <button onclick="closeNewDatastreamModal()" style="border:none;background:none;cursor:pointer;font-size:18px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" id="ds-modal-name" class="form-input" value="Soil Moisture" />
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label">Pin</label>
+            <input type="text" id="ds-modal-pin" class="form-input" value="V9" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Data Type</label>
+            <select id="ds-modal-type" class="form-input">
+              <option value="INTEGER">Integer</option>
+              <option value="DOUBLE">Double</option>
+              <option value="STRING">String</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:12px;">
+          <div class="form-group">
+            <label class="form-label">Min</label>
+            <input type="number" id="ds-modal-min" class="form-input" value="0" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Max</label>
+            <input type="number" id="ds-modal-max" class="form-input" value="100" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Units</label>
+            <input type="text" id="ds-modal-units" class="form-input" value="%" />
+          </div>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button class="filter-btn" onclick="closeNewDatastreamModal()">Cancel</button>
+        <button class="btn-blynk-primary" onclick="confirmCreateDatastream()">Create Datastream</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Automation Modal Dialog -->
+  <div id="new-automation-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Create Automation Rule</h3>
+        <button onclick="closeNewAutomationModal()" style="border:none;background:none;cursor:pointer;font-size:18px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Automation Name</label>
+          <input type="text" id="auto-name-input" class="form-input" value="High Temp Fan Trigger" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Trigger Condition</label>
+          <select id="auto-condition-input" class="form-input">
+            <option value="When Temperature (V2) &gt; 30 °C">When Temperature (V2) &gt; 30 °C</option>
+            <option value="When Alarm State (V6) == 1">When Alarm State (V6) == 1</option>
+            <option value="Schedule: Everyday at 08:00 AM">Schedule: Everyday at 08:00 AM</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Action</label>
+          <select id="auto-action-input" class="form-input">
+            <option value="Turn Fan Relay (V3) ON">Turn Fan Relay (V3) ON</option>
+            <option value="Send Push Alert Notification">Send Push Alert Notification</option>
+            <option value="Set System Alarm LED (V6) to 1">Set System Alarm LED (V6) to 1</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button class="filter-btn" onclick="closeNewAutomationModal()">Cancel</button>
+        <button class="btn-blynk-primary" onclick="confirmCreateAutomation()">Save Automation</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let activeTemplateId = 1;
+
+    function openTemplateDetail(templateId) {
+      activeTemplateId = templateId;
+      document.getElementById('template-list-view').style.display = 'none';
+      document.getElementById('template-detail-view').style.display = 'block';
+      loadDatastreamsTable(templateId);
+    }
+
+    function closeTemplateDetail() {
+      document.getElementById('template-detail-view').style.display = 'none';
+      document.getElementById('template-list-view').style.display = 'block';
+    }
+
+    function switchTemplateSubTab(subTabName, el) {
+      document.querySelectorAll('.subtab-item').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.tmpl-subpane').forEach(pane => pane.style.display = 'none');
+      if (el) el.classList.add('active');
+
+      const targetPane = document.getElementById(`tmpl-subpane-${subTabName}`);
+      if (targetPane) targetPane.style.display = 'block';
+
+      if (subTabName === 'web-dashboard') {
+        const preview = document.getElementById('template-widget-preview-grid');
+        const mainGrid = document.getElementById('widget-canvas');
+        if (preview && mainGrid) {
+          preview.innerHTML = mainGrid.innerHTML;
+        }
+      }
+    }
+
+    async function loadDatastreamsTable(templateId) {
+      try {
+        const res = await fetch(`/api/v1/templates/${templateId}`);
+        const data = await res.json();
+        const tbody = document.getElementById('datastreams-table-body');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        data.datastreams.forEach(ds => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+            <td style="font-family:monospace;font-weight:700;color:#0375de;">${ds.pin}</td>
+            <td style="font-weight:600;">${ds.name}</td>
+            <td><span style="padding:2px 8px;border-radius:4px;background:#f0f2f5;font-size:11.5px;font-family:monospace;">${ds.dataType}</span></td>
+            <td>${ds.min}</td>
+            <td>${ds.max}</td>
+            <td>${ds.step}</td>
+            <td>${ds.units || '-'}</td>
+            <td><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:${ds.color};"></span></td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (e) {
+        console.error('Error loading datastreams:', e);
+      }
+    }
+
+    function openNewDatastreamModal() {
+      document.getElementById('new-datastream-modal').classList.add('open');
+    }
+
+    function closeNewDatastreamModal() {
+      document.getElementById('new-datastream-modal').classList.remove('open');
+    }
+
+    async function confirmCreateDatastream() {
+      const name = document.getElementById('ds-modal-name').value;
+      const pin = document.getElementById('ds-modal-pin').value;
+      const dataType = document.getElementById('ds-modal-type').value;
+      const min = parseFloat(document.getElementById('ds-modal-min').value) || 0;
+      const max = parseFloat(document.getElementById('ds-modal-max').value) || 100;
+      const units = document.getElementById('ds-modal-units').value;
+
+      try {
+        const res = await fetch(`/api/v1/templates/${activeTemplateId}/datastreams`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            pin: pin,
+            name: name,
+            data_type: dataType,
+            min_value: min,
+            max_value: max,
+            step: 1.0,
+            default_value: "0",
+            units: units,
+            color_hex: "#0375de"
+          })
+        });
+        if (res.ok) {
+          closeNewDatastreamModal();
+          loadDatastreamsTable(activeTemplateId);
+        } else {
+          alert('Error adding datastream');
+        }
+      } catch (err) {
+        console.error('Failed to create datastream:', err);
+      }
+    }
+
+    function openNewAutomationModal() {
+      document.getElementById('new-automation-modal').classList.add('open');
+    }
+
+    function closeNewAutomationModal() {
+      document.getElementById('new-automation-modal').classList.remove('open');
+    }
+
+    function confirmCreateAutomation() {
+      const name = document.getElementById('auto-name-input').value;
+      const cond = document.getElementById('auto-condition-input').value;
+      const act = document.getElementById('auto-action-input').value;
+
+      const tbody = document.getElementById('automations-table-body');
+      if (tbody) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td style="font-weight:600;">${name}</td>
+          <td>${cond}</td>
+          <td>${act}</td>
+          <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+          <td>Just now</td>
+        `;
+        tbody.prepend(tr);
+      }
+      closeNewAutomationModal();
     }
   </script>
 </body>
