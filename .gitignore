@@ -2,11 +2,13 @@
 __pycache__/
 *.pyc
 *.db
+*.log
+server.log
+server_err.log
 axon_iot.db
 tools/
 apk_raw/
 apk_decompiled/sources/
 apk_decompiled/raw_base/
 web_extracted/chunks/
-
 web_extracted/*.js

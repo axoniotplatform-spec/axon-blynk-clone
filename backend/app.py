@@ -43,7 +43,7 @@ async def websocket_endpoint(websocket: WebSocket):
     except Exception as e:
         hub.disconnect(websocket)
 
-# Seed initial database from captured Blynk payloads if empty
+# Seed initial database with full widget suite and datastreams
 def seed_database():
     db = SessionLocal()
     try:
@@ -92,119 +92,139 @@ def seed_database():
             )
             db.add(dev)
 
+            # Datastreams V0 to V8
             ds_v0 = Datastream(
-                template_id=tmpl.id,
-                pin="V0",
-                name="BLINKING LED",
-                data_type="INTEGER",
-                pin_type="VIRTUAL",
-                min_value=0.0,
-                max_value=1.0,
-                step=1.0,
-                default_value="0",
-                current_value="0",
-                units="",
-                color_hex="#0375de",
-                aggregation="AVG"
+                template_id=tmpl.id, pin="V0", name="BLINKING LED",
+                data_type="INTEGER", pin_type="VIRTUAL",
+                min_value=0.0, max_value=1.0, step=1.0,
+                default_value="0", current_value="0", units="", color_hex="#0375de"
             )
             db.add(ds_v0)
 
-            # Add extra standard datastreams for demonstration
             ds_v1 = Datastream(
-                template_id=tmpl.id,
-                pin="V1",
-                name="LED Brightness",
-                data_type="INTEGER",
-                pin_type="VIRTUAL",
-                min_value=0.0,
-                max_value=255.0,
-                step=5.0,
-                default_value="128",
-                current_value="128",
-                units="",
-                color_hex="#10f17f"
+                template_id=tmpl.id, pin="V1", name="LED Brightness",
+                data_type="INTEGER", pin_type="VIRTUAL",
+                min_value=0.0, max_value=255.0, step=5.0,
+                default_value="128", current_value="128", units="", color_hex="#10f17f"
             )
             db.add(ds_v1)
 
             ds_v2 = Datastream(
-                template_id=tmpl.id,
-                pin="V2",
-                name="Temperature",
-                data_type="DOUBLE",
-                pin_type="VIRTUAL",
-                min_value=-20.0,
-                max_value=100.0,
-                step=0.1,
-                default_value="28.4",
-                current_value="28.4",
-                units="°C",
-                color_hex="#e0ff7b"
+                template_id=tmpl.id, pin="V2", name="Temperature",
+                data_type="DOUBLE", pin_type="VIRTUAL",
+                min_value=-20.0, max_value=100.0, step=0.1,
+                default_value="28.4", current_value="28.4", units="C", color_hex="#e0ff7b"
             )
             db.add(ds_v2)
 
-            # Web Widgets: Button, Slider, Gauge, SuperGraph
+            ds_v3 = Datastream(
+                template_id=tmpl.id, pin="V3", name="Fan Relay",
+                data_type="INTEGER", pin_type="VIRTUAL",
+                min_value=0.0, max_value=1.0, step=1.0,
+                default_value="1", current_value="1", units="", color_hex="#10f17f"
+            )
+            db.add(ds_v3)
+
+            ds_v4 = Datastream(
+                template_id=tmpl.id, pin="V4", name="Target Setpoint",
+                data_type="DOUBLE", pin_type="VIRTUAL",
+                min_value=16.0, max_value=32.0, step=0.5,
+                default_value="24.0", current_value="24.0", units="C", color_hex="#0375de"
+            )
+            db.add(ds_v4)
+
+            ds_v5 = Datastream(
+                template_id=tmpl.id, pin="V5", name="Humidity",
+                data_type="INTEGER", pin_type="VIRTUAL",
+                min_value=0.0, max_value=100.0, step=1.0,
+                default_value="62", current_value="62", units="%", color_hex="#38f394"
+            )
+            db.add(ds_v5)
+
+            ds_v6 = Datastream(
+                template_id=tmpl.id, pin="V6", name="Alarm State",
+                data_type="INTEGER", pin_type="VIRTUAL",
+                min_value=0.0, max_value=1.0, step=1.0,
+                default_value="1", current_value="1", units="", color_hex="#fe0f00"
+            )
+            db.add(ds_v6)
+
+            ds_v7 = Datastream(
+                template_id=tmpl.id, pin="V7", name="CLI Terminal",
+                data_type="STRING", pin_type="VIRTUAL",
+                min_value=0.0, max_value=255.0, step=1.0,
+                default_value="system ready", current_value="system ready", units="", color_hex="#8c8fa3"
+            )
+            db.add(ds_v7)
+
+            # Widgets Setup
             w_btn = DashboardWidget(
-                template_id=tmpl.id,
-                widget_type="WEB_STYLED_BUTTON",
-                label="LED Power",
-                pin="V0",
-                grid_x=0,
-                grid_y=0,
-                width=4,
-                height=2,
-                on_label="ON",
-                off_label="OFF",
-                on_color="#0375de",
-                off_color="#fe0f00",
-                on_back_color="#0375de1a",
-                off_back_color="#fe0f001a"
+                template_id=tmpl.id, widget_type="WEB_STYLED_BUTTON", label="LED Power", pin="V0",
+                grid_x=0, grid_y=0, width=4, height=2,
+                on_label="ON", off_label="OFF", on_color="#0375de", off_color="#fe0f00"
             )
             db.add(w_btn)
 
             w_slider = DashboardWidget(
-                template_id=tmpl.id,
-                widget_type="SLIDER",
-                label="Brightness Level",
-                pin="V1",
-                grid_x=4,
-                grid_y=0,
-                width=4,
-                height=2,
+                template_id=tmpl.id, widget_type="SLIDER", label="Brightness Level", pin="V1",
+                grid_x=4, grid_y=0, width=4, height=2,
                 settings={"min": 0, "max": 255, "step": 5}
             )
             db.add(w_slider)
 
             w_gauge = DashboardWidget(
-                template_id=tmpl.id,
-                widget_type="GAUGE",
-                label="Ambient Temp",
-                pin="V2",
-                grid_x=8,
-                grid_y=0,
-                width=4,
-                height=2,
-                settings={"min": -20, "max": 100, "units": "°C"}
+                template_id=tmpl.id, widget_type="GAUGE", label="Ambient Temp", pin="V2",
+                grid_x=8, grid_y=0, width=4, height=2,
+                settings={"min": -20, "max": 100, "units": "C"}
             )
             db.add(w_gauge)
 
+            w_switch = DashboardWidget(
+                template_id=tmpl.id, widget_type="SWITCH", label="Fan Relay Switch", pin="V3",
+                grid_x=0, grid_y=2, width=3, height=2
+            )
+            db.add(w_switch)
+
+            w_stepper = DashboardWidget(
+                template_id=tmpl.id, widget_type="NUMBER_INPUT", label="Temp Setpoint", pin="V4",
+                grid_x=3, grid_y=2, width=3, height=2,
+                settings={"min": 16.0, "max": 32.0, "step": 0.5, "units": "C"}
+            )
+            db.add(w_stepper)
+
+            w_radial = DashboardWidget(
+                template_id=tmpl.id, widget_type="RADIAL_GAUGE", label="Humidity Level", pin="V5",
+                grid_x=6, grid_y=2, width=3, height=2,
+                settings={"min": 0, "max": 100, "units": "%"}
+            )
+            db.add(w_radial)
+
+            w_led = DashboardWidget(
+                template_id=tmpl.id, widget_type="LED", label="System Alarm LED", pin="V6",
+                grid_x=9, grid_y=2, width=3, height=2,
+                settings={"color": "#fe0f00"}
+            )
+            db.add(w_led)
+
             w_chart = DashboardWidget(
-                template_id=tmpl.id,
-                widget_type="SUPERGRAPH",
-                label="Telemetry History (V2)",
-                pin="V2",
-                grid_x=0,
-                grid_y=2,
-                width=12,
-                height=4,
+                template_id=tmpl.id, widget_type="SUPERGRAPH", label="Telemetry Live SuperGraph", pin="V2",
+                grid_x=0, grid_y=4, width=8, height=4,
                 settings={"periods": ["1h", "6h", "1d", "1w"], "color": "#10f17f"}
             )
             db.add(w_chart)
 
+            w_term = DashboardWidget(
+                template_id=tmpl.id, widget_type="TERMINAL", label="Device Console Log", pin="V7",
+                grid_x=8, grid_y=4, width=4, height=4
+            )
+            db.add(w_term)
+
             db.commit()
-            print("Axon IoT database seeded with Blynk core template and device specifications.")
+            print("Axon IoT database seeded with full Blynk widget suite.")
     finally:
         db.close()
 
+# Re-seed if needed
 seed_database()
 
 # Serve static frontend files
@@ -217,4 +237,4 @@ def serve_index():
     index_file = os.path.join(frontend_dir, "index.html")
     if os.path.exists(index_file):
         return FileResponse(index_file)
-    return {"message": "Axon IoT Core API is running. Build frontend/index.html to view dashboard."}
+    return {"message": "Axon IoT Core API is running."}
