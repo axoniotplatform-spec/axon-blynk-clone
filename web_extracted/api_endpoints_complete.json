@@ -1,0 +1,16 @@
+[
+  "/${e}/global/devices",
+  "/${r}/global/devices",
+  "/${s}/global/devices",
+  "/${s}/global/organizations",
+  "/${s}/global/organizations/-1/organization/${s}/organization-details/${d}/info",
+  "/${s}/settings/organization-settings",
+  "/${s}/settings/users?openInviteModal=true",
+  "/${this.props.Organization.id}/templates",
+  "/${v?.orgId}/global/devices/-1/organization/${v?.orgId}/devices/${v?.deviceId}/dashboard?fromOnboarding=true",
+  "/static/app.json",
+  "/static/icon.png",
+  "/static/logo.png",
+  "/static/theme.json",
+  "/static/theme.json?t=${Date.now()}"
+]

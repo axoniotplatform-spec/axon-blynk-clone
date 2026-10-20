@@ -1,0 +1,2592 @@
+/*
+ * Theme @font-face declarations, mirrored from blynk-server's
+ * server/http-dashboard/app/components/StyleGuide/fontsFaces/*.less (imported via font-faces.less),
+ * so AnyWidget's sandboxed WebView can render the same theme fonts as the web console's HTML Widget.
+ * Served as-is via AnyWidgetAssetsPathHandler (scoped to this assets/anywidget/ folder, not the
+ * whole assets/ tree) and loaded with a <link rel="stylesheet"> by BlynkBridge's constructor —
+ * see AnyWidgetData.kt and /html-widget-theme-font-injection.md.
+ * All sources point at the same CDN (static-fonts.nyc3.cdn.digitaloceanspaces.com); nothing is bundled locally.
+ */
+
+@font-face {
+  font-family: 'Gotham_Pro';
+  src: local('Gotham_Pro Bold'), local('GothamPro-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamPro-Bold.woff2') format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro';
+  src: local('Gotham_Pro Light'), local('GothamPro-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamPro-Light.woff2')
+      format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro';
+  src: local('Gotham_Pro Black'), local('GothamPro-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamPro-Black.woff2')
+      format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro_Narrow';
+  src: local('Gotham_Pro Narrow Bold'), local('GothamProNarrow-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamProNarrow-Bold.woff2')
+      format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro';
+  src: local('Gotham_Pro Medium'), local('GothamPro-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamPro-Medium.woff2')
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro';
+  src: local('Gotham_Pro'), local('GothamPro'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamPro.woff2') format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro_Narrow';
+  src: local('Gotham_Pro Narrow Medium'), local('GothamProNarrow-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamProNarrow-Medium.woff2')
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced';
+  src: local('Roboto_Condenced Bold'), local('RobotoCondensed-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensed-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced Narrow';
+  src: local('Roboto_Condenced Narrow Bold'), local('RobotoCondensedNarrow-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensedNarrow-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced';
+  src: local('Roboto_Condenced Medium'), local('RobotoCondensed-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensed-Medium.woff2')
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced';
+  src: local('Roboto_Condenced Medium'), local('RobotoCondensed-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensed-Medium.woff2')
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced';
+  src: local('Roboto_Condenced Regular'), local('RobotoCondensed-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensed-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Roboto_Condenced';
+  src: local('Roboto_Condenced Light'), local('RobotoCondensed-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/RobotoCondensed-Light.woff2')
+      format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans Black'), local('NunitoSans-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-Black.woff2')
+      format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans ExtraBold'), local('NunitoSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-ExtraBold.woff2')
+      format('woff2');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans Bold'), local('NunitoSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans SemiBold'), local('NunitoSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans Regular'), local('NunitoSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans Light'), local('NunitoSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-Light.woff2')
+      format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Nunito_Sans';
+  src: local('Nunito_Sans ExtraLight'), local('NunitoSans-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NunitoSans-ExtraLight.woff2')
+      format('woff2');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Black'), local('SourceSansPro-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-Black.woff2')
+      format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Bold'), local('SourceSansPro-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Semi Bold'), local('SourceSansPro-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Regular'), local('SourceSansPro-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Light'), local('SourceSansPro-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-Light.woff2')
+      format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Source_Sans_Pro';
+  src: local('SourceSansPro Extra Light'), local('SourceSansPro-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SourceSansPro-ExtraLight.woff2')
+      format('woff2');
+  font-weight: 200;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Black'), local('Satoshi-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Bold'), local('Satoshi-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Medium'), local('Satoshi-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Regular'), local('Satoshi-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Light'), local('Satoshi-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Satoshi';
+  src: local('Satoshi Variable'), local('Satoshi-Variable'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Satoshi-Variable.woff2')
+      format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TEG';
+  src: local('TEG Bold'), local('TEG-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/TEG-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TEG';
+  src: local('TEG Semi Bold'), local('TEG-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/TEG-SemiBold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TEG';
+  src: local('TEG Semi Medium'), local('TEG-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/TEG-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TEG';
+  src: local('TEG Regular'), local('TEG-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/TEG-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'TEG';
+  src: local('TEG Light'), local('TEG-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/TEG-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public_Sans';
+  src: local('PublicSans Bold'), local('PublicSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/PublicSans-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public_Sans';
+  src: local('PublicSans Semi Bold'), local('PublicSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/PublicSans-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public_Sans';
+  src: local('PublicSans Semi Medium'), local('PublicSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/PublicSans-Medium.woff2')
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public_Sans';
+  src: local('PublicSans Regular'), local('PublicSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/PublicSans-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Public_Sans';
+  src: local('PublicSans Light'), local('PublicSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/PublicSans-Light.woff2')
+      format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Subway_Ticker_Grid';
+  src: local('Subway_Ticker_Grid'), local('SubwayTickerGrid'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/SubwayTickerGrid.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Serif_Display';
+  src: local('Serif_Display'), local('Serif Display'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/DMSerifDisplay-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Avenir_Next_LT_Pro';
+  src: local('Avenir_Next_LT_Pro Bold'), local('Avenir-Next-LT-Pro-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir-Next-LT-Pro-Bold.woff2')
+      format('woff2');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Avenir_Next_LT_Pro';
+  src: local('Avenir_Next_LT_Pro Regular'), local('Avenir-Next-LT-Pro-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir-Next-LT-Pro-Regular.woff2')
+      format('woff2');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Verdana';
+  src: local('Verdana Regular'), local('Verdana-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Verdana-Regular.woff2')
+      format('woff2');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Veranda';
+  src: local('Veranda Regular'), local('Veranda-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Verdana-Regular.woff2')
+      format('woff2');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Bebas_Neue_Pro';
+  src: url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeuePro-Book.woff2')
+    format('woff2');
+  font-style: normal;
+}
+
+/* Brighton STD */
+
+@font-face {
+  font-family: 'Brighton_STD';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Brighton Light'), local('Brighton-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/brighton-std-light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Brighton_STD';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Brighton Medium'), local('Brighton-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/brighton-std-medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Brighton_STD';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Brighton Bold'), local('Brighton-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/brighton-std-bold.woff2')
+      format('woff2');
+}
+
+/* Helvetica */
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Helvetica Thin'), local('Helvetica-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Helvetica Light'), local('Helvetica-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Helvetica'), local('Helvetica-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Roman.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Helvetica Medium'), local('Helvetica-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Helvetica Bold'), local('Helvetica-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_Neue';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Helvetica Black'), local('Helvetica-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/HelveticaNeueCyr-Black.woff2')
+      format('woff2');
+}
+
+/* Montserrat */
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Montserrat Thin'), local('Montserrat-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Montserrat Light'), local('Montserrat-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Montserrat'), local('Montserrat-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Montserrat Medium'), local('Montserrat-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Montserrat Bold'), local('Montserrat-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Montserrat Black'), local('Montserrat-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Montserrat-Black.woff2')
+      format('woff2');
+}
+
+/* Raleway regular */
+@font-face {
+  font-family: 'Raleway_Monorale';
+  font-style: normal;
+  font-weight: normal;
+  src: url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Monorale-Regular.woff2')
+    format('woff2');
+}
+
+/* Raleway medium */
+@font-face {
+  font-family: 'Raleway_Monorale';
+  font-style: normal;
+  font-weight: 500;
+  src: url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Monorale-Medium.woff2')
+    format('woff2');
+}
+
+/* Raleway semi-bold */
+@font-face {
+  font-family: 'Raleway_Monorale';
+  font-style: normal;
+  font-weight: 600;
+  src: url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Monorale-SemiBold.woff2')
+    format('woff2');
+}
+
+/* Raleway bold */
+@font-face {
+  font-family: 'Raleway_Monorale';
+  font-style: normal;
+  font-weight: 700;
+  src: url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Monorale-Bold.woff2')
+    format('woff2');
+}
+
+/* https://google-webfonts-helper.herokuapp.com/fonts/roboto?subsets=latin,cyrillic */
+/* roboto-100 - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Roboto Thin'), local('Roboto-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-100.woff2')
+      format('woff2');
+}
+
+/* roboto-300 - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Roboto Light'), local('Roboto-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-300.woff2')
+      format('woff2');
+}
+
+/* roboto-regular - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roboto'), local('Roboto-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-regular.woff2')
+      format('woff2');
+}
+
+/* roboto-500 - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Roboto Medium'), local('Roboto-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-500.woff2')
+      format('woff2');
+}
+
+/* roboto-700 - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Roboto Bold'), local('Roboto-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-700.woff2')
+      format('woff2');
+}
+
+/* roboto-900 - latin_cyrillic */
+@font-face {
+  font-family: 'Roboto';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Roboto Black'), local('Roboto-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roboto-v20-latin_cyrillic-900.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Sacramento';
+  src: url(https://static-fonts.nyc3.cdn.digitaloceanspaces.com/sacramento-v8-latin-regular.woff2)
+    format('woff2');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Ubuntu Mono';
+  src: url(https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ubuntu-mono-v10-latin-regular.woff2)
+    format('woff2');
+  font-style: normal;
+}
+
+/* Ubuntu light */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Ubuntu Light'), local('Ubuntu-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Ubuntu-Light.woff2') format('woff2');
+}
+
+/* Ubuntu regular */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Ubuntu'), local('Ubuntu-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Ubuntu-Regular.woff2') format('woff2');
+}
+
+/* Ubuntu medium */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Ubuntu Medium'), local('Ubuntu-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Ubuntu-Medium.woff2') format('woff2');
+}
+
+/* Ubuntu bold */
+@font-face {
+  font-family: 'Ubuntu';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Ubuntu Bold'), local('Ubuntu-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Ubuntu-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Gotham_Pro_Narrow';
+  src: local('Gotham_Pro_Narrow'), local('GothamProNarrow-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamProNarrowMedium.woff2')
+      format('woff2');
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Gotham_Pro_Narrow';
+  src: local('Gotham_Pro_Narrow'), local('GothamProNarrow-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamProNarrowBold.woff2')
+      format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+/* Metropolis */
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Metropolis Thin'), local('Metropolis-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Metropolis ExtraLight'), local('Metropolis-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Metropolis Light'), local('Metropolis-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Metropolis Regular'), local('Metropolis-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Metropolis Medium'), local('Metropolis-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Metropolis SemiBold'), local('Metropolis-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Metropolis Bold'), local('Metropolis-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Metropolis ExtraBold'), local('Metropolis-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Metropolis';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Metropolis Black'), local('Metropolis-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Metropolis-Black.woff2')
+      format('woff2');
+}
+
+/* Din */
+@font-face {
+  font-family: 'Din';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Din Light'), local('Din-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/din-light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Din';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Din Regular'), local('Din-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/din-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Din';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Metropolis Bold'), local('Metropolis-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/din-bold.woff2') format('woff2');
+}
+
+/* Roobert */
+@font-face {
+  font-family: 'Roobert';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Roobert Regular'), local('Roobert-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roobert-regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Roobert';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Roobert Medium'), local('Roobert-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/roobert-medium.woff2') format('woff2');
+}
+
+/* Open Sans */
+
+@font-face {
+  font-family: 'Open_Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('OpenSans Bold'), local('OpenSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Open_Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('OpenSans ExtraBold'), local('OpenSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Open_Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('OpenSans Light'), local('OpenSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Open_Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('OpenSans Medium'), local('OpenSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Open_Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('OpenSans'), local('OpenSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Open_Sans';
+  src: local('OpenSans Semi Bold'), local('OpenSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/OpenSans-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Avenir';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Avenir Light'), local('Avenir-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Avenir';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Avenir Regular'), local('Avenir-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir%20Regular.woff2')
+      format('woff2');
+}
+@font-face {
+  font-family: 'Avenir';
+  font-style: normal;
+  font-weight: 350;
+  src: local('Avenir Book'), local('Avenir-Book'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir%20Book.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Avenir';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Avenir Heavy'), local('Avenir-Heavy'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir%20Heavy.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Avenir';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Avenir Black'), local('Avenir-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Avenir%20Black.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Helvetica_LT_Std Light'), local('Helvetica_LT_Std-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Helvetica_LT_Std Roman'), local('Helvetica_LT_Std-Roman'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Roman.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Helvetica_LT_Std Oblique'), local('Helvetica_LT_Std-Oblique'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Oblique.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Helvetica_LT_Std Bold Oblique'), local('Helvetica_LT_Std-Bold-Oblique'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Bold%20Oblique.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Helvetica_LT_Std Black Oblique'), local('Helvetica_LT_Std-Black-Oblique'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Black%20Oblique.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Helvetica_LT_Std Fractions'), local('Helvetica_LT_Std-Fractions'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Fractions.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Helvetica_LT_Std Fractions Bold'), local('Helvetica_LT_Std-Fractions-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Fractions%20Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Helvetica_LT_Std Bold'), local('Helvetica_LT_Std-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Helvetica_LT_Std';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Helvetica_LT_Std Black'), local('Helvetica_LT_Std-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Helvetica%20LT%20Std%20Black.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Exo';
+  src: local('Exo Variable'), local('Exo-Variable'),
+    url(https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Exo-VariableFont_wght.woff2)
+      format('woff2');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Titling_Gothic_FB';
+  src: local('Titling_Gothic_FB Medium'), local('TitlingGothicFB-Medium'),
+    url(https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Titling_Gothic_FB_Normal_Medium.woff2)
+      format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: local('Inter Variable'), local('Inter-Variable'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Inter-VariableFont_slnt,wght.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Outfit';
+  src: local('Outfit Variable'), local('Outfit-Variable'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Outfit-VariableFont_wght.woff2')
+      format('woff2');
+}
+
+/* DMSans */
+
+@font-face {
+  font-family: 'DM_Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('DM_Sans'), local('DMSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/DMSans-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM_Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('DM_Sans Bold'), local('DMSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/DMSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'DM_Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('DM_Sans Medium'), local('DMSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/DMSans-Medium.woff2') format('woff2');
+}
+
+/* GeorgiaPro */
+
+@font-face {
+  font-family: 'Georgia_Pro';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Georgia_Pro Light'), local('GeorgiaPro-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GeorgiaPro-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Georgia_Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Georgia_Pro'), local('GeorgiaPro-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GeorgiaPro-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Georgia_Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Georgia_Pro Bold'), local('GeorgiaPro-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GeorgiaPro-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Georgia_Pro';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Georgia_Pro Black'), local('GeorgiaPro-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GeorgiaPro-Black.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Georgia_Pro';
+  src: local('Georgia_Pro Semi Bold'), local('GeorgiaPro-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GeorgiaPro-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+/* Barlow */
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 100;
+  src: local('BarlowClassic Thin'), local('Barlow-Classic-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 300;
+  src: local('BarlowClassic Light'), local('Barlow-Classic-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BarlowClassic'), local('Barlow-Classic-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 500;
+  src: local('BarlowClassic Medium'), local('Barlow-Classic-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  src: local('BarlowClassic SemiBold'), local('Barlow-Classic-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 700;
+  src: local('BarlowClassic Bold'), local('Barlow-Classic-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 800;
+  src: local('BarlowClassic ExtraBold'), local('Barlow-Classic-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow';
+  font-style: normal;
+  font-weight: 900;
+  src: local('BarlowClassic Black'), local('Barlow-Classic-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Black.woff2') format('woff2');
+}
+
+/* Saved themes still use BarlowClassic; keep the same faces under that family. */
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 100;
+  src: local('BarlowClassic Thin'), local('Barlow-Classic-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 300;
+  src: local('BarlowClassic Light'), local('Barlow-Classic-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BarlowClassic'), local('Barlow-Classic-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 500;
+  src: local('BarlowClassic Medium'), local('Barlow-Classic-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  src: local('BarlowClassic SemiBold'), local('Barlow-Classic-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 700;
+  src: local('BarlowClassic Bold'), local('Barlow-Classic-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 800;
+  src: local('BarlowClassic ExtraBold'), local('Barlow-Classic-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'BarlowClassic';
+  font-style: normal;
+  font-weight: 900;
+  src: local('BarlowClassic Black'), local('Barlow-Classic-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Barlow-Classic-Black.woff2') format('woff2');
+}
+
+/* Albert Sans */
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Albert_Sans Thin'), local('AlbertSans-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Albert_Sans Light'), local('AlbertSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Albert_Sans'), local('AlbertSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Albert_Sans Medium'), local('AlbertSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Albert_Sans Bold'), local('AlbertSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 900;
+  src: local('Albert_Sans Black'), local('AlbertSans-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-Black.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  src: local('Albert_Sans Semi Bold'), local('AlbertSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Albert_Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Albert_Sans ExtraBold'), local('AlbertSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/AlbertSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+/* Poppins */
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Poppins Thin'), local('Poppins-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Poppins ExtraLight'), local('Poppins-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Poppins Light'), local('Poppins-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Poppins Regular'), local('Poppins-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Poppins Medium'), local('Poppins-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Poppins SemiBold'), local('Poppins-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Poppins Bold'), local('Poppins-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Poppins ExtraBold'), local('Poppins-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Poppins';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Poppins Black'), local('Poppins-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Poppins-Black.woff2') format('woff2');
+}
+
+/* Chakra Petch */
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 100;
+  src: local('ChakraPetch Thin'), local('ChakraPetch-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 200;
+  src: local('ChakraPetch ExtraLight'), local('ChakraPetch-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 300;
+  src: local('ChakraPetch Light'), local('ChakraPetch-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 400;
+  src: local('ChakraPetch Regular'), local('ChakraPetch-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 500;
+  src: local('ChakraPetch Medium'), local('ChakraPetch-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 600;
+  src: local('ChakraPetch SemiBold'), local('ChakraPetch-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 700;
+  src: local('ChakraPetch Bold'), local('ChakraPetch-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-style: normal;
+  font-weight: 800;
+  src: local('ChakraPetch ExtraBold'), local('ChakraPetch-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'ChakraPetch';
+  font-weight: 900;
+  font-style: normal;
+  src: local('ChakraPetch Black'), local('ChakraPetch-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/ChakraPetch-Black.woff2')
+      format('woff2');
+}
+
+/* IBM Plex Sans */
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('IBMPlexSans Thin'), local('IBMPlexSans-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 200;
+  src: local('IBMPlexSans ExtraLight'), local('IBMPlexSans-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('IBMPlexSans Light'), local('IBMPlexSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('IBMPlexSans Regular'), local('IBMPlexSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('IBMPlexSans Medium'), local('IBMPlexSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('IBMPlexSans SemiBold'), local('IBMPlexSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('IBMPlexSans Bold'), local('IBMPlexSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('IBMPlexSans ExtraBold'), local('IBMPlexSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM_Plex_Sans';
+  font-weight: 900;
+  font-style: normal;
+  src: local('IBMPlexSans Black'), local('IBMPlexSans-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/IBMPlexSans-Black.woff2')
+      format('woff2');
+}
+
+/* Lato */
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Lato Thin'), local('Lato-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Lato ExtraLight'), local('Lato-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Lato Light'), local('Lato-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Lato Regular'), local('Lato-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Lato Medium'), local('Lato-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Lato SemiBold'), local('Lato-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Lato Bold'), local('Lato-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Lato ExtraBold'), local('Lato-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Lato';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Lato Black'), local('Lato-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Lato-Black.woff2') format('woff2');
+}
+
+/* Noto Sans */
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('NotoSans Thin'), local('NotoSans-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 200;
+  src: local('NotoSans ExtraLight'), local('NotoSans-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('NotoSans Light'), local('NotoSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('NotoSans Regular'), local('NotoSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('NotoSans Medium'), local('NotoSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('NotoSans SemiBold'), local('NotoSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('NotoSans Bold'), local('NotoSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('NotoSans ExtraBold'), local('NotoSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'NotoSans';
+  font-weight: 900;
+  font-style: normal;
+  src: local('NotoSans Black'), local('NotoSans-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/NotoSans-Black.woff2') format('woff2');
+}
+
+/* Manrope */
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Manrope Thin'), local('Manrope-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Manrope ExtraLight'), local('Manrope-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Manrope Light'), local('Manrope-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Manrope Regular'), local('Manrope-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Manrope Medium'), local('Manrope-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Manrope SemiBold'), local('Manrope-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Manrope Bold'), local('Manrope-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Manrope ExtraBold'), local('Manrope-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Manrope';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Manrope Black'), local('Manrope-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Manrope-Black.woff2') format('woff2');
+}
+
+/* Doto */
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Doto Thin'), local('Doto-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Doto ExtraLight'), local('Doto-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Doto Light'), local('Doto-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Doto Regular'), local('Doto-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Doto Medium'), local('Doto-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Doto SemiBold'), local('Doto-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Doto Bold'), local('Doto-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Doto ExtraBold'), local('Doto-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Doto';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Doto Black'), local('Doto-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Doto-Black.woff2') format('woff2');
+}
+
+/* D Din */
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 100;
+  src: local('D-DIN Thin'), local('D-DIN-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 200;
+  src: local('D-DIN ExtraLight'), local('D-DIN-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 300;
+  src: local('D-DIN Light'), local('D-DIN-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 400;
+  src: local('D-DIN Regular'), local('D-DIN-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 500;
+  src: local('D-DIN Medium'), local('D-DIN-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 600;
+  src: local('D-DIN SemiBold'), local('D-DIN-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 700;
+  src: local('D-DIN Bold'), local('D-DIN-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DINxp-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-style: normal;
+  font-weight: 800;
+  src: local('D-DIN ExtraBold'), local('D-DIN-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'D_Din';
+  font-weight: 900;
+  font-style: normal;
+  src: local('D-DIN Black'), local('D-DIN-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/D-DIN-Black.woff2') format('woff2');
+}
+
+/* Bebas Neue */
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 100;
+  src: local('BebasNeue Thin'), local('BebasNeue-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 200;
+  src: local('BebasNeue ExtraLight'), local('BebasNeue-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 300;
+  src: local('BebasNeue Light'), local('BebasNeue-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BebasNeue Regular'), local('BebasNeue-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 500;
+  src: local('BebasNeue Medium'), local('BebasNeue-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 600;
+  src: local('BebasNeue SemiBold'), local('BebasNeue-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 700;
+  src: local('BebasNeue Bold'), local('BebasNeue-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-style: normal;
+  font-weight: 800;
+  src: local('BebasNeue ExtraBold'), local('BebasNeue-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Bebas_Neue';
+  font-weight: 900;
+  font-style: normal;
+  src: local('BebasNeue Black'), local('BebasNeue-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BebasNeue-Black.woff2')
+      format('woff2');
+}
+
+/* Work Sans */
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 100;
+  src: local('WorkSans Thin'), local('WorkSans-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 200;
+  src: local('WorkSans ExtraLight'), local('WorkSans-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 300;
+  src: local('WorkSans Light'), local('WorkSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 400;
+  src: local('WorkSans Regular'), local('WorkSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 500;
+  src: local('WorkSans Medium'), local('WorkSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 600;
+  src: local('WorkSans SemiBold'), local('WorkSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-SemiBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 700;
+  src: local('WorkSans Bold'), local('WorkSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-style: normal;
+  font-weight: 800;
+  src: local('WorkSans ExtraBold'), local('WorkSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Work_Sans';
+  font-weight: 900;
+  font-style: normal;
+  src: local('WorkSans Black'), local('WorkSans-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/WorkSans-Black.woff2') format('woff2');
+}
+
+/* Hind */
+
+@font-face {
+  font-family: 'Hind';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Hind Light'), local('Hind-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Hind-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Hind';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Hind Regular'), local('Hind-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Hind-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Hind';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Hind SemiBold'), local('Hind-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Hind-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Hind';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Hind Bold'), local('Hind-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Hind-Bold.woff2') format('woff2');
+}
+
+/* Rubik */
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Rubik Thin'), local('Rubik-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Rubik ExtraLight'), local('Rubik-ExtraLight'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-ExtraLight.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Rubik Light'), local('Rubik-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Rubik Regular'), local('Rubik-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Rubik Medium'), local('Rubik-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Rubik SemiBold'), local('Rubik-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Rubik Bold'), local('Rubik-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Rubik ExtraBold'), local('Rubik-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'Rubik';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Rubik Black'), local('Rubik-Black'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Rubik-Black.woff2') format('woff2');
+}
+
+/* Barlow Semi Condensed  */
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 100;
+  src: local('BarlowSemiCondensed Thin'), local('BarlowSemiCondensed-Thin'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 200;
+  src: local('BarlowSemiCondensed ExtraLight'), local('BarlowSemiCondensed-ExtraLight'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-ExtraLight.woff2')
+  format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 300;
+  src: local('BarlowSemiCondensed Light'), local('BarlowSemiCondensed-Light'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 400;
+  src: local('BarlowSemiCondensed'), local('BarlowSemiCondensed-Regular'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 500;
+  src: local('BarlowSemiCondensed Medium'), local('BarlowSemiCondensed-Medium'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  src: local('BarlowSemiCondensed Semi Bold'), local('BarlowSemiCondensed-SemiBold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-SemiBold.woff2')
+  format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 700;
+  src: local('BarlowSemiCondensed Bold'), local('BarlowSemiCondensed-Bold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 800;
+  src: local('BarlowSemiCondensed ExtraBold'), local('BarlowSemiCondensed-ExtraBold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-ExtraBold.woff2')
+  format('woff2');
+}
+
+@font-face {
+  font-family: 'Barlow_Semi_Condensed';
+  font-style: normal;
+  font-weight: 900;
+  src: local('BarlowSemiCondensed Black'), local('BarlowSemiCondensed-Black'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/BarlowSemiCondensed-Black.woff2') format('woff2');
+}
+
+/* Canada Type Orpheus Pro  */
+
+@font-face {
+  font-family: 'Canada_Type_Orpheus_Pro';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Canada_Type_Orpheus_Pro'), local('Canada_Type_Orpheus_Pro-Regular'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Canada Type - Orpheus Pro.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Canada_Type_Orpheus_Pro';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Canada_Type_Orpheus_Pro Medium'), local('Canada_Type_Orpheus_Pro-Medium'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Canada Type - OrpheusPro-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Canada_Type_Orpheus_Pro';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Canada_Type_Orpheus_Pro Bold'), local('Canada_Type_Orpheus_Pro-Bold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Canada Type - OrpheusPro-Bold.woff2') format('woff2');
+}
+
+/* Carmen Sans */
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 100;
+  src:
+    local('CarmenSans Thin'),
+    local('CarmenSans-Thin'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Thin.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 300;
+  src:
+    local('CarmenSans Light'),
+    local('CarmenSans-Light'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Light.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 400;
+  src:
+    local('CarmenSans'),
+    local('CarmenSans-Regular'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Regular.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 500;
+  src:
+    local('CarmenSans Medium'),
+    local('CarmenSans-Medium'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Medium.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 700;
+  src:
+    local('CarmenSans Bold'),
+    local('CarmenSans-Bold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Bold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  src:
+    local('CarmenSans Semi Bold'),
+    local('CarmenSans-SemiBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-SemiBold.woff2')
+      format('woff2');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 800;
+  src:
+    local('CarmenSans ExtraBold'),
+    local('CarmenSans-ExtraBold'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-ExtraBold.woff2')
+      format('woff2');
+}
+
+@font-face {
+  font-family: 'CarmenSans';
+  font-style: normal;
+  font-weight: 800;
+  src:
+    local('CarmenSans Heavy'),
+    local('CarmenSans-Heavy'),
+    url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/CarmenSans-Heavy.woff2')
+      format('woff2');
+}
+
+/* GothamNarrow */
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Light'), local('GothamNarrow-Light'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Light.woff2')
+  format('woff2');
+  font-weight: 300;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Black'), local('GothamNarrow-Black'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Black.woff2')
+  format('woff2');
+  font-weight: 900;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Bold'), local('GothamNarrow-Bold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Bold.woff2')
+  format('woff2');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Medium'), local('GothamNarrow-Medium'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Medium.woff2')
+  format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Thin'), local('GothamNarrow-Thin'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Thin.woff2')
+  format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Ultra'), local('GothamNarrow-Ultra'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Ultra.woff2')
+  format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow XLight'), local('GothamNarrow-XLight'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-XLight.woff2')
+  format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'GothamNarrow';
+  src: local('GothamNarrow Book'), local('GothamNarrow-Book'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/GothamNarrow-Book.woff2')
+  format('woff2');
+  font-weight: 500;
+  font-style: normal;
+}
+
+
+
+
+/* Figtree */
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 100;
+  src: local('Figtree Thin'), local('Figtree-Thin'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Thin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 200;
+  src: local('Figtree ExtraLight'), local('Figtree-ExtraLight'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-ExtraLight.woff2')
+  format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 300;
+  src: local('Figtree Light'), local('Figtree-Light'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Light.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 400;
+  src: local('Figtree Regular'), local('Figtree-Regular'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 500;
+  src: local('Figtree Medium'), local('Figtree-Medium'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Medium.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 600;
+  src: local('Figtree SemiBold'), local('Figtree-SemiBold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-SemiBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 700;
+  src: local('Figtree Bold'), local('Figtree-Bold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Bold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-style: normal;
+  font-weight: 800;
+  src: local('Figtree ExtraBold'), local('Figtree-ExtraBold'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-ExtraBold.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Figtree';
+  font-weight: 900;
+  font-style: normal;
+  src: local('Figtree Black'), local('Figtree-Black'),
+  url('https://static-fonts.nyc3.cdn.digitaloceanspaces.com/Figtree-Black.woff2') format('woff2');
+}

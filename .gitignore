@@ -1,3 +1,12 @@
 .env
 __pycache__/
 *.pyc
+*.db
+axon_iot.db
+tools/
+apk_raw/
+apk_decompiled/sources/
+apk_decompiled/raw_base/
+web_extracted/chunks/
+
+web_extracted/*.js

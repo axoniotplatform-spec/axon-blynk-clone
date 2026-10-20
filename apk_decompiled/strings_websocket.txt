@@ -1,0 +1,50 @@
+getWebSocketHeaderHelper
+1Lcom/neovisionaries/ws/client/WebSocketException;
+wss://
+websocket
+Sec-WebSocket-Version
+2The current state of the WebSocket is not CREATED.
+Sec-WebSocket-Key
+Sec-WebSocket-Extensions
+Sec-WebSocket-Accept
+&UNEXPECTED_SEC_WEBSOCKET_ACCEPT_HEADER
+NThe value of 'Sec-WebSocket-Accept' header is different from the expected one.
+QThe extension contained in the Sec-WebSocket-Extensions header is not supported: 
+=The value in 'Sec-WebSocket-Extensions' failed to be parsed: 
+Sec-WebSocket-Protocol
+NThe protocol contained in the Sec-WebSocket-Protocol header is not supported: 
+NO_SEC_WEBSOCKET_ACCEPT_HEADER
+NThe opening handshake response does not contain 'Sec-WebSocket-Accept' header.
+NO_WEBSOCKET_IN_UPGRADE_HEADER
+.'websocket' was not found in 'Upgrade' header.
+ * WebSocketListener
+WebSocketFrame(FIN=
+ WebSocket 
+.Expected 'Sec-WebSocket-Accept' header value '
+5Expected 'Upgrade' header value 'websocket' but was '
+DLcom/mapbox/common/module/okhttp/WebsocketObserverWrapper$Companion;
+:Lcom/mapbox/common/module/okhttp/WebsocketObserverWrapper;
+5Lio/ktor/client/plugins/websocket/WebSocketException;
+8Lio/ktor/serialization/WebsocketContentConvertException;
+;Lio/ktor/serialization/WebsocketConverterNotFoundException;
+5Lio/ktor/serialization/WebsocketDeserializeException;
+,Lio/ktor/websocket/ChannelOverflowException;
+(Lio/ktor/websocket/FrameTooBigException;
+.Lio/ktor/websocket/ProtocolViolationException;
+(No more WebSocket frame from the server.
+8Request header not permitted: 'Sec-WebSocket-Extensions'
+WebSocketCapability
+&WebSocketExtensions(perMessageDeflate=
+Websocket onClosed code: 
+BWebsocket onClosed exception, probably callback is null or crashed
+Websocket onFailure: 
+Websocket onMessage (binary): 
+Websocket onMessage (text): 
+3Websocket opened with code 101, switching protocols
+&access$getWebsocketClosedNormalCode$cp
+getWebSocket
+getWebsocketClosedNormalCode
+setWebSocket
+6unexpected Sec-WebSocket-Extensions in response header
+webSocket
+websocketClosedNormalCode

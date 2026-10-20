@@ -1,0 +1,186 @@
+<androidx.activity.result.contract.action.REQUEST_PERMISSIONS
+3androidx.activity.result.contract.extra.PERMISSIONS
+%android.permission.POST_NOTIFICATIONS
+#Permission request for permissions 
+requestPermissions
+checkPermission
+permission must be non-null
+grantUriPermissions
+#Provider must grant uri permissions
+RequestPermissions
+%cc.blynk.core.utils.PermissionHelper:
+permissions
+'android.permission.ACCESS_LOCAL_NETWORK
+$android.permission.BLUETOOTH_CONNECT
+!android.permission.BLUETOOTH_SCAN
+&android.permission.NEARBY_WIFI_DEVICES
+)android.permission.ACCESS_COARSE_LOCATION
+'android.permission.ACCESS_FINE_LOCATION
+4SkipPermissions event received in unexpected state: 
+$cc.blynk.core.utils.PermissionHelper
+hasPermission
+PERMISSION_EDITING
+PERMISSION
+permissionGroup1
+permissionGroup2
+permissionGroup3
+permissionGroup4
+permissionsScreenTitle
+permissionsScreenConnectTitle
+permissionsScreenScanTitle
+android.permission.WAKE_LOCK
+HAS_GET_CLASS_LOADER_PERMISSION
+Ljava/lang/RuntimePermission;
+Ljava/security/Permission;
+'android.permission.ACCESS_NETWORK_STATE
+7Application permission for ACCESS_NETWORK_STATE granted
+<Couldn't get application permission for ACCESS_NETWORK_STATE
+=Unable to get application permission for ACCESS_NETWORK_STATE
+Permission status: 
+-Lcom/mapbox/common/location/PermissionStatus;
+getPermissionStatus
+?Cannot start Google device location provider: permission denied
+.[Lcom/mapbox/common/location/PermissionStatus;
+isPermissionGranted
+-android.permission.ACCESS_BACKGROUND_LOCATION
+;com.mapbox.common.location.sdk28_use_background_permissions
+!activityRecognitionPermissionName
+'android.permission.ACTIVITY_RECOGNITION
+6com.google.android.gms.permission.ACTIVITY_RECOGNITION
+ hasActivityRecognitionPermission
+, has permission: 
+checkSelfPermission
+$android.permission.ACCESS_WIFI_STATE
+android.permission.BLUETOOTH
+@androidx.activity.result.contract.extra.PERMISSION_GRANT_RESULTS
+checkCallingOrSelfPermission
+7Could not read data collection permission from manifest
+bl_prov_step_permissions
+Granted Permissions: 
+, permissions=
+ , permissionsScreenConnectTitle=
+, permissionsScreenScanTitle=
+, permissionsScreenTitle=
+).DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION
+2Does not meet requirements: permission is required
+;Google Play services missing or without correct permission.
+1Lcc/blynk/core/activity/PermissionDeniedActivity;
+No permissions
+"No permissions were requested for 
+%No settings or permissions to request
+Permission 
+9Permission request result delivered for unknown Fragment 
+Permissions(ownTitle=
+Permissions(permissions=
+EReconnect requires permissions or settings that are no longer granted
+"RequirementPermission(permissions=
+SERVICE_MISSING_PERMISSION
+android.permission.VIBRATE
+'com.google.android.c2dm.permission.SEND
++common/location/googleProviderNoPermissions
+7connect: Missing required permission: BLUETOOTH_CONNECT
+getPermissions
+ getPermissionsScreenConnectTitle
+getPermissionsScreenScanTitle
+getPermissionsScreenTitle
+onPermissionStatusChanged
+onRequestPermissionsResult
+requestedPermissions
+requestedPermissionsFlags
+$shouldShowRequestPermissionRationale
+    getDeviceTimelinePermissions() {
+        return this.#withErrorCallback(() => this.#platformTimelineRequest('permissions', {}));
+    isPermissionAllowed(permission) {
+            if (typeof permission !== 'string' ||
+                !['VIEW_TIMELINE', 'EDIT_TIMELINE', 'CONTROL_DEVICE', 'EDIT_DEVICE_METADATA', 'QUERY_DATA_ENGINE'].includes(permission)) {
+                throw new BlynkBridgeError('invalid_request', 'Unknown permission');
+            if (typeof window.BlynkAndroidBridge?.requestDevicePermission !== 'function') {
+                throw new BlynkBridgeError('device_unavailable', 'Device permission bridge is unavailable');
+                const url = new URL(window.BlynkAndroidBridge.requestDevicePermission(permission), window.location.href);
+                    !/^\/blynk\/permissions\/[0-9a-f-]+\.json$/.test(url.pathname)) {
+                    throw new BlynkBridgeError(error.code || 'server_error', error.message || 'Permission request failed', error.details || {});
+                    throw new BlynkBridgeError('server_error', 'Invalid permission result');
+                throw new BlynkBridgeError('transport_disconnected', 'Unable to fetch permission result');
+$, isLocationCreatePermissionGranted=
+", isLocationEditPermissionGranted=
+, permission=
+/blynk/permissions/
+CXCP#checkCameraPermission
+CheckCameraPermission
+ConnectPermissions
+Could not get last known location. This is probably because the app does not have any location permissions. Falling back to hardcoded sunrise/sunset values.
+"DevicePermissionMessage(requestId=
+!DevicePermissions(actionsAllowed=
+GRANULARITY_PERMISSION_LEVEL
++GrantedRequirementsPermissions(permissions=
+%Landroid/view/DragAndDropPermissions;
+1Lcc/blynk/about/activity/PermissionAboutActivity;
+Missing Permission: android.permission.ACCESS_NETWORK_STATE this should normally be included by the manifest merger, but may needed to be manually added to your manifest
+Missing Permission: android.permission.WAKE_LOCK this should normally be included by the manifest merger, but may needed to be manually added to your manifest
+!NotAllowedBillingPermissionNotice
+ Permission present on component 
+PermissionResult(permissions=
+Permissions
+Permissions(ts=
+RequestPermissions(permissions=
+Scan(permissions=
+ScanPermissions
+SkipPermissions
+Unknown permission
+2You do not have permission to edit device metadata
+2You do not have permission to view device metadata
+*android.intent.extra.PERMISSION_GROUP_NAME
+android.permission-group.CAMERA
+!android.permission-group.LOCATION
+'android.permission-group.NEARBY_DEVICES
+&android.permission-group.NOTIFICATIONS
+android.permission.CAMERA
+getPermissionsController
+8https://appassets.androidplatform.net/blynk/permissions/
+permission
+requestDevicePermission
+requestDragAndDropPermissions
+requestPermission
+z. This permission should normally be included by the manifest merger, but may needed to be manually added to your manifest
+.App is missing ACCESS_NETWORK_STATE permission
+"App is missing INTERNET permission
+%BluetoothLocationPermission(required=
+BluetoothPermission(required=
+*CODE_SCANNER_CAMERA_PERMISSION_NOT_GRANTED
+9Can't insert content from IME; requestPermission() failed
+Connect(permissions=
+Editable permissions
++Failed to turn off database read permission
+,Failed to turn off database write permission
+4Failed to turn on database read permission for owner
+5Failed to turn on database write permission for owner
+6Google Play services is missing a required permission.
+'Landroid/webkit/GeolocationPermissions;
+"Location permission is not granted
+Missing Permission: 
+kMissing location permission, location component will not take effect before location permission is granted.
+:Missing wake lock permission, service start may be delayed
+NoPermission(permissions=
+PERMISSION_DENIED
+:Permission denied as protocol is not secure enough to call
+Permission not granted
+Permissions(flow=
+%ProvisioningRequirements(permissions=
+*Scan.Requirements.Permissions(permissions=
+4Service.ConnectRequirements.Permissions(permissions=
+"UnifiedDevicesPermission(required=
+#UnifiedLocationPermission(required=
+FWAKE_LOCK permission not granted, can't acquire wake lock for playback
+WiFiDevicesPermission(required=
+ WiFiLocationPermission(required=
+3You do not have permission to query the Data Engine
+android.permission.INTERNET
+&android.permission.UPDATE_DEVICE_STATS
+Ccom.google.android.finsky.permission.PLAY_BILLING_LIBRARY_BROADCAST
+getGeoLocationPermissions
+9io.blynk.provisioning.model.core.Requirements.Permissions
++no_access_adservices_attribution_permission
+permissionToOp
+permission_denied
+,start: BLUETOOTH_SCAN permission not granted
+(start: Both scanners require permissions

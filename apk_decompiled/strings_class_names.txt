@@ -1,0 +1,518 @@
+Landroid/app/Activity;
+getLifecycle() returned null in ComponentActivity's constructor. Please make sure you are lazily constructing your Lifecycle in the first call to getLifecycle() rather than relying on field initialization.
+pYour activity is not yet attached to the Application instance. You can't request ViewModel before onCreate call.
+onActivityResult
+startActivityForResult
+ActivityResultRegistry
+!Landroid/content/pm/ActivityInfo;
+getActivityInfo
+$Exception while getting ActivityInfo
+_The Activity's LayoutInflater already has a Factory installed so we can not install AppCompat's
+0androidx.lifecycle.ViewModelProvider.DefaultKey:
+1Local and anonymous classes can not be ViewModels
+parentActivityName
+getMaxShortcutCountPerActivity
+3Landroidx/core/google/shortcuts/TrampolineActivity;
+FragmentManager
+Fragment 
+ICannot remove Fragment attached to a different FragmentManager. Fragment 
+* is already attached to a FragmentManager.
+/ as this Fragment was involved in a Transition.
+$onDismiss called for DialogFragment 
+setOwnerActivity
+'get layout inflater for DialogFragment 
++getting layout inflater for DialogFragment 
++Setting style and theme for DialogFragment 
+DialogFragment 
+6DialogFragment can not be attached to a container view
+Y, you will not be able to use AndroidViewModel with the default ViewModelProvider.Factory
+a, you will need CreationExtras to use AndroidViewModel with the default ViewModelProvider.Factory
+.Can't access ViewModels from detached fragment
+4Can't access the Fragment View's LifecycleOwner for 
+yCalling getViewModelStore() before a Fragment reaches onCreate() when using setMaxLifecycle(INITIALIZED) is not supported
+childFragmentManager
+_onGetLayoutInflater() cannot be executed until the Fragment is attached to the FragmentManager.
+Fragment#onCreateView
+ for Fragment 
+Fragment#onViewCreated
+ is attempting to registerForActivityResult after being created. Fragments must call registerForActivityResult() before they are created (i.e. initialization, onAttach(), or onCreate()).
+/Fragment already added and state has been saved
+-Landroidx/fragment/app/FragmentContainerView;
+>FragmentContainerView must have an android:id to add Fragment 
+PViews added to a FragmentContainerView must be associated with a Fragment. View 
+# is not associated with a Fragment.
+Retained Fragment 
+FragmentManager:
+StartActivityForResult
+"FragmentManager has been destroyed
+0FragmentManager has not been attached to a host.
+Activity has been destroyed
+1FragmentManager is already executing transactions
+Fragment#onSaveInstanceState
+(Setting FragmentResultListener with key 
+FragmentManager 
+*OnBackPressedCallback for FragmentManager 
+Fragment#onActivityCreated
+Fragment#onViewStateRestored
+5FragmentViewLifecycle#handleLifecycleEvent(ON_CREATE)
+2 did not call through to super.onActivityCreated()
+. that does not belong to this FragmentManager!
+Fragment#onAttach
+Fragment#onCreate
+1FragmentLifecycle#handleLifecycleEvent(ON_CREATE)
+2FragmentLifecycle#handleLifecycleEvent(ON_DESTROY)
+Fragment#onDestroy
+6FragmentViewLifecycle#handleLifecycleEvent(ON_DESTROY)
+Fragment#onDestroyView
+Fragment#onDetach
+4FragmentViewLifecycle#handleLifecycleEvent(ON_PAUSE)
+0FragmentLifecycle#handleLifecycleEvent(ON_PAUSE)
+Fragment#onPause
+ on Fragment 
+Fragment#onResume
+1FragmentLifecycle#handleLifecycleEvent(ON_RESUME)
+5FragmentViewLifecycle#handleLifecycleEvent(ON_RESUME)
+Fragment#onStart
+0FragmentLifecycle#handleLifecycleEvent(ON_START)
+4FragmentViewLifecycle#handleLifecycleEvent(ON_START)
+3FragmentViewLifecycle#handleLifecycleEvent(ON_STOP)
+/FragmentLifecycle#handleLifecycleEvent(ON_STOP)
+Fragment#onStop
+Fragment already added: 
+FThis FragmentTransaction is not allowed to be added to the back stack.
+4Landroid/app/Application$ActivityLifecycleCallbacks;
+onActivityCreated
+onActivityDestroyed
+onActivityPaused
+onActivityResumed
+onActivitySaveInstanceState
+onActivityStarted
+onActivityStopped
+"registerActivityLifecycleCallbacks
+Landroid/app/FragmentManager;
+getFragmentManager
+Landroid/app/Fragment;
+findFragmentByTag
+onActivityPreCreated
+onActivityPostResumed
+onActivityPostStarted
+getActivity
+!Landroid/app/FragmentTransaction;
+onActivityPostCreated
+onActivityPreDestroyed
+onActivityPrePaused
+onActivityPreStopped
+SAVED_STATE_REGISTRY_OWNER_KEY andVIEW_MODEL_STORE_OWNER_KEY must be provided in the creation extras tosuccessfully create a ViewModel.
+;VIEW_MODEL_KEY must always be provided by ViewModelProvider
+Eandroidx.lifecycle.viewmodel.internal.ViewModelCoroutineScope.JOB_KEY
+AndroidViewModelFactory constructed with empty constructor works only with create(modelClass: Class<T>, extras: CreationExtras).
+Display Features are only supported after Q. Display features for non-Activity contexts are not expected to be reported on devices running Q.
+Landroid/app/ActivityManager;
+android.app.ActivityThread
+.Unable to check ActivityThread for processName
+3Landroid/app/ActivityManager$RunningAppProcessInfo;
+&Lcc/blynk/shell/activity/MainActivity;
+JLcc/blynk/compose/device_provisioning/activity/DeviceProvisioningActivity;
+com.blynk.android.NOTIFICATION
+(Lcc/blynk/core/activity/WebViewActivity;
+emptyDashboardFragmentFactory
+/Lcc/blynk/guides/viewmodel/UserGuidesViewModel;
+5Lcc/blynk/organization/activity/OrganizationActivity;
+]onAttach called multiple times with different Context! Hilt Fragments should not be retained.
++Lcc/blynk/profile/activity/ProfileActivity;
+shellFragmentFactory
+ALcc/blynk/logevents/notifications/activity/NotificationsActivity;
+startActivity
+'Lcc/blynk/about/activity/AboutActivity;
+5Lcc/blynk/automation/activity/EditAutomationActivity;
+1Lcc/blynk/constructor/activity/TemplatesActivity;
+-cc.blynk.guides.viewmodel.UserGuidesViewModel
+com.google.android.gms
+com.google.app.id
+com.google.android.gms.version
+com.android.vending
+5Lcom/google/android/gms/common/api/GoogleApiActivity;
+com.google
+com.google.android.gms.chimera
+;Lcom/google/android/gms/location/ActivityRecognitionClient;
+ActivityRecognition.API
+$onActivityCreatedByScionActivityInfo
+&onActivityDestroyedByScionActivityInfo
+#onActivityPausedByScionActivityInfo
+$onActivityResumedByScionActivityInfo
+.onActivitySaveInstanceStateByScionActivityInfo
+$onActivityStartedByScionActivityInfo
+$onActivityStoppedByScionActivityInfo
+5Lcom/google/android/gms/location/ActivityRecognition;
+ActivityRecognitionApi
+com.google.firebase.components:
+(Landroid/app/ActivityManager$MemoryInfo;
+com.google.firebase.crashlytics
+com.google.firebase.messaging
+com.google.android.gms.appid
+com.mapbox.common.module
+com.mapbox.base.common.logger
+com.mapbox.maps.module
+'getApplicationContextFromActivityThread
+2Lcom/mapbox/common/LifecycleService$ActivityState;
+ access$registerActivityWithState
+registerActivityWithState
+access$unregisterActivity
+unregisterActivity
+@Lcom/mapbox/common/LifecycleService$registerActivityWithState$2;
+9Lcom/mapbox/common/LifecycleService$unregisterActivity$3;
+3[Lcom/mapbox/common/LifecycleService$ActivityState;
+'getAppLifecycleStateFromActivityManager
+%Landroid/app/ActivityManager$AppTask;
+,Landroid/app/ActivityManager$RecentTaskInfo;
+0Landroid/app/ActivityManager$RunningServiceInfo;
+(isGooglePlayActivityRecognitionAvailable
+ALcom/mapbox/common/movement/ProxyGoogleActivityRecognitionClient;
+KLcom/mapbox/common/movement/ProxyGoogleActivityRecognitionClient$Companion;
+,Failed to load Activity Recognition client: 
+ActivityRecognitionObserver
+com.mapbox.module.
+6Lcom/mapbox/common/movement/ActivityRecognitionClient;
+?Lcom/mapbox/common/movement/ActivityRecognitionClient$Observer;
+6Lcom/mapbox/common/movement/GoogleActivityRecognition;
+@Lcom/mapbox/common/movement/GoogleActivityRecognition$Companion;
+;Lcom/mapbox/common/movement/GoogleActivityRecognition$Mode;
+4Lcom/mapbox/common/movement/StubActivityRecognition;
+bLcom/mapbox/common/movement/GoogleActivityRecognition$Companion$TRANSITION_API_MONITORING_TYPES$2;
+9com.google.android.gms.location.ActivityRecognitionClient
+$googlePlayActivityRecognitionBundled
+ULcom/mapbox/common/movement/GoogleActivityRecognition$activityUpdatesPendingIntent$2;
+BLcom/mapbox/common/movement/GoogleActivityRecognition$broadcast$1;
+1access$getGooglePlayActivityRecognitionBundled$cp
+ hasActivityRecognitionPermission
+CLcom/mapbox/common/movement/GoogleActivityRecognition$WhenMappings;
+getActivityUpdatesPendingIntent
+requestActivityUpdates
+ requestActivityTransitionUpdates
+6getGooglePlayActivityRecognitionBundled$common_release
+<[Lcom/mapbox/common/movement/GoogleActivityRecognition$Mode;
+WLcom/mapbox/common/movement/ProxyGoogleActivityRecognitionClient$Companion$available$2;
+googleActivityRecognitionClient
+,access$setRemoveActivityTransitionUpdates$cp
+removeActivityTransitionUpdates
+"access$setRemoveActivityUpdates$cp
+removeActivityUpdates
+-access$setRequestActivityTransitionUpdates$cp
+#access$setRequestActivityUpdates$cp
+ULcom/mapbox/common/location/IncompatibleGooglePlayServicesActivityRecognitionVersion;
+com.mapbox.search
+9Lcom/mapbox/search/internal/bindgen/UserActivityReporter;
+BLcom/mapbox/search/internal/bindgen/UserActivityReporterInterface;
+@Lcom/mapbox/search/internal/bindgen/UserActivityReporterOptions;
+BCannot bind the flag @DisableFragmentGetContextFix more than once.
+BHilt Activity must be attached to an @HiltAndroidApp Application. 
+NsetExtras should only be called for an Activity that extends ComponentActivity
+LHilt Fragments must be attached to an @AndroidEntryPoint Activity. Found: %s
+>Hilt Fragments must be attached before creating the component.
+g%s, Hilt view cannot be created using the application context. Use a Hilt Fragment or Activity context.
+K, Hilt view must be attached to an @AndroidEntryPoint Fragment or Activity.
+Yassociate: ClassCastException likely due to using application context instead of Activity
+onActivityResult: resultCode=
+%onActivityResult: Unknown resultCode=
++onActivityResult: Scan failure (resultCode=
+=onActivityResult: User canceled device selection (resultCode=
+0onActivityResult: RESULT_OK but no data provided
+BonActivityResult: RESULT_OK but failed to extract device from data
+'scanToConnect: Activity not initialized
+4Lcc/blynk/guides/activity/InstallationGuideActivity;
+;Lcc/blynk/organization/activity/SwitchOrganizationActivity;
+)Lcc/blynk/search/activity/SearchActivity;
+2Lcc/blynk/shell/activity/DeviceQuickStartActivity;
+4Lcc/blynk/shell/activity/DeviceManualCreateActivity;
+)Lcc/blynk/device/activity/DeviceActivity;
+BLcc/blynk/compose/device_claiming/activity/DeviceClaimingActivity;
+S. You must ensure the ActivityResultLauncher is registered before calling launch().
+JAttempting to launch an unregistered ActivityResultLauncher with contract 
+N to be available in the multi-binding of @HiltViewModelMap but none was found.
+,Expected the @HiltViewModel-annotated class 
+? does not have an assisted factory specified in @HiltViewModel.
+%Found @HiltViewModel-annotated class 
+)Found the @HiltViewModel-annotated class 
+O in both the multi-bindings of @HiltViewModelMap and @HiltViewModelAssistedMap.
+0Lcc/blynk/core/biometric/BiometricEnterActivity;
++Lcc/blynk/billing/activity/BillingActivity;
+com.crashlytics.settings.json
+com.crashlytics.RequireBuildId
+5Lcc/blynk/automation/activity/AutomationListActivity;
+(Lcc/blynk/login/activity/SignUpActivity;
+(Lcc/blynk/login/activity/SignInActivity;
+ for  FragmentManager 
+Z has already been destroyed. Nested fragments should always use the child FragmentManager.
+. is not an active fragment of FragmentManager 
+. is not within a subclass of FragmentActivity.
+ not attached to Activity
+< received the following in onActivityResult(): requestCode: 
+3 that was not found in the set of active Fragments 
+) ViewModelStores (
+2: calling Fragment constructor caused an exception
+%: could not find Fragment constructor
+1: make sure class is a valid subclass of Fragment
+Active Fragments:
+$Activity recognition result received
+/Activity result delivered for unknown Fragment 
+Activity state:
+#Activity transition result received
+ActivityResult{resultCode=
+ActivityState
+(ActivityTransitionRequest [mTransitions=
+Added Fragments:
+~Attempt to invoke virtual method 'android.os.Handler android.app.FragmentHostCallback.getHandler()' on a null object reference
+6Clearing non-config state for saved state of Fragment 
+Discarding retained Fragment 
+YFragmentContainerView does not support Layout Transitions or animateLayoutChanges="true".
+?FragmentContainerView must be within a FragmentActivity to use 
+FragmentManager misc state:
+FragmentManagerViewModel{
+FragmentManager{
+FragmentState{
+Fragments Created Menus:
+=Ignoring removeRetainedFragment as the state is already saved
+4Intent Sender result delivered for unknown Fragment 
+-Landroid/app/ActivityManager$RunningTaskInfo;
+Landroid/app/DialogFragment;
++Landroid/content/ActivityNotFoundException;
+7Landroidx/fragment/app/Fragment$InstantiationException;
+7Lcc/blynk/automation/activity/CreateAutomationActivity;
+0Lcc/blynk/blueprints/activity/BlueprintActivity;
+2Lcc/blynk/constructor/activity/DataStreamActivity;
+8Lcc/blynk/constructor/activity/DataStreamCreateActivity;
+6Lcc/blynk/constructor/activity/DataStreamEditActivity;
+8Lcc/blynk/constructor/activity/DataStreamSelectActivity;
+5Lcc/blynk/constructor/activity/GroupTemplateActivity;
+>Lcc/blynk/constructor/activity/HtmlWidgetPresetPickerActivity;
+1Lcc/blynk/constructor/activity/ImageEditActivity;
+=Lcc/blynk/constructor/activity/MultiDataStreamSelectActivity;
+2Lcc/blynk/constructor/activity/PageCreateActivity;
+0Lcc/blynk/constructor/activity/PageEditActivity;
+0Lcc/blynk/constructor/activity/PageListActivity;
+2Lcc/blynk/constructor/activity/PageSelectActivity;
+5Lcc/blynk/constructor/activity/ProductCreateActivity;
+4Lcc/blynk/constructor/activity/TileTemplateActivity;
+2Lcc/blynk/constructor/activity/WidgetListActivity;
+1Lcc/blynk/core/activity/PermissionDeniedActivity;
+/Lcc/blynk/login/activity/PasswordResetActivity;
+ILcc/blynk/metafields/device/activity/EditLocationDeviceMetaFieldActivity;
+4Lcc/blynk/orglocation/activity/SaveLocationActivity;
+;Lcc/blynk/orglocation/activity/SelectLocationOnMapActivity;
+5Lcc/blynk/pages/activity/WidgetPageDashboardActivity;
+8Lcc/blynk/provisioning/activity/DeviceProfilingActivity;
+;Lcc/blynk/provisioning/activity/DeviceProvisioningActivity;
+0Lcc/blynk/ui/widgets/activity/AliasNameActivity;
+6Lcc/blynk/ui/widgets/activity/RgbLightControlActivity;
+<Lcc/blynk/ui/widgets/activity/SimpleGraphFullscreenActivity;
+;Lcc/blynk/ui/widgets/activity/SuperGraphFullscreenActivity;
+0Lcc/blynk/ui/widgets/activity/TimeInputActivity;
+6Lcc/blynk/ui/widgets/activity/VideoFullscreenActivity;
+8Lcc/blynk/ui/widgets/activity/WidgetBarcodeScanActivity;
+;Lcom/google/android/gms/location/ActivityRecognitionResult;
+CLcom/google/android/play/core/common/PlayCoreDialogWrapperActivity;
+KLcom/mapbox/common/movement/GoogleActivityRecognition$Companion$withLogs$1;
+OLcom/mapbox/common/movement/GoogleActivityRecognition$broadcast$1$WhenMappings;
+YLcom/mapbox/search/internal/bindgen/UserActivityReporter$UserActivityReporterPeerCleaner;
+Local FragmentActivity 
+9Permission request result delivered for unknown Fragment 
+SavedStateViewModelFactory constructed with empty constructor supports only calls to create(modelClass: Class<T>, extras: CreationExtras).
+EStarting activity with a requestCode requires a FragmentActivity host
+The Fragment 
+TrampolineActivity
+5Unable to get application context from ActivityThread
+%Updating retained Fragments: Removed 
+ViewModelStore
+1access$setGooglePlayActivityRecognitionBundled$cp
+com.google.android.wearable.app
+com.google.iid.TOKEN_REQUEST
+com.google.mlkit.internal
+currentActivityThread
+getFragment
+BgetGooglePlayActivityRecognitionBundled$common_release$annotations
+getParentActivityIntent
+1getParentActivityIntent: bad parentActivityName '
+getRawFragment
+&isPlatformActivityRecognitionAvailable
+mFragmentId=#
+mFragmentManager=
+mParentFragment=
+mSavedFragmentState=
+makeMainActivity
+)onCreateDialog called for DialogFragment 
+reportActivity
+(reportFullyDrawn() for ComponentActivity
+resolveActivity
+#setCurrentScreenByScionActivityInfo
+6setGooglePlayActivityRecognitionBundled$common_release
+showErrorDialogFragment
+topActivity
+$unregisterActivityLifecycleCallbacks
+} Fragments (
+% which is not a FragmentContainerView
+, without using parent's childFragmentManager
+BiometricFragment
+GCannot show Fragment attached to a different FragmentManager. Fragment 
+EFailed to check device credential. Client FragmentActivity not found.
+FingerprintFragment
+FirmwareUpdateProgressFragment
+SFragmentManager has the following pending actions inside of prepareBackStackState: 
+FragmentPager.SavedState{
+FragmentedMp4Extractor
+ IncorrectFragmentation{expected=
+yInternal error: OnRecreation should be registered only on components that implement ViewModelStoreOwner. Received owner: 
+Landroid/app/ActivityOptions;
+9Landroidx/fragment/app/strictmode/FragmentReuseViolation;
+<Landroidx/fragment/app/strictmode/FragmentTagUsageViolation;
+MLandroidx/fragment/app/strictmode/GetTargetFragmentRequestCodeUsageViolation;
+BLandroidx/fragment/app/strictmode/GetTargetFragmentUsageViolation;
+BLandroidx/fragment/app/strictmode/SetTargetFragmentUsageViolation;
+?Landroidx/fragment/app/strictmode/TargetFragmentUsageViolation;
+BLandroidx/fragment/app/strictmode/WrongFragmentContainerViolation;
+1Lcc/blynk/about/activity/PermissionAboutActivity;
+0Lcc/blynk/barcode/activity/BlynkScannerActivity;
+2Lcc/blynk/constructor/activity/HeaderEditActivity;
+2Lcc/blynk/constructor/activity/WidgetEditActivity;
++Lcc/blynk/gallery/activity/GalleryActivity;
+QLcc/blynk/homescreenwidgets/overview/activity/OverviewOrganizationPickerActivity;
+CLcc/blynk/logevents/comment/activity/CreateLogEventCommentActivity;
+;Lcc/blynk/logevents/device/activity/DeviceTimelineActivity;
+TLcc/blynk/logevents/timeline/device/activity/CreateOrEditDeviceTimelineNoteActivity;
+DLcc/blynk/logevents/timeline/device/activity/DeviceTimelineActivity;
+PLcc/blynk/logevents/timeline/organization/activity/OrganizationTimelineActivity;
+,Lcc/blynk/login/activity/OidcSignInActivity;
+6Lcc/blynk/orglocation/activity/CreateLocationActivity;
+6Lcc/blynk/pages/activity/WelcomePageDashboardActivity;
+7Lcc/blynk/provisioning/activity/DeviceClaimingActivity;
+-Lcc/blynk/settings/activity/SettingsActivity;
+&Lcc/blynk/tiles/activity/TileActivity;
+9Lcom/google/android/gms/oss/licenses/OssLicensesActivity;
+@Lcom/google/android/gms/oss/licenses/v2/OssLicensesMenuActivity;
+PNo ActivityResultRegistryOwner was provided via LocalActivityResultRegistryOwner
+,androidx.biometric.FingerprintDialogFragment
+barcodeFragmentFactory
+com.amazon.hardware.tv_screen
+com.android.capture.fps
+com.android.chrome
+com.apple.hls.interstitial
+com.apple.iTunes
+com.brave.browser
+com.chrome.beta
+com.chrome.canary
+com.chrome.dev
+com.duckduckgo.mobile.android
+com.google.common.base.Strings
+com.microsoft.emmx
+com.microsoft.playready
+com.opera.browser
+com.opera.browser.beta
+com.opera.cryptobrowser
+com.opera.gx
+com.opera.mini.native
+com.opera.mini.native.beta
+com.opera.touch
+com.sec.android.app.sbrowser
+com.widevine
+deviceFragmentFactory
+getDefaultActivityIcon
+getSearchActivity
+getSettingsActivityName
+io.blynk.plus.m
+io.blynk.plus.y
+io.blynk.pro.m.100
+io.blynk.pro.m.20
+io.blynk.pro.m.50
+io.blynk.starter.m
+io.blynk.starter.y
+io.ktor.client.plugins.SaveBody
+io.ktor.util.date.Month
+io.ktor.util.date.WeekDay
+mapFragmentProvider
+metaFieldFragmentFactory
+performStopActivity
+queryIntentActivityOptions
+requestRelaunchActivity
++setPendingIntentBackgroundActivityStartMode
+Activity
+=Activity created with data 'referrer' without required params
+Activity created with referrer
+"Activity finished with resultCode 
+:Activity intent has no data. Preview Mode was not enabled.
+Activity must not be null
+#Activity not found while launching 
+Activity paused, time
+Activity resumed, time
+Activity started without extras
+#Activity started without resolution
+!Activity transition type not set.
+Activity type not set.
+Activity's intent is null.
+ActivityChooserView
+8ActivityChooserView_expandActivityOverflowButtonDrawable
+(ActivityChooserView_initialActivityCount
+.ActivityRecognitionResult [probableActivities=
+ActivityRecreator
+"ActivityTransition [mActivityType=
+ActivityType 
+)Base_Widget_AppCompat_ActivityChooserView
+DetectedActivity [type=
+DeviceProvisioningViewModel
+,Exception while invoking performStopActivity
+Fragment
+FFragment with tag LifecycleFragmentImpl is not a LifecycleFragmentImpl
+NFragment with tag SLifecycleFragmentImpl is not a SupportLifecycleFragmentImpl
+FragmentContainerView
+"FragmentContainerView_android_name
+!FragmentContainerView_android_tag
+Fragment_android_id
+Fragment_android_name
+Fragment_android_tag
+GoogleApiActivity
+-Got onActivityResult with wrong requestCode: 
+4Lcom/android/billingclient/api/ProxyBillingActivity;
+6Lcom/android/billingclient/api/ProxyBillingActivityV2;
+=Lcom/google/android/gms/oss/licenses/OssLicensesMenuActivity;
+LifecycleFragmentImpl
+@No ViewModelStoreOwner was provided via LocalViewModelStoreOwner
+OssLicensesMenuActivity
+ProxyBillingActivity
+ProxyBillingActivityV2
+SLifecycleFragmentImpl
+bThe intent based title is deprecated. Use OssLicensesMenuActivity.setActivityTitle(title) instead.
+6Throwable caught in handleReferrerForOnActivityCreated
+%Throwable caught in onActivityCreated
+UserActivityReporterPeerCleaner
+$Widget_AppCompat_ActivityChooserView
+*Widget_AppCompat_Light_ActivityChooserView
+<[Lcom/google/android/gms/location/ActivityRecognitionResult;
+android.app.ActivityOptions
+$androidx.biometric.BiometricFragment
+Eandroidx.fragment.app.FragmentViewLifecycleOwner.handleLifecycleEvent
+com.android.contacts
+com.google.android.gms.signin
+com.google.protobuf.UnsafeUtil
+com.mapbox.common
+com.mapbox.common.core
+com.mapbox.common.i18n.language
+com.mapbox.common.loader
+com.mapbox.common.logger
+com.mapbox.maps
+com.mapbox.maps.ThreadChecker
+com.mapbox.maps.UtilsKt
+com.mapbox.maps.base
+com.mapbox.maps.core
+encodedFragment
+$expandActivityOverflowButtonDrawable
+getActivityWindow
+initialActivityCount
+io.grpc.IS_PETIOLE_POLICY
+io.ktor.development
+io.ktor.http.Url
+io.ktor.internal.disable.sfg
+io.ktor.util.date.GMTDate
+io.perfmark.PerfMark.debug
+onActivityResult: data.keys={}
+onActivityResult: resultCode={}
+onActivityResult: scanResult={}
+screenFragmentFactory
+/setPendingIntentBackgroundActivityLaunchAllowed

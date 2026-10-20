@@ -1,0 +1,311 @@
+"Landroid/database/ContentObserver;
+Landroid/database/Observable;
+-Pre-packaged database has an invalid schema: 
+OSELECT 1 FROM sqlite_master WHERE type = 'table' AND name = 'room_master_table'
+ASELECT identity_hash FROM room_master_table WHERE id = 42 LIMIT 1
+Room cannot verify the data integrity. Looks like you've changed schema but forgot to update the version number. You can simply fix this by increasing the version number. Expected identity hash: 
+XCREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)
+&Landroidx/work/impl/WorkDatabase_Impl;
+LSQLiteManager was constructed with both null driver and open helper factory!
+iCannot access database on the main thread since it may potentially lock the UI for a long period of time.
+(Landroid/database/sqlite/SQLiteDatabase;
+jCannot return a SupportSQLiteOpenHelper since no SupportSQLiteOpenHelper.Factory was configured with Room.
+!Landroidx/work/impl/WorkDatabase;
+ROOM
+?SELECT * FROM room_table_modification_log WHERE invalidated = 1
+LUPDATE room_table_modification_log SET invalidated = 0 WHERE invalidated = 1
+!Room Invalidation Tracker Refresh
+9INSERT OR IGNORE INTO room_table_modification_log VALUES(
+ room_table_modification_trigger_
+P` BEGIN UPDATE room_table_modification_log SET invalidated = 1 WHERE table_id = 
+Landroid/database/Cursor;
+6Landroid/database/sqlite/SQLiteDatabase$CursorFactory;
+)Landroid/database/sqlite/SQLiteStatement;
+`Cannot access database on a different coroutine context inherited from a suspending transaction.
+WMust set a non-null database name to a configuration that uses the no backup directory.
+getDatabaseName
+*Landroid/database/sqlite/SQLiteOpenHelper;
+'Landroid/database/DatabaseErrorHandler;
+getDatabasePath
+/Invalid database parent file, not a directory: 
+SupportSQLite
+getWritableDatabase
+getReadableDatabase
+)Landroid/database/sqlite/SQLiteException;
+deleteDatabase
+'Landroid/database/sqlite/SQLiteProgram;
+(Landroid/database/sqlite/SQLiteClosable;
+SupportSQLiteLock
+1Migrating WorkDatabase to the no-backup directory
+0DROP TABLE IF EXISTS room_table_modification_log
+CREATE TEMP TABLE IF NOT EXISTS room_table_modification_log (table_id INTEGER PRIMARY KEY, invalidated INTEGER NOT NULL DEFAULT 0)
++) is missing in the database configuration.
+* is missing in the database configuration.
+C does not exist. Is Room annotation processor correctly configured?
+Cannot build a database with null or empty name. If you are trying to create an in memory database, use Room.inMemoryDatabaseBuilder
+createSchedulers(Landroid/content/Context;Landroidx/work/Configuration;Landroidx/work/impl/utils/taskexecutor/TaskExecutor;Landroidx/work/impl/WorkDatabase;Landroidx/work/impl/constraints/trackers/Trackers;Landroidx/work/impl/Processor;)Ljava/util/List;
+3Landroid/database/sqlite/SQLiteAccessPermException;
+9Landroid/database/sqlite/SQLiteCantOpenDatabaseException;
+3Landroid/database/sqlite/SQLiteConstraintException;
+8Landroid/database/sqlite/SQLiteDatabaseCorruptException;
+7Landroid/database/sqlite/SQLiteDatabaseLockedException;
+/Landroid/database/sqlite/SQLiteDiskIOException;
+-Landroid/database/sqlite/SQLiteFullException;
+4Landroid/database/sqlite/SQLiteTableLockedException;
+-Unexpected SQLite exception during migrations
+DATABASES
+ Lcc/blynk/model/core/database/a;
+ Lcc/blynk/model/core/database/b;
+'Lcc/blynk/model/core/database/RowValue;
+,Lcc/blynk/model/core/database/RowValue$List;
+![Lcc/blynk/model/core/database/c;
+Landroid/database/MatrixCursor;
+firebase_database_url
+setupSqlite
+SQLITE_TMPDIR
+.Lcom/mapbox/maps/OfflineDatabaseMergeCallback;
+4Lcom/mapbox/maps/OfflineDatabaseMergeCallbackNative;
+room
+,Landroid/database/sqlite/SQLiteCursorDriver;
+%Landroid/database/sqlite/SQLiteQuery;
+&Landroid/database/sqlite/SQLiteCursor;
+!com.google.firebase.common.prefs:
+3Landroid/database/sqlite/SQLiteTransactionListener;
+Landroid/database/SQLException;
+G jobs tracked by WorkManager's database;
+ was required but not found. Please provide the necessary Migration path via RoomDatabase.Builder.addMigration(...) or allow for destructive migrations via one of the RoomDatabase.Builder.fallbackToDestructiveMigration* functions.
++Corruption reported by sqlite on database: 
+DATABASE
+DATABASE_ERROR
+Database
+DatabaseError
+DatabaseRepository(tables=
+jINSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '08b926448d86528e697981ddd30459f7')
+.Lcc/blynk/model/core/database/RowValue$List$a;
+)Lcc/blynk/model/core/database/RowValue$a;
+)Lcc/blynk/model/core/database/RowValue$b;
+)Lcc/blynk/model/core/database/RowValue$c;
+)Lcc/blynk/model/core/database/RowValue$d;
+)Lcc/blynk/model/core/database/RowValue$e;
+)Lcc/blynk/model/core/database/RowValue$f;
+)Lcc/blynk/model/core/database/RowValue$g;
+)Lcc/blynk/model/core/database/RowValue$h;
+)Lcc/blynk/model/core/database/RowValue$i;
+)Lcc/blynk/model/core/database/RowValue$j;
+)Lcc/blynk/model/core/database/RowValue$k;
+)Lcc/blynk/model/core/database/RowValue$l;
+)Lcc/blynk/model/core/database/RowValue$m;
+)Lcc/blynk/model/core/database/RowValue$n;
+)Lcc/blynk/model/core/database/RowValue$o;
+)Lcc/blynk/model/core/database/RowValue$p;
+)Lcc/blynk/model/core/database/RowValue$q;
+)Lcc/blynk/model/core/database/RowValue$r;
+)Lcc/blynk/model/core/database/RowValue$s;
+)Lcc/blynk/model/core/database/RowValue$t;
+"Lcc/blynk/model/core/database/a$a;
+"Lcc/blynk/model/core/database/a$b;
+"Lcc/blynk/model/core/database/b$a;
+"Lcc/blynk/model/core/database/b$b;
+"Lcc/blynk/model/core/database/b$c;
+"Lcc/blynk/model/core/database/b$d;
+"Lcc/blynk/model/core/database/b$e;
+"Lcc/blynk/model/core/database/b$f;
+"Lcc/blynk/model/core/database/b$g;
+"Lcc/blynk/model/core/database/b$h;
+"Lcc/blynk/model/core/database/b$i;
+"Lcc/blynk/model/core/database/b$j;
+"Lcc/blynk/model/core/database/b$k;
+"Lcc/blynk/model/core/database/b$l;
+"Lcc/blynk/model/core/database/b$m;
+"Lcc/blynk/model/core/database/b$n;
+"Lcc/blynk/model/core/database/b$o;
+"Lcc/blynk/model/core/database/b$p;
+"Lcc/blynk/model/core/database/b$q;
+"Lcc/blynk/model/core/database/b$r;
+"Lcc/blynk/model/core/database/b$s;
+"Lcc/blynk/model/core/database/b$t;
+"Lcc/blynk/model/core/database/b$u;
+ Lcc/blynk/model/core/database/c;
+\Lcom/mapbox/maps/OfflineDatabaseMergeCallbackNative$OfflineDatabaseMergeCallbackPeerCleaner;
+Migration functionality with a SupportSQLiteDatabase (without a provided SQLiteDriver) requires overriding the migrate(SupportSQLiteDatabase) function.
+pMigration functionality with a provided SQLiteDriver requires overriding the migrate(SQLiteConnection) function.
+CSELECT count(*) FROM sqlite_master WHERE name != 'android_metadata'
+JSELECT name, type FROM sqlite_master WHERE type = 'table' OR type = 'view'
+SQLITE_TMPDIR_VAR_NAME
+([Lcc/blynk/model/core/database/RowValue;
+%[Lcc/blynk/model/core/database/b$k$b;
+databaseRepository
+databaseUrl
+deleting the database file: 
+mergeOfflineDatabase
+sqlite_
+HINSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '
+"Landroid/database/DataSetObserver;
+.Landroidx/media3/database/DatabaseIOException;
+0Landroidx/room/MultiInstanceInvalidationService;
++Lcc/blynk/model/core/database/RowValue$a$a;
++Lcc/blynk/model/core/database/RowValue$b$a;
++Lcc/blynk/model/core/database/RowValue$d$a;
++Lcc/blynk/model/core/database/RowValue$e$a;
++Lcc/blynk/model/core/database/RowValue$f$a;
++Lcc/blynk/model/core/database/RowValue$g$a;
++Lcc/blynk/model/core/database/RowValue$h$a;
++Lcc/blynk/model/core/database/RowValue$i$a;
++Lcc/blynk/model/core/database/RowValue$j$a;
++Lcc/blynk/model/core/database/RowValue$k$a;
++Lcc/blynk/model/core/database/RowValue$l$a;
++Lcc/blynk/model/core/database/RowValue$m$a;
++Lcc/blynk/model/core/database/RowValue$n$a;
++Lcc/blynk/model/core/database/RowValue$o$a;
++Lcc/blynk/model/core/database/RowValue$p$a;
++Lcc/blynk/model/core/database/RowValue$q$a;
++Lcc/blynk/model/core/database/RowValue$r$a;
++Lcc/blynk/model/core/database/RowValue$s$a;
++Lcc/blynk/model/core/database/RowValue$t$a;
+$Lcc/blynk/model/core/database/a$a$a;
+$Lcc/blynk/model/core/database/a$b$a;
+$Lcc/blynk/model/core/database/b$a$a;
+$Lcc/blynk/model/core/database/b$b$a;
+$Lcc/blynk/model/core/database/b$d$a;
+$Lcc/blynk/model/core/database/b$e$a;
+$Lcc/blynk/model/core/database/b$f$a;
+$Lcc/blynk/model/core/database/b$g$a;
+$Lcc/blynk/model/core/database/b$h$a;
+$Lcc/blynk/model/core/database/b$i$a;
+$Lcc/blynk/model/core/database/b$j$a;
+$Lcc/blynk/model/core/database/b$k$a;
+&Lcc/blynk/model/core/database/b$k$b$a;
+$Lcc/blynk/model/core/database/b$k$b;
+$Lcc/blynk/model/core/database/b$l$a;
+$Lcc/blynk/model/core/database/b$m$a;
+$Lcc/blynk/model/core/database/b$n$a;
+$Lcc/blynk/model/core/database/b$o$a;
+$Lcc/blynk/model/core/database/b$p$a;
+$Lcc/blynk/model/core/database/b$q$a;
+$Lcc/blynk/model/core/database/b$r$a;
+$Lcc/blynk/model/core/database/b$s$a;
+$Lcc/blynk/model/core/database/b$t$a;
+$Lcc/blynk/model/core/database/b$u$a;
+$Lcc/blynk/model/core/database/b$u$b;
+"Lcc/blynk/model/core/database/c$a;
+5SELECT name FROM sqlite_master WHERE type = 'trigger'
+_SHOW_AS_ACTION_ALWAYS, SHOW_AS_ACTION_IF_ROOM, and SHOW_AS_ACTION_NEVER are mutually exclusive.
+-[Lcc/blynk/model/core/database/RowValue$List;
+*[Lcc/blynk/model/core/database/RowValue$a;
+*[Lcc/blynk/model/core/database/RowValue$b;
+*[Lcc/blynk/model/core/database/RowValue$d;
+*[Lcc/blynk/model/core/database/RowValue$e;
+*[Lcc/blynk/model/core/database/RowValue$f;
+*[Lcc/blynk/model/core/database/RowValue$g;
+*[Lcc/blynk/model/core/database/RowValue$h;
+*[Lcc/blynk/model/core/database/RowValue$i;
+*[Lcc/blynk/model/core/database/RowValue$j;
+*[Lcc/blynk/model/core/database/RowValue$k;
+*[Lcc/blynk/model/core/database/RowValue$l;
+*[Lcc/blynk/model/core/database/RowValue$m;
+*[Lcc/blynk/model/core/database/RowValue$n;
+*[Lcc/blynk/model/core/database/RowValue$o;
+*[Lcc/blynk/model/core/database/RowValue$p;
+*[Lcc/blynk/model/core/database/RowValue$q;
+*[Lcc/blynk/model/core/database/RowValue$r;
+*[Lcc/blynk/model/core/database/RowValue$s;
+*[Lcc/blynk/model/core/database/RowValue$t;
+#[Lcc/blynk/model/core/database/a$a;
+#[Lcc/blynk/model/core/database/a$b;
+![Lcc/blynk/model/core/database/a;
+#[Lcc/blynk/model/core/database/b$a;
+#[Lcc/blynk/model/core/database/b$b;
+#[Lcc/blynk/model/core/database/b$d;
+#[Lcc/blynk/model/core/database/b$e;
+#[Lcc/blynk/model/core/database/b$f;
+#[Lcc/blynk/model/core/database/b$g;
+#[Lcc/blynk/model/core/database/b$h;
+#[Lcc/blynk/model/core/database/b$i;
+#[Lcc/blynk/model/core/database/b$j;
+#[Lcc/blynk/model/core/database/b$k;
+#[Lcc/blynk/model/core/database/b$l;
+#[Lcc/blynk/model/core/database/b$m;
+#[Lcc/blynk/model/core/database/b$n;
+#[Lcc/blynk/model/core/database/b$o;
+#[Lcc/blynk/model/core/database/b$p;
+#[Lcc/blynk/model/core/database/b$q;
+#[Lcc/blynk/model/core/database/b$r;
+#[Lcc/blynk/model/core/database/b$s;
+#[Lcc/blynk/model/core/database/b$t;
+#[Lcc/blynk/model/core/database/b$u;
+0androidx$room$IMultiInstanceInvalidationCallback
+/androidx$room$IMultiInstanceInvalidationService
+getRoom
+isRoomEnabled
+room_fts_content_sync_
+setRoom
+<'. Was a proper path / name used in Room's database builder?
+]]]){0,1}\.)+(?:(?:(?:aaa|aarp|abb|abbott|abbvie|abc|able|abogado|abudhabi|academy|accenture|accountant|accountants|aco|actor|ads|adult|aeg|aero|aetna|afl|africa|agakhan|agency|aig|airbus|airforce|airtel|akdn|alibaba|alipay|allfinanz|allstate|ally|alsace|alstom|amazon|americanexpress|americanfamily|amex|amfam|amica|amsterdam|analytics|android|anquan|anz|aol|apartments|app|apple|aquarelle|arab|aramco|archi|army|arpa|art|arte|asda|asia|associates|athleta|attorney|auction|audi|audible|audio|auspost|author|auto|autos|avianca|aws|axa|azure|a[cdefgilmoqrstuwxz])|(?:baby|baidu|banamex|bananarepublic|band|bank|bar|barcelona|barclaycard|barclays|barefoot|bargains|baseball|basketball|bauhaus|bayern|bbc|bbt|bbva|bcg|bcn|beats|beauty|beer|bentley|berlin|best|bestbuy|bet|bharti|bible|bid|bike|bing|bingo|bio|biz|black|blackfriday|blockbuster|blog|bloomberg|blue|bms|bmw|bnpparibas|boats|boehringer|bofa|bom|bond|boo|book|booking|bosch|bostik|boston|bot|boutique|box|bradesco|bridgestone|broadway|broker|brother|brussels|build|builders|business|buy|buzz|bzh|b[abdefghijmnorstvwyz])|(?:cab|cafe|cal|call|calvinklein|cam|camera|camp|canon|capetown|capital|capitalone|car|caravan|cards|care|career|careers|cars|casa|case|cash|casino|cat|catering|catholic|cba|cbn|cbre|cbs|center|ceo|cern|cfa|cfd|chanel|channel|charity|chase|chat|cheap|chintai|christmas|chrome|church|cipriani|circle|cisco|citadel|citi|citic|city|cityeats|claims|cleaning|click|clinic|clinique|clothing|cloud|club|clubmed|coach|codes|coffee|college|cologne|com|comcast|commbank|community|company|compare|computer|comsec|condos|construction|consulting|contact|contractors|cooking|cool|coop|corsica|country|coupon|coupons|courses|cpa|credit|creditcard|creditunion|cricket|crown|crs|cruise|cruises|cuisinella|cymru|cyou|c[acdfghiklmnoruvwxyz])|(?:dabur|dad|dance|data|date|dating|datsun|day|dclk|dds|deal|dealer|deals|degree|delivery|dell|deloitte|delta|democrat|dental|dentist|desi|design|dev|dhl|diamonds|diet|digital|direct|directory|discount|discover|dish|diy|dnp|docs|doctor|dog|domains|dot|download|drive|dtv|dubai|dunlop|dupont|durban|dvag|dvr|d[ejkmoz])|(?:earth|eat|eco|edeka|edu|education|email|emerck|energy|engineer|engineering|enterprises|epson|equipment|ericsson|erni|esq|estate|etisalat|eurovision|eus|events|exchange|expert|exposed|express|extraspace|e[cegrstu])|(?:fage|fail|fairwinds|faith|family|fan|fans|farm|farmers|fashion|fast|fedex|feedback|ferrari|ferrero|fidelity|fido|film|final|finance|financial|fire|firestone|firmdale|fish|fishing|fit|fitness|flickr|flights|flir|florist|flowers|fly|foo|food|football|ford|forex|forsale|forum|foundation|fox|free|fresenius|frl|frogans|frontdoor|frontier|ftr|fujitsu|fun|fund|furniture|futbol|fyi|f[ijkmor])|(?:gal|gallery|gallo|gallup|game|games|gap|garden|gay|gbiz|gdn|gea|gent|genting|george|ggee|gift|gifts|gives|giving|glass|gle|global|globo|gmail|gmbh|gmo|gmx|godaddy|gold|goldpoint|golf|goo|goodyear|goog|google|gop|got|gov|grainger|graphics|gratis|green|gripe|grocery|group|guardian|gucci|guge|guide|guitars|guru|g[abdefghilmnpqrstuwy])|(?:hair|hamburg|hangout|haus|hbo|hdfc|hdfcbank|health|healthcare|help|helsinki|here|hermes|hiphop|hisamitsu|hitachi|hiv|hkt|hockey|holdings|holiday|homedepot|homegoods|homes|homesense|honda|horse|hospital|host|hosting|hot|hotels|hotmail|house|how|hsbc|hughes|hyatt|hyundai|h[kmnrtu])|(?:ibm|icbc|ice|icu|ieee|ifm|ikano|imamat|imdb|immo|immobilien|inc|industries|infiniti|info|ing|ink|institute|insurance|insure|int|international|intuit|investments|ipiranga|irish|ismaili|ist|istanbul|itau|itv|i[delmnoqrst])|(?:jaguar|java|jcb|jeep|jetzt|jewelry|jio|jll|jmp|jnj|jobs|joburg|jot|joy|jpmorgan|jprs|juegos|juniper|j[emop])|(?:kaufen|kddi|kerryhotels|kerrylogistics|kerryproperties|kfh|kia|kids|kim|kinder|kindle|kitchen|kiwi|koeln|komatsu|kosher|kpmg|kpn|krd|kred|kuokgroup|kyoto|k[eghimnprwyz])|(?:lacaixa|lamborghini|lamer|lancaster|land|landrover|lanxess|lasalle|lat|latino|latrobe|law|lawyer|lds|lease|leclerc|lefrak|legal|lego|lexus|lgbt|lidl|life|lifeinsurance|lifestyle|lighting|like|lilly|limited|limo|lincoln|link|lipsy|live|living|llc|llp|loan|loans|locker|locus|lol|london|lotte|lotto|love|lpl|lplfinancial|ltd|ltda|lundbeck|luxe|luxury|l[abcikrstuvy])|(?:madrid|maif|maison|makeup|man|management|mango|map|market|marketing|markets|marriott|marshalls|mattel|mba|mckinsey|med|media|meet|melbourne|meme|memorial|men|menu|merckmsd|miami|microsoft|mil|mini|mint|mit|mitsubishi|mlb|mls|mma|mobi|mobile|moda|moe|moi|mom|monash|money|monster|mormon|mortgage|moscow|moto|motorcycles|mov|movie|msd|mtn|mtr|museum|music|m[acdeghklmnopqrstuvwxyz])|(?:nab|nagoya|name|natura|navy|nba|nec|net|netbank|netflix|network|neustar|new|news|next|nextdirect|nexus|nfl|ngo|nhk|nico|nike|nikon|ninja|nissan|nissay|nokia|norton|now|nowruz|nowtv|nra|nrw|ntt|nyc|n[acefgilopruz])|(?:obi|observer|office|okinawa|olayan|olayangroup|oldnavy|ollo|omega|one|ong|onl|online|ooo|open|oracle|orange|org|organic|origins|osaka|otsuka|ott|ovh|om)|(?:page|panasonic|paris|pars|partners|parts|party|pay|pccw|pet|pfizer|pharmacy|phd|philips|phone|photo|photography|photos|physio|pics|pictet|pictures|pid|pin|ping|pink|pioneer|pizza|place|play|playstation|plumbing|plus|pnc|pohl|poker|politie|porn|post|pramerica|praxi|press|prime|pro|prod|productions|prof|progressive|promo|properties|property|protection|pru|prudential|pub|pwc|p[aefghklmnrstwy])|(?:qpon|quebec|quest|qa)|(?:racing|radio|read|realestate|realtor|realty|recipes|red|redstone|redumbrella|rehab|reise|reisen|reit|reliance|ren|rent|rentals|repair|report|republican|rest|restaurant|review|reviews|rexroth|rich|richardli|ricoh|ril|rio|rip|rocher|rocks|rodeo|rogers|room|rsvp|rugby|ruhr|run|rwe|ryukyu|r[eosuw])|(?:saarland|safe|safety|sakura|sale|salon|samsclub|samsung|sandvik|sandvikcoromant|sanofi|sap|sarl|sas|save|saxo|sbi|sbs|sca|scb|schaeffler|schmidt|scholarships|school|schule|schwarz|science|scot|search|seat|secure|security|seek|select|sener|services|seven|sew|sex|sexy|sfr|shangrila|sharp|shaw|shell|shia|shiksha|shoes|shop|shopping|shouji|show|showtime|silk|sina|singles|site|ski|skin|sky|skype|sling|smart|smile|sncf|soccer|social|softbank|software|sohu|solar|solutions|song|sony|soy|spa|space|sport|spot|srl|stada|staples|star|statebank|statefarm|stc|stcgroup|stockholm|storage|store|stream|studio|study|style|sucks|supplies|supply|support|surf|surgery|suzuki|swatch|swiss|sydney|systems|s[abcdeghijklmnorstuvxyz])|(?:tab|taipei|talk|taobao|target|tatamotors|tatar|tattoo|tax|taxi|tci|tdk|team|tech|technology|tel|temasek|tennis|teva|thd|theater|theatre|tiaa|tickets|tienda|tips|tires|tirol|tjmaxx|tjx|tkmaxx|tmall|today|tokyo|tools|top|toray|toshiba|total|tours|town|toyota|toys|trade|trading|training|travel|travelers|travelersinsurance|trust|trv|tube|tui|tunes|tushu|tvs|t[cdfghjklmnortvwz])|(?:ubank|ubs|unicom|university|uno|uol|ups|u[agksyz])|(?:vacations|vana|vanguard|vegas|ventures|verisign|versicherung|vet|viajes|video|vig|viking|villas|vin|vip|virgin|visa|vision|viva|vivo|vlaanderen|vodka|volkswagen|volvo|vote|voting|voto|voyage|v[aceginu])|(?:wales|walmart|walter|wang|wanggou|watch|watches|weather|weatherchannel|webcam|weber|website|wed|wedding|weibo|weir|whoswho|wien|wiki|williamhill|win|windows|wine|winners|wme|wolterskluwer|woodside|work|works|world|wow|wtc|wtf|w[fs])|(?:
+, room=
+Cannot create database tables
+"Cannot determine database filename
+Cannot open database
+RConditional user property too long for local database. Sending directly to service
+DEVICE_LOCATION_ROOM
+Database error
+)Database error getting next bundle app id
+-Database error querying filter results. appId
+&Database error querying filters. appId
+-Database error querying scoped filters. appId
+6Database error while trying to delete uploaded bundles
+Database open failed
+Database returned empty set
+DatabaseListTab(iconResId=
+QDefault event parameters too long for local database. Sending directly to service
+Default prefs file
+3Error deleting app launch break from local database
+FError deleting app launch break from local database in reasonable time
+Error opening database
+4Error opening database for diagnostic signals. appId
+Error querying database.
+)Error reading entries from local database
+%Error writing entry to local database
+(Error writing entry; local database full
+GEvent is too long for local database. Sending event directly to service
+<Failed to load conditional user property from local database
+;Failed to load default event parameters from local database
+(Failed to load event from local database
+0Failed to load user property from local database
+'Failed to open freshly created database
+?Failed to open local database. Events will bypass local storage
+6Failed to read events from database in reasonable time
++Failed to turn off database read permission
+,Failed to turn off database write permission
+4Failed to turn on database read permission for owner
+5Failed to turn on database write permission for owner
+'Failed to write entry to local database
+7Fewer entries removed from local database than expected
+1Lch/qos/logback/classic/android/SQLiteAppender$1;
+/Lch/qos/logback/classic/android/SQLiteAppender;
+1Lch/qos/logback/classic/android/SQLiteLogCleaner;
+'Loaded invalid null value from database
+Location Room
+,Logging telemetry for logEvent from database
+4Lokhttp3/internal/publicsuffix/PublicSuffixDatabase;
+>New GMP App Id passed in. Removing cached database data. appId
+6Null default event parameters; not writing to database
+'OfflineDatabaseMergeCallbackPeerCleaner
+7Opening the database failed, dropping and recreating it
+=Opening the local database failed, dropping and recreating it
+6Populate EES config from database on cache miss. appId
+PublicSuffixDatabase.list
+Recursive database initialization detected. Did you try to use the database instance during initialization? Maybe in one of the callbacks?
+QRetrieved last session number from database does not contain a valid (long) value
+SHARED_PREFS
+SQLITE_MASTER
+SQLiteEventStore
+Unable to open database '
+%Unknown record type in local database
+FUser property too long for local database. Sending directly to service
+7__androidx_security_crypto_encrypted_prefs_key_keyset__
+9__androidx_security_crypto_encrypted_prefs_value_keyset__
+(com.google.android.gms.measurement.prefs
+getDatabaseDirectoryPath
+getDatabaseFile
+(google.analytics.deferred.deeplink.prefs
+openOrCreateDatabase

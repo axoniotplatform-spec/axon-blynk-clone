@@ -1,0 +1,10 @@
+{
+  "iosAppLink" : "https://apps.apple.com/us/app/blynk-iot/id1559317868",
+  "androidAppLink" : "https://play.google.com/store/apps/details?id=cloud.blynk",
+  "appleAppSiteAssociation" : "{\n  \"applinks\": {\n    \"apps\": [],\n    \"details\": [\n      {\n        \"appID\": \"YCN439KN4Y.cc.blynk.blynknew\",\n        \"paths\": [\n          \"*resetPass*\",\n          \"*invite*\",\n          \"*contractorInvite*\",\n          \"*device_activation*\",\n          \"*close_action\",\n          \"*mobile-billing\",\n          \"*/dashboard/blueprints/Library/*\"\n        ]\n      }\n    ]\n  }\n}",
+  "androidAppSiteAssociation" : "[\n  {\n    \"relation\": [\n      \"delegate_permission/common.handle_all_urls\"\n    ],\n    \"target\": {\n      \"namespace\": \"android_app\",\n      \"package_name\": \"cloud.blynk\",\n      \"sha256_cert_fingerprints\": [\n        \"97:D1:61:0F:23:F9:B1:89:70:74:E7:7A:21:72:CF:C9:36:42:FF:B6:AA:07:64:67:DF:57:92:B8:48:5C:1E:D2\",\n        \"74:EA:1C:24:D0:E2:31:7A:72:EA:03:07:A6:08:E2:31:74:79:D5:64:E8:49:75:60:B6:5F:03:43:42:28:D7:64\"\n      ]\n    }\n  }\n]",
+  "provisionType" : "BOTH",
+  "enableCriticalAlerts" : false,
+  "iosMinVersion" : "3.6.2",
+  "androidMinVersion" : "4.14.2"
+}

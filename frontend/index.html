@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Devices - Blynk.Console</title>
+  <link rel="stylesheet" href="/static/styles/theme.css" />
+  <link rel="icon" href="/static/static/icon.png" />
+</head>
+<body>
+  <!-- Exact Blynk.Console Sidebar -->
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <div class="blynk-logo-icon">B</div>
+      <span class="blynk-logo-title">Blynk.Console</span>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="sidebar-nav-item" onclick="switchTab('get-started')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        <span>Get Started</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('dashboards')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        <span>Dashboards</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('custom-data')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><ellipse cx="12" cy="5" rx="9" ry="3"></ellipse><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"></path><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"></path></svg>
+        <span>Custom Data</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('developer-zone')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        <span>Developer Zone</span>
+      </div>
+
+      <div class="sidebar-nav-item active" onclick="switchTab('devices')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path><polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline><line x1="12" y1="22.08" x2="12" y2="12"></line></svg>
+        <span>Devices</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('automations')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Automations</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('users')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Users</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('organizations')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"></rect><line x1="9" y1="6" x2="9" y2="6.01"></line><line x1="15" y1="6" x2="15" y2="6.01"></line><line x1="9" y1="10" x2="9" y2="10.01"></line><line x1="15" y1="10" x2="15" y2="10.01"></line><line x1="9" y1="14" x2="9" y2="14.01"></line><line x1="15" y1="14" x2="15" y2="14.01"></line><line x1="9" y1="18" x2="15" y2="18"></line></svg>
+        <span>Organizations</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('locations')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+        <span>Locations</span>
+      </div>
+
+      <div class="sidebar-divider"></div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('snapshots')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path><circle cx="12" cy="13" r="4"></circle></svg>
+        <span>Snapshots</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('fleet-management')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"></rect><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"></polygon><circle cx="5.5" cy="18.5" r="2.5"></circle><circle cx="18.5" cy="18.5" r="2.5"></circle></svg>
+        <span>Fleet Management</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('in-app-messaging')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+        <span>In-App Messaging</span>
+      </div>
+
+      <div class="sidebar-nav-item" onclick="switchTab('predictive-maintenance')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline><polyline points="17 6 23 6 23 12"></polyline></svg>
+        <span>Predictive Maintenance</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content Layout -->
+  <div class="main-layout">
+    <!-- Topbar -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="org-dropdown">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path></svg>
+          <span>My organization - 2257TU</span>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div class="messages-progress-box">
+          Messages used: <strong>0 of 100.0k</strong>
+        </div>
+
+        <button class="ask-ai-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"></path></svg>
+          <span>Ask AI</span>
+        </button>
+
+        <div class="user-avatar-circle" title="samblynkk@gmail.com">
+          S
+        </div>
+      </div>
+    </header>
+
+    <!-- Content Router Views -->
+    <main class="page-container">
+      
+      <!-- TAB 1: DEVICES VIEW (EXACT MATCH TO USER SCREENSHOT) -->
+      <section id="pane-devices" class="tab-pane active">
+        <div class="view-header">
+          <h1 class="view-title">Devices</h1>
+          <button class="btn-blynk-primary" onclick="openNewDeviceModal()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>New Device</span>
+          </button>
+        </div>
+
+        <div class="filter-toolbar">
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div class="search-box">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <input type="text" id="device-search-input" placeholder="Start typing" onkeyup="filterDeviceTable()" />
+            </div>
+
+            <button class="filter-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+              <span>Add Filter</span>
+            </button>
+          </div>
+
+          <div style="display:flex;gap:12px;align-items:center;">
+            <div class="segmented-pill-group">
+              <div class="segmented-pill active">All 1</div>
+              <div class="segmented-pill">My devices</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Devices Table -->
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" /></th>
+                <th>Name</th>
+                <th>Auth Token</th>
+                <th>Device Owner</th>
+                <th>Status</th>
+                <th>Last Reported At</th>
+                <th>Organization</th>
+                <th>Template Name</th>
+                <th>Firmware</th>
+              </tr>
+            </thead>
+            <tbody id="devices-table-body">
+              <tr onclick="openDeviceDetail(1)" style="cursor:pointer;">
+                <td><input type="checkbox" onclick="event.stopPropagation()" /></td>
+                <td style="font-weight:600;color:#0375de;">BLINKING LED</td>
+                <td style="font-family:monospace;color:var(--text-muted);">yhdHK6Vu - ••••</td>
+                <td>samblynkk@gmail.com (you)</td>
+                <td>
+                  <span id="device-row-status" class="status-badge online">
+                    <span class="status-dot-sm"></span> Online
+                  </span>
+                </td>
+                <td style="color:var(--text-muted);">Just now</td>
+                <td>My organization - 2257TU</td>
+                <td>BLINKING LED</td>
+                <td>1.0.0</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- TAB 2: DASHBOARDS VIEW (REAL-TIME WIDGET CANVAS) -->
+      <section id="pane-dashboards" class="tab-pane">
+        <div class="view-header">
+          <div>
+            <h1 class="view-title">BLINKING LED Dashboard</h1>
+            <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">
+              Template: <strong>TMPL2yjltoB57</strong> • Hardware: <strong>ESP32 (Wi-Fi)</strong>
+            </div>
+          </div>
+          <button class="filter-btn" onclick="switchTab('devices')">← Back to Devices</button>
+        </div>
+
+        <div id="widget-canvas" style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px;">
+          <!-- Loaded dynamically by app.js -->
+        </div>
+      </section>
+
+      <!-- TAB 3: DEVELOPER ZONE (TEMPLATES) -->
+      <section id="pane-developer-zone" class="tab-pane">
+        <div class="view-header">
+          <h1 class="view-title">Templates</h1>
+          <button class="btn-blynk-primary" onclick="alert('Creating template...')">+ New Template</button>
+        </div>
+
+        <div class="template-grid">
+          <div class="template-card" onclick="switchTab('dashboards')">
+            <div class="template-card-header">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
+            </div>
+            <div class="template-card-body">
+              <div>
+                <div>BLINKING LED</div>
+                <div class="template-card-sub">1 Device • ESP32</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+          </div>
+
+          <div class="template-card">
+            <div class="template-card-header">
+              <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
+            </div>
+            <div class="template-card-body">
+              <div>
+                <div>test</div>
+                <div class="template-card-sub">No devices • ESP8266</div>
+              </div>
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 4: AUTOMATIONS -->
+      <section id="pane-automations" class="tab-pane">
+        <div class="view-header">
+          <h1 class="view-title">Automations</h1>
+          <button class="btn-blynk-primary">+ Create Automation</button>
+        </div>
+
+        <div style="background:#fff;border:1px solid var(--border-color);border-radius:8px;padding:32px;max-width:800px;">
+          <h3 style="font-size:18px;margin-bottom:8px;">Choose Condition</h3>
+          <p style="color:var(--text-muted);font-size:13px;margin-bottom:24px;">Automations let you set up actions that start when a certain trigger happens.</p>
+          
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
+              <h4 style="font-size:14px;margin-bottom:4px;">⏱️ Schedule</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Automation will start at a specific time of day.</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
+              <h4 style="font-size:14px;margin-bottom:4px;">⚡ Device State</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger automation by a certain state of the device.</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
+              <h4 style="font-size:14px;margin-bottom:4px;">🌅 Sunset/Sunrise</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Automation will start based on the sun position.</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;">
+              <h4 style="font-size:14px;margin-bottom:4px;">🎬 Scene</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger automation manually with one tap.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- TAB 5: USERS -->
+      <section id="pane-users" class="tab-pane">
+        <div class="view-header">
+          <h1 class="view-title">Users</h1>
+          <button class="btn-blynk-primary">+ Create New User</button>
+        </div>
+
+        <div class="table-card">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th style="width:40px;"><input type="checkbox" /></th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Location</th>
+                <th>Status</th>
+                <th>Registration Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox" /></td>
+                <td style="font-weight:600;">Sam (you)</td>
+                <td>samblynkk@gmail.com</td>
+                <td><span style="padding:2px 8px;border-radius:4px;background:#eef2ff;color:#4f46e5;font-weight:600;font-size:11.5px;">Admin</span></td>
+                <td>No locations</td>
+                <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                <td style="color:var(--text-muted);">Jun 24, 2026</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- Exact Blynk Footer -->
+    <footer class="app-footer">
+      <span>Region: NY3</span>
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+    </footer>
+  </div>
+
+  <!-- New Device Modal Dialog -->
+  <div id="new-device-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">New Device</h3>
+        <button onclick="closeNewDeviceModal()" style="border:none;background:none;cursor:pointer;font-size:18px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="font-size:13px;color:var(--text-muted);margin-bottom:16px;">Choose a template to provision a new device token:</p>
+        
+        <div class="form-group">
+          <label class="form-label">Template</label>
+          <select id="modal-template-select" class="form-input">
+            <option value="1">BLINKING LED (TMPL2yjltoB57) - ESP32</option>
+            <option value="2">test - ESP8266</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Device Name</label>
+          <input type="text" id="modal-device-name" class="form-input" value="ESP32 Unit 2" />
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button class="filter-btn" onclick="closeNewDeviceModal()">Cancel</button>
+        <button class="btn-blynk-primary" onclick="confirmCreateDevice()">Create Device</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="/static/src/bridge/shellBridge.js"></script>
+  <script src="/static/src/app.js"></script>
+  <script>
+    function switchTab(tabId) {
+      document.querySelectorAll('.sidebar-nav-item').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(el => el.classList.remove('active'));
+      
+      const pane = document.getElementById(`pane-${tabId}`);
+      if (pane) pane.classList.add('active');
+
+      const items = Array.from(document.querySelectorAll('.sidebar-nav-item'));
+      const activeItem = items.find(el => el.innerText.toLowerCase().replace(/\s+/g, '-') === tabId);
+      if (activeItem) activeItem.classList.add('active');
+
+      if (tabId === 'dashboards') {
+        loadDeviceDashboard();
+      }
+    }
+
+    function openNewDeviceModal() {
+      document.getElementById('new-device-modal').classList.add('open');
+    }
+
+    function closeNewDeviceModal() {
+      document.getElementById('new-device-modal').classList.remove('open');
+    }
+
+    function confirmCreateDevice() {
+      const name = document.getElementById('modal-device-name').value;
+      alert(`Device '${name}' provisioned! Auth Token generated.`);
+      closeNewDeviceModal();
+    }
+
+    function openDeviceDetail(id) {
+      switchTab('dashboards');
+    }
+
+    function filterDeviceTable() {
+      const query = document.getElementById('device-search-input').value.toLowerCase();
+      const rows = document.querySelectorAll('#devices-table-body tr');
+      rows.forEach(r => {
+        r.style.display = r.innerText.toLowerCase().includes(query) ? '' : 'none';
+      });
+    }
+  </script>
+</body>
+</html>
