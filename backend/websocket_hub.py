@@ -164,6 +164,13 @@ class ShellBridgeHub:
                                 "value": value,
                                 "timestamp": datetime.utcnow().isoformat()
                             })
+
+                            # Phase 5B: Automations Rules Engine Evaluation
+                            try:
+                                from backend.rules_engine import evaluate_rules_for_device
+                                evaluate_rules_for_device(db, dev_id, pin, value, hub=self)
+                            except Exception as re_err:
+                                logger.warning(f"Error evaluating rules: {re_err}")
                         else:
                             error = {"code": "invalid_pin", "message": f"Pin {pin} not registered on template"}
                     else:

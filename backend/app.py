@@ -4,8 +4,8 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from backend.database import engine, Base, SessionLocal
-from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget
-from backend.api import devices, templates
+from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
+from backend.api import devices, templates, automations, external
 from backend.websocket_hub import hub
 
 # Create tables
@@ -29,6 +29,8 @@ app.add_middleware(
 # Include API routers
 app.include_router(devices.router)
 app.include_router(templates.router)
+app.include_router(automations.router)
+app.include_router(external.router)
 
 # WebSocket endpoint matching ShellBridge specification
 @app.websocket("/ws")
@@ -221,6 +223,33 @@ def seed_database():
 
             db.commit()
             print("Axon IoT database seeded with full Blynk widget suite.")
+
+        # Seed Automation Rules if empty
+        if db.query(AutomationRule).count() == 0:
+            org_first = db.query(Organization).first()
+            if org_first:
+                r1 = AutomationRule(
+                    org_id=org_first.id,
+                    name="High Temp Cooling Trigger",
+                    trigger_type="DATASTREAM_VALUE",
+                    trigger_config={"condition": "When Temperature (V2) > 30 °C"},
+                    action_type="WRITE_PIN",
+                    action_config={"action": "Turn Fan Relay (V3) ON"},
+                    is_active=True
+                )
+                r2 = AutomationRule(
+                    org_id=org_first.id,
+                    name="Daily System Diagnostic",
+                    trigger_type="SCHEDULE",
+                    trigger_config={"condition": "Schedule: Everyday at 08:00 AM"},
+                    action_type="NOTIFICATION",
+                    action_config={"action": "Log Status to Terminal (V7)"},
+                    is_active=True
+                )
+                db.add(r1)
+                db.add(r2)
+                db.commit()
+                print("Seeded automation rules.")
     finally:
         db.close()
 
