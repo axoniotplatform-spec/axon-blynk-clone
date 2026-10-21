@@ -7,6 +7,8 @@ from backend.database import engine, Base, SessionLocal
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
 from backend.api import devices, templates, automations, external
 from backend.websocket_hub import hub
+from backend.hardware_gateway import hardware_gateway
+import asyncio
 
 # Create tables
 Base.metadata.create_all(bind=engine)
@@ -31,6 +33,13 @@ app.include_router(devices.router)
 app.include_router(templates.router)
 app.include_router(automations.router)
 app.include_router(external.router)
+
+@app.on_event("startup")
+async def on_startup():
+    hardware_gateway.hub = hub
+    asyncio.create_task(hardware_gateway.start())
+    print("[Axon Core] Blynk Hardware Protocol Gateway started on TCP port 8080.")
+
 
 # WebSocket endpoint matching ShellBridge specification
 @app.websocket("/ws")

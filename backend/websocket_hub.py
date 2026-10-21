@@ -156,6 +156,11 @@ class ShellBridgeHub:
                             db.commit()
 
                             result = {"success": True, "pin": pin, "value": value}
+                            try:
+                                from backend.hardware_gateway import hardware_gateway
+                                asyncio.create_task(hardware_gateway.send_pin_write(d.auth_token, pin, value))
+                            except Exception:
+                                pass
                             
                             # Broadcast real-time update to all listeners
                             await self.broadcast_event("onValueUpdated", {
