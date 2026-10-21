@@ -178,3 +178,41 @@ def add_widget(template_id: int, data: WidgetCreate, db: Session = Depends(get_d
     db.commit()
     db.refresh(w)
     return {"status": "created", "id": w.id, "type": w.widget_type}
+
+
+@router.put("/{template_id}/widgets/{widget_id}")
+def update_widget(template_id: int, widget_id: int, data: WidgetCreate, db: Session = Depends(get_db)):
+    w = db.query(DashboardWidget).filter(
+        DashboardWidget.template_id == template_id,
+        DashboardWidget.id == widget_id
+    ).first()
+    if not w:
+        raise HTTPException(status_code=404, detail="Widget not found")
+
+    w.widget_type = data.widget_type
+    w.label = data.label
+    w.pin = data.pin.upper()
+    w.grid_x = data.grid_x
+    w.grid_y = data.grid_y
+    w.width = data.width
+    w.height = data.height
+    w.on_label = data.on_label
+    w.off_label = data.off_label
+    w.on_color = data.on_color
+    w.off_color = data.off_color
+    w.settings = data.settings
+    db.commit()
+    db.refresh(w)
+    return {"status": "updated", "id": w.id, "label": w.label}
+
+@router.delete("/{template_id}/widgets/{widget_id}")
+def delete_widget(template_id: int, widget_id: int, db: Session = Depends(get_db)):
+    w = db.query(DashboardWidget).filter(
+        DashboardWidget.template_id == template_id,
+        DashboardWidget.id == widget_id
+    ).first()
+    if not w:
+        raise HTTPException(status_code=404, detail="Widget not found")
+    db.delete(w)
+    db.commit()
+    return {"status": "deleted", "id": widget_id}

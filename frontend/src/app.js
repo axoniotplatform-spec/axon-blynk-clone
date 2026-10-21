@@ -221,6 +221,77 @@ function renderWidgets(widgets, datastreams) {
           </div>
         </div>
       `;
+    } else if (wType === "LCD") {
+      const val = w.currentValue || "SYSTEM READY";
+      widgetContent = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-weight:600;font-size:13.5px;color:var(--text-main);">${w.label}</span>
+          <span style="font-family:monospace;font-size:11px;background:#f0f2f5;padding:2px 6px;border-radius:4px;">${w.pin}</span>
+        </div>
+        <div style="background:#1a3d1a;border:3px solid #2d5a2d;border-radius:6px;padding:12px 16px;box-shadow:inset 0 0 10px rgba(0,0,0,0.5);font-family:'Courier New', monospace;color:#4ade80;">
+          <div style="font-size:12px;opacity:0.8;letter-spacing:1px;border-bottom:1px dashed #2d5a2d;padding-bottom:4px;margin-bottom:6px;">LINE 1: ${w.label.toUpperCase()}</div>
+          <div id="lcd-val-${w.pin}" style="font-size:15px;font-weight:bold;letter-spacing:1.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">LINE 2: ${val}</div>
+        </div>
+      `;
+    } else if (wType === "RGB_LIGHT" || wType === "COLOR_PICKER") {
+      const colorVal = w.currentValue || "#0375de";
+      widgetContent = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-weight:600;font-size:13.5px;color:var(--text-main);">${w.label}</span>
+          <span style="font-family:monospace;font-size:11px;background:#f0f2f5;padding:2px 6px;border-radius:4px;">${w.pin}</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:4px 0;">
+          <div id="rgb-preview-${w.pin}" style="width:44px;height:44px;border-radius:50%;background:${colorVal};box-shadow:0 0 14px ${colorVal};border:2px solid #fff;transition:all 0.2s;"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap;justify-content:center;">
+            ${['#fe0f00', '#10f17f', '#0375de', '#f59e0b', '#8b5cf6', '#ec4899', '#ffffff'].map(c => `
+              <div onclick="setRgbColor('${w.pin}', '${c}')" style="width:20px;height:20px;border-radius:50%;background:${c};cursor:pointer;border:1px solid #cbd5e1;box-shadow:0 1px 3px rgba(0,0,0,0.1);"></div>
+            `).join('')}
+          </div>
+        </div>
+      `;
+    } else if (wType === "MAP" || wType === "GPS_MAP") {
+      widgetContent = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+          <span style="font-weight:600;font-size:13.5px;color:var(--text-main);">${w.label}</span>
+          <span style="font-family:monospace;font-size:11px;background:#f0f2f5;padding:2px 6px;border-radius:4px;">${w.pin}</span>
+        </div>
+        <div style="height:120px;border-radius:6px;overflow:hidden;position:relative;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg, #e0f2fe 0%, #dbeafe 100%);border:1px solid #bfdbfe;">
+          <div style="text-align:center;">
+            <div style="font-size:24px;">📍</div>
+            <div style="font-weight:700;font-size:12px;color:#1e40af;margin-top:2px;">GPS TRACKER ACTIVE</div>
+            <div style="font-family:monospace;font-size:11px;color:#3b82f6;">Lat: 6.5244° N, Lon: 3.3792° E</div>
+          </div>
+        </div>
+      `;
+    } else if (wType === "VALUE_DISPLAY" || wType === "STATUS_TILE") {
+      const val = w.currentValue || "100";
+      const units = w.settings?.units || "";
+      widgetContent = `
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+          <span style="font-weight:600;font-size:13.5px;color:var(--text-main);">${w.label}</span>
+          <span style="font-family:monospace;font-size:11px;background:#f0f2f5;padding:2px 6px;border-radius:4px;">${w.pin}</span>
+        </div>
+        <div style="display:flex;align-items:baseline;justify-content:center;gap:6px;flex:1;padding:12px 0;">
+          <span id="metric-val-${w.pin}" style="font-size:36px;font-weight:800;color:var(--text-main);">${val}</span>
+          <span style="font-size:14px;font-weight:600;color:var(--text-muted);">${units}</span>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:center;gap:4px;font-size:11.5px;color:#10f17f;font-weight:600;">
+          <span>↑ Normal Operating Range</span>
+        </div>
+      `;
+    }
+
+    // In Edit mode, show configure & delete overlays
+    if (window.isDashboardEditMode) {
+      widgetContent = `
+        <div style="position:relative;width:100%;height:100%;">
+          <div style="position:absolute;top:-10px;right:-10px;display:flex;gap:6px;z-index:10;">
+            <button onclick="openWidgetSettingsModal(${w.id})" style="background:#0375de;color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.2);">⚙️</button>
+            <button onclick="deleteWidgetFromCanvas(${w.id})" style="background:#fe0f00;color:#fff;border:none;border-radius:4px;padding:3px 7px;font-size:11px;cursor:pointer;box-shadow:0 1px 3px rgba(0,0,0,0.2);">🗑️</button>
+          </div>
+          ${widgetContent}
+        </div>
+      `;
     }
 
     card.innerHTML = widgetContent;
@@ -321,6 +392,17 @@ function handleLivePinUpdate(pin, value) {
   } else if (pin === "V3") {
     const sw = document.getElementById("switch-V3");
     if (sw) sw.checked = String(value) === "1";
+  } else if (pin === "V10" || pin === "V8") {
+    const lcd = document.getElementById(`lcd-val-${pin}`);
+    if (lcd) lcd.innerText = `LINE 2: ${value}`;
+    const rgb = document.getElementById(`rgb-preview-${pin}`);
+    if (rgb) {
+      rgb.style.background = value;
+      rgb.style.boxShadow = `0 0 14px ${value}`;
+    }
+  } else {
+    const metric = document.getElementById(`metric-val-${pin}`);
+    if (metric) metric.innerText = value;
   }
 }
 
@@ -420,4 +502,144 @@ function drawChart() {
   ctx.arc(lastX, lastY, 4, 0, Math.PI * 2);
   ctx.fillStyle = "#10f17f";
   ctx.fill();
+}
+
+// Extended Widget Handlers
+async function setRgbColor(pin, hex) {
+  const preview = document.getElementById(`rgb-preview-${pin}`);
+  if (preview) {
+    preview.style.background = hex;
+    preview.style.boxShadow = `0 0 14px ${hex}`;
+  }
+  await window.shellBridge.sendValue(activeDeviceId, pin, hex);
+}
+
+window.isDashboardEditMode = false;
+
+function toggleEditDashboardMode() {
+  window.isDashboardEditMode = !window.isDashboardEditMode;
+  const btn = document.getElementById('btn-edit-dashboard');
+  if (btn) {
+    btn.innerText = window.isDashboardEditMode ? '💾 Save Dashboard' : '✏️ Edit Dashboard';
+    btn.style.background = window.isDashboardEditMode ? '#d1ff39' : 'var(--bg-white)';
+    btn.style.color = '#000000';
+  }
+  loadDeviceDashboard();
+}
+
+async function addNewWidgetFromPalette(widgetType) {
+  const pinMap = {
+    'BUTTON': 'V0', 'SLIDER': 'V1', 'GAUGE': 'V2', 'SWITCH': 'V3',
+    'NUMBER_INPUT': 'V4', 'RADIAL_GAUGE': 'V5', 'LED': 'V6',
+    'SUPERGRAPH': 'V2', 'TERMINAL': 'V7', 'LCD': 'V8', 'RGB_LIGHT': 'V10',
+    'MAP': 'V11', 'VALUE_DISPLAY': 'V9'
+  };
+
+  const labelMap = {
+    'BUTTON': 'Control Push', 'SLIDER': 'Range Slider', 'GAUGE': 'Dial Gauge',
+    'SWITCH': 'Power Toggle', 'NUMBER_INPUT': 'Setpoint Step', 'RADIAL_GAUGE': 'Radial Level',
+    'LED': 'Status Indicator', 'SUPERGRAPH': 'Telemetry Graph', 'TERMINAL': 'Serial Console',
+    'LCD': 'Matrix Display', 'RGB_LIGHT': 'NeoPixel RGB', 'MAP': 'GPS Location',
+    'VALUE_DISPLAY': 'Metric KPI'
+  };
+
+  const selectedPin = pinMap[widgetType] || 'V0';
+  const selectedLabel = labelMap[widgetType] || widgetType;
+
+  try {
+    const res = await fetch(`/api/v1/templates/${activeDeviceId}/widgets`, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        widget_type: widgetType,
+        label: selectedLabel,
+        pin: selectedPin,
+        grid_x: 0,
+        grid_y: 0,
+        width: 4,
+        height: 2,
+        on_label: 'ON',
+        off_label: 'OFF',
+        on_color: '#0375de',
+        off_color: '#fe0f00',
+        settings: {}
+      })
+    });
+    if (res.ok) {
+      loadDeviceDashboard();
+    }
+  } catch (err) {
+    console.error('Failed to add widget:', err);
+  }
+}
+
+async function deleteWidgetFromCanvas(widgetId) {
+  if (!confirm('Remove this widget from dashboard?')) return;
+  try {
+    const res = await fetch(`/api/v1/templates/${activeDeviceId}/widgets/${widgetId}`, {
+      method: 'DELETE'
+    });
+    if (res.ok) {
+      loadDeviceDashboard();
+    }
+  } catch (e) {
+    console.error('Failed to delete widget:', e);
+  }
+}
+
+function openWidgetSettingsModal(widgetId) {
+  const widget = currentDashboard?.widgets?.find(w => w.id === widgetId);
+  if (!widget) return;
+
+  const titleInput = document.getElementById('ws-modal-title');
+  const pinInput = document.getElementById('ws-modal-pin');
+  const idInput = document.getElementById('ws-modal-id');
+
+  if (titleInput) titleInput.value = widget.label;
+  if (pinInput) pinInput.value = widget.pin;
+  if (idInput) idInput.value = widget.id;
+
+  const modal = document.getElementById('widget-settings-modal');
+  if (modal) modal.classList.add('open');
+}
+
+function closeWidgetSettingsModal() {
+  const modal = document.getElementById('widget-settings-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+async function confirmSaveWidgetSettings() {
+  const id = document.getElementById('ws-modal-id').value;
+  const label = document.getElementById('ws-modal-title').value;
+  const pin = document.getElementById('ws-modal-pin').value;
+
+  const widget = currentDashboard?.widgets?.find(w => String(w.id) === String(id));
+  if (!widget) return;
+
+  try {
+    const res = await fetch(`/api/v1/templates/${activeDeviceId}/widgets/${id}`, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        widget_type: widget.widgetType || widget.type,
+        label: label,
+        pin: pin,
+        grid_x: widget.grid?.x || 0,
+        grid_y: widget.grid?.y || 0,
+        width: widget.grid?.w || 4,
+        height: widget.grid?.h || 2,
+        on_label: widget.onLabel || 'ON',
+        off_label: widget.offLabel || 'OFF',
+        on_color: widget.onColor || '#0375de',
+        off_color: widget.offColor || '#fe0f00',
+        settings: widget.settings || {}
+      })
+    });
+    if (res.ok) {
+      closeWidgetSettingsModal();
+      loadDeviceDashboard();
+    }
+  } catch (err) {
+    console.error('Failed to save widget settings:', err);
+  }
 }

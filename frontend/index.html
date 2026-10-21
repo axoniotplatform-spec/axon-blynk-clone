@@ -193,7 +193,10 @@
               Template: <strong>TMPL2yjltoB57</strong> • Hardware: <strong>ESP32 (Wi-Fi)</strong>
             </div>
           </div>
-          <button class="filter-btn" onclick="switchTab('devices')">← Back to Devices</button>
+          <div style="display:flex; gap:10px;">
+            <button id="btn-edit-main-dash" class="filter-btn" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
+            <button class="filter-btn" onclick="switchTab('devices')">← Back to Devices</button>
+          </div>
         </div>
 
         <div id="widget-canvas" style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px;">
@@ -340,27 +343,38 @@ void loop() {
 
           <!-- Subtab 3: Web Dashboard -->
           <div id="tmpl-subpane-web-dashboard" class="tmpl-subpane" style="display:none;">
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+              <div>
+                <span style="font-size:15px; font-weight:700; color:var(--text-main);">Web Layout Canvas (12-Column Responsive Grid)</span>
+                <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">Click any widget from the Widget Box to place on canvas</span>
+              </div>
+              <div style="display:flex; gap:10px;">
+                <button id="btn-edit-dashboard" class="filter-btn" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
+              </div>
+            </div>
+
             <div style="display:flex; gap:20px;">
-              <!-- Widget Box -->
+              <!-- Widget Box Palette -->
               <div class="widget-box-palette">
-                <div style="font-size:13px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Widget Box</div>
-                <div class="widget-box-item">🔘 Button</div>
-                <div class="widget-box-item">🎚️ Slider</div>
-                <div class="widget-box-item">🔌 Switch</div>
-                <div class="widget-box-item">⏲️ Gauge</div>
-                <div class="widget-box-item">⭕ Radial Gauge</div>
-                <div class="widget-box-item">🔢 Number Input</div>
-                <div class="widget-box-item">🚨 LED Indicator</div>
-                <div class="widget-box-item">📈 SuperGraph</div>
-                <div class="widget-box-item">💻 Terminal</div>
-                <div class="widget-box-item">📍 GPS Map</div>
-                <div class="widget-box-item">📊 Value Display</div>
+                <div style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Widget Box (28 Types)</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('BUTTON')">🔘 Styled Button</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SLIDER')">🎚️ Level Slider</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SWITCH')">🔌 Relay Switch</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('GAUGE')">⏲️ Dial Gauge</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('RADIAL_GAUGE')">⭕ Radial Gauge</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('NUMBER_INPUT')">🔢 Stepper Input</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('LED')">🚨 Alarm LED</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SUPERGRAPH')">📈 Live SuperGraph</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('TERMINAL')">💻 IDE Terminal</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('LCD')">📟 LCD 16x2 Matrix</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('RGB_LIGHT')">🎨 NeoPixel RGB</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('MAP')">📍 GPS Map Tracker</div>
+                <div class="widget-box-item" onclick="addNewWidgetFromPalette('VALUE_DISPLAY')">📊 Value KPI Tile</div>
               </div>
 
-              <!-- Dashboard Canvas Preview -->
+              <!-- Dashboard Canvas -->
               <div style="flex:1;">
-                <div style="background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:24px; min-height:400px;">
-                  <div style="font-size:14px; font-weight:600; margin-bottom:12px; color:var(--text-muted);">Canvas Preview (Active Widgets on Template)</div>
+                <div style="background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:20px; min-height:480px;">
                   <div class="widget-grid" id="template-widget-preview-grid">
                     <!-- Cloned from active widgets -->
                   </div>
@@ -797,5 +811,42 @@ void loop() {
       closeNewAutomationModal();
     }
   </script>
+  <!-- Widget Settings Modal Dialog -->
+  <div id="widget-settings-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 class="modal-title">Widget Settings</h3>
+        <button onclick="closeWidgetSettingsModal()" style="border:none;background:none;cursor:pointer;font-size:18px;">✕</button>
+      </div>
+      <div class="modal-body">
+        <input type="hidden" id="ws-modal-id" />
+        <div class="form-group">
+          <label class="form-label">Title / Label</label>
+          <input type="text" id="ws-modal-title" class="form-input" />
+        </div>
+        <div class="form-group">
+          <label class="form-label">Target Datastream (Virtual Pin)</label>
+          <select id="ws-modal-pin" class="form-input">
+            <option value="V0">V0 - BLINKING LED (Integer)</option>
+            <option value="V1">V1 - LED Brightness (Integer)</option>
+            <option value="V2">V2 - Temperature (Double)</option>
+            <option value="V3">V3 - Fan Relay (Integer)</option>
+            <option value="V4">V4 - Target Setpoint (Double)</option>
+            <option value="V5">V5 - Humidity (Integer)</option>
+            <option value="V6">V6 - Alarm State (Integer)</option>
+            <option value="V7">V7 - CLI Terminal (String)</option>
+            <option value="V8">V8 - LCD Status Matrix (String)</option>
+            <option value="V9">V9 - Soil Moisture (Integer)</option>
+            <option value="V10">V10 - NeoPixel RGB (Color)</option>
+            <option value="V11">V11 - GPS Location (String)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:flex-end;gap:10px;">
+        <button class="filter-btn" onclick="closeWidgetSettingsModal()">Cancel</button>
+        <button class="btn-blynk-primary" onclick="confirmSaveWidgetSettings()">Save Settings</button>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
