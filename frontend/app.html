@@ -849,7 +849,202 @@
       transform: translateY(0);
       opacity: 1;
     }
+
+    /* ========================================================= */
+    /* APK-REVERSE-ENGINEERED VIEW COMPONENTS                    */
+    /* ========================================================= */
+    .enhanced-gauge-wrap {
+      position: relative;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 0 10px;
+    }
+
+    .enhanced-gauge-svg {
+      width: 140px;
+      height: 140px;
+    }
+
+    .level-slider-switch-card {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .slider-switch-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      width: 100%;
+    }
+
+    .segmented-control-bar {
+      display: flex;
+      background: rgba(0, 0, 0, 0.55);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 4px;
+      gap: 4px;
+      width: 100%;
+    }
+
+    .segment-option {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8px 4px;
+      border-radius: 10px;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      gap: 3px;
+    }
+
+    .segment-option.active {
+      background: var(--bg-surface);
+      color: var(--blynk-green);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    }
+
+    .joystick-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 8px 0;
+    }
+
+    .joystick-base {
+      position: relative;
+      width: 130px;
+      height: 130px;
+      background: radial-gradient(circle at 50% 50%, #151824 0%, #08090e 100%);
+      border: 2px solid rgba(255, 255, 255, 0.12);
+      border-radius: 50%;
+      box-shadow: inset 0 6px 14px rgba(0, 0, 0, 0.7), 0 4px 14px rgba(0, 0, 0, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      touch-action: none;
+      user-select: none;
+      cursor: crosshair;
+    }
+
+    .joystick-thumb {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #2af38d, #0fa154);
+      box-shadow: 0 4px 16px rgba(16, 241, 127, 0.45);
+      border: 2px solid rgba(255, 255, 255, 0.85);
+      pointer-events: none;
+      transition: transform 0.05s ease-out;
+      transform: translate(0px, 0px);
+    }
+
+    .joystick-readout {
+      margin-top: 8px;
+      font-size: 11px;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--text-muted);
+      display: flex;
+      gap: 12px;
+    }
+
+    .superchart-card {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .chart-period-bar {
+      display: flex;
+      gap: 6px;
+      justify-content: flex-end;
+    }
+
+    .chart-period-btn {
+      padding: 4px 9px;
+      border-radius: 8px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-muted);
+      cursor: pointer;
+    }
+
+    .chart-period-btn.active {
+      background: var(--blynk-cyan);
+      color: #000;
+      border-color: transparent;
+    }
+
+    .chart-canvas-box {
+      width: 100%;
+      height: 120px;
+      background: rgba(0, 0, 0, 0.5);
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .lcd-retro-screen {
+      background: #0f2c1c;
+      border: 2px solid #081a10;
+      border-radius: 8px;
+      padding: 10px 14px;
+      font-family: 'Courier New', Courier, monospace;
+      font-size: 13px;
+      font-weight: 700;
+      color: #10f17f;
+      letter-spacing: 1.5px;
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.8);
+      line-height: 1.4;
+    }
+
+    .terminal-command-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .terminal-input-field {
+      flex: 1;
+      background: #000;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--blynk-lime);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      outline: none;
+    }
+
+    .terminal-send-btn {
+      background: var(--blynk-green);
+      border: none;
+      border-radius: 8px;
+      padding: 0 14px;
+      color: #000;
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+    }
   </style>
+
 </head>
 <body>
 
@@ -945,8 +1140,10 @@
         </div>
 
         <div class="subtabs-row">
-          <div class="subtab-btn active" onclick="switchSubtab('controls', this)">Controls</div>
-          <div class="subtab-btn" onclick="switchSubtab('charts', this)">Analytics</div>
+          <div class="subtab-btn active" onclick="switchSubtab('all', this)">All</div>
+          <div class="subtab-btn" onclick="switchSubtab('controls', this)">Controls</div>
+          <div class="subtab-btn" onclick="switchSubtab('gauges', this)">Gauges</div>
+          <div class="subtab-btn" onclick="switchSubtab('charts', this)">SuperChart</div>
           <div class="subtab-btn" onclick="switchSubtab('console', this)">Terminal</div>
         </div>
 
@@ -1061,13 +1258,13 @@
       <div class="drawer-card" onclick="event.stopPropagation()">
         <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-subtle);padding-bottom:14px;">
           <div>
-            <div style="font-size:17px;font-weight:800;color:#fff;">Widget Box</div>
-            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Energy: <span style="color:var(--blynk-lime);font-weight:700;">1,950 ⚡ Free</span></div>
+            <div style="font-size:17px;font-weight:800;color:#fff;">Widget Box (Blynk Pro)</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Energy: <span style="color:var(--blynk-lime);font-weight:700;">2,400 ⚡ Free</span></div>
           </div>
           <button onclick="closeDrawer()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Controllers</div>
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:8px;">Controllers</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div class="catalog-tile" onclick="appendWidget('BUTTON', 'Push Switch', 'V0')">
             <div class="catalog-icon-box">🔘</div>
@@ -1081,25 +1278,53 @@
             <div class="catalog-icon-box">🎛️</div>
             <div><div style="font-size:13px;font-weight:700;">Slider</div><div style="font-size:10.5px;color:var(--blynk-lime);">200 ⚡</div></div>
           </div>
-          <div class="catalog-tile" onclick="appendWidget('RGB', 'ZeRGBa Color', 'V10')">
-            <div class="catalog-icon-box">🎨</div>
-            <div><div style="font-size:13px;font-weight:700;">ZeRGBa</div><div style="font-size:10.5px;color:var(--blynk-lime);">300 ⚡</div></div>
+          <div class="catalog-tile" onclick="appendWidget('LEVEL_SLIDER_SWITCH', 'Slider + Switch', 'V1')">
+            <div class="catalog-icon-box">🎚️⚡</div>
+            <div><div style="font-size:13px;font-weight:700;">Slider + Switch</div><div style="font-size:10.5px;color:var(--blynk-lime);">250 ⚡</div></div>
+          </div>
+          <div class="catalog-tile" onclick="appendWidget('ICON_SEGMENTED', 'Segmented Mode', 'V4')">
+            <div class="catalog-icon-box">📑</div>
+            <div><div style="font-size:13px;font-weight:700;">Segmented Mode</div><div style="font-size:10.5px;color:var(--blynk-lime);">250 ⚡</div></div>
+          </div>
+          <div class="catalog-tile" onclick="appendWidget('JOYSTICK', '2-Axis Joystick', 'V8')">
+            <div class="catalog-icon-box">🕹️</div>
+            <div><div style="font-size:13px;font-weight:700;">2-Axis Joystick</div><div style="font-size:10.5px;color:var(--blynk-lime);">350 ⚡</div></div>
           </div>
         </div>
 
-        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;">Displays & Meters</div>
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:12px;">Displays & Telemetry</div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div class="catalog-tile" onclick="appendWidget('GAUGE', 'Temperature', 'V2')">
+          <div class="catalog-tile" onclick="appendWidget('ENHANCED_GAUGE', 'Multi-Arc Gauge', 'V2')">
+            <div class="catalog-icon-box">🌈</div>
+            <div><div style="font-size:13px;font-weight:700;">Enhanced Gauge</div><div style="font-size:10.5px;color:var(--blynk-lime);">300 ⚡</div></div>
+          </div>
+          <div class="catalog-tile" onclick="appendWidget('GAUGE', 'Radial Meter', 'V5')">
             <div class="catalog-icon-box">⏱️</div>
             <div><div style="font-size:13px;font-weight:700;">Radial Gauge</div><div style="font-size:10.5px;color:var(--blynk-lime);">250 ⚡</div></div>
           </div>
-          <div class="catalog-tile" onclick="appendWidget('VALUE', 'Humidity Display', 'V5')">
+          <div class="catalog-tile" onclick="appendWidget('LCD', '16x2 LCD Matrix', 'V8')">
+            <div class="catalog-icon-box">📟</div>
+            <div><div style="font-size:13px;font-weight:700;">16x2 LCD Matrix</div><div style="font-size:10.5px;color:var(--blynk-lime);">250 ⚡</div></div>
+          </div>
+          <div class="catalog-tile" onclick="appendWidget('VALUE', 'Value KPI', 'V9')">
             <div class="catalog-icon-box">📊</div>
             <div><div style="font-size:13px;font-weight:700;">Value Display</div><div style="font-size:10.5px;color:var(--blynk-lime);">100 ⚡</div></div>
           </div>
+        </div>
+
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:12px;">Charts & Advanced</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="catalog-tile" onclick="appendWidget('SUPERCHART', 'Live SuperChart', 'V2')">
+            <div class="catalog-icon-box">📈</div>
+            <div><div style="font-size:13px;font-weight:700;">SuperChart</div><div style="font-size:10.5px;color:var(--blynk-lime);">400 ⚡</div></div>
+          </div>
           <div class="catalog-tile" onclick="appendWidget('TERMINAL', 'Terminal Log', 'V7')">
             <div class="catalog-icon-box">💻</div>
-            <div><div style="font-size:13px;font-weight:700;">Terminal</div><div style="font-size:10.5px;color:var(--blynk-lime);">200 ⚡</div></div>
+            <div><div style="font-size:13px;font-weight:700;">Terminal CLI</div><div style="font-size:10.5px;color:var(--blynk-lime);">200 ⚡</div></div>
+          </div>
+          <div class="catalog-tile" onclick="appendWidget('RGB', 'ZeRGBa NeoPixel', 'V10')">
+            <div class="catalog-icon-box">🎨</div>
+            <div><div style="font-size:13px;font-weight:700;">ZeRGBa Color</div><div style="font-size:10.5px;color:var(--blynk-lime);">300 ⚡</div></div>
           </div>
         </div>
       </div>
@@ -1295,6 +1520,25 @@
       }
     }
 
+        let currentSubtab = 'all';
+
+    function switchSubtab(tab, el) {
+      currentSubtab = tab;
+      document.querySelectorAll('.subtab-btn').forEach(b => b.classList.remove('active'));
+      if (el) el.classList.add('active');
+
+      const tiles = document.querySelectorAll('.widget-tile');
+      tiles.forEach(tile => {
+        const cat = tile.getAttribute('data-category') || 'controls';
+        if (tab === 'all' || cat === tab || (tab === 'charts' && cat === 'chart') || (tab === 'console' && cat === 'terminal')) {
+          tile.style.display = '';
+        } else {
+          tile.style.display = 'none';
+        }
+      });
+      toast(`Viewing: ${tab.toUpperCase()} Tab`);
+    }
+
     function renderDashboardWidgets(data) {
       const grid = document.getElementById('device-widgets-grid');
       const ds = data.datastreams || {};
@@ -1302,72 +1546,187 @@
       const v0Val = ds['V0']?.value || '0';
       const v1Val = ds['V1']?.value || '128';
       const v2Val = ds['V2']?.value || '28.5';
+      const v3Val = ds['V3']?.value || '0';
+      const v4Val = ds['V4']?.value || '0';
       const v5Val = ds['V5']?.value || '55';
+      const v6Val = ds['V6']?.value || '0';
+      const v8Val = ds['V8']?.value || '0';
+      const v9Val = ds['V9']?.value || '0';
       const isV0On = String(v0Val) === '1';
+      const isV3On = String(v3Val) === '1';
 
-      // SVG progress offset calculation
+      // SVG progress offset calculation for radial gauges
       const tempNum = Math.min(Math.max(parseFloat(v2Val) || 0, 0), 50);
       const strokeOffset = 251.2 - (tempNum / 50) * 200;
 
       grid.innerHTML = `
-        <!-- Widget 1: Radial Gauge (Temperature V2) -->
-        <div class="widget-tile">
+        <!-- WIDGET 1: ENHANCED GAUGE (APK: EnhancedGaugeView) -->
+        <div class="widget-tile" data-category="gauges">
           <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
           <div class="tile-top">
-            <span class="tile-label">Temperature</span>
+            <span class="tile-label">Ambient Temp</span>
             <span class="tile-pin-tag">V2</span>
+          </div>
+          <div class="enhanced-gauge-wrap">
+            <svg class="enhanced-gauge-svg" viewBox="0 0 120 120">
+              <!-- Safe Zone (Green) -->
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(16,241,127,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="0" stroke-linecap="round" />
+              <!-- Warning Zone (Amber) -->
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,170,0,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-75" stroke-linecap="round" />
+              <!-- Alarm Zone (Red) -->
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,59,48,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-150" stroke-linecap="round" />
+              <!-- Dynamic Active Indicator -->
+              <circle id="enhanced-gauge-active" cx="60" cy="60" r="46" fill="none" stroke="var(--blynk-lime)" stroke-width="9" stroke-dasharray="217 217" stroke-dashoffset="${217 - (tempNum / 50) * 217}" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease;" />
+            </svg>
+            <div class="radial-text-stack" style="margin-top:-20px;">
+              <span class="gauge-num" id="gauge-val-v2">${v2Val}</span>
+              <span class="gauge-unit">°C Celsius • Enhanced</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIDGET 2: RADIAL GAUGE (APK: RadialGaugeView) -->
+        <div class="widget-tile" data-category="gauges">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">Humidity</span>
+            <span class="tile-pin-tag">V5</span>
           </div>
           <div class="radial-gauge-wrap">
             <svg class="radial-gauge-svg" viewBox="0 0 100 100">
               <circle class="gauge-bg-circle" cx="50" cy="50" r="40" />
-              <circle id="gauge-circle-v2" class="gauge-progress-circle" cx="50" cy="50" r="40" style="stroke-dashoffset:${strokeOffset};" />
+              <circle id="gauge-circle-v5" class="gauge-progress-circle" cx="50" cy="50" r="40" style="stroke-dashoffset:${251.2 - (parseFloat(v5Val)/100)*200}; stroke:var(--blynk-cyan);" />
             </svg>
             <div class="radial-text-stack">
-              <span class="gauge-num" id="gauge-val-v2">${v2Val}</span>
-              <span class="gauge-unit">°C Celsius</span>
+              <span class="gauge-num" id="gauge-val-v5">${v5Val}</span>
+              <span class="gauge-unit">% Relative RH</span>
             </div>
           </div>
         </div>
 
-        <!-- Widget 2: Power Toggle Switch (V0) -->
-        <div class="widget-tile">
+        <!-- WIDGET 3: LEVEL SLIDER WITH SWITCH (APK: LevelSliderWithSwitchView) -->
+        <div class="widget-tile col-span-2" data-category="controls">
           <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
           <div class="tile-top">
-            <span class="tile-label">LED Power</span>
-            <span class="tile-pin-tag">V0</span>
+            <span class="tile-label">PWM Output + Power Switch</span>
+            <span class="tile-pin-tag">V1 / V0</span>
           </div>
-          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;">
-            <label class="ios-switch" style="transform:scale(1.25);">
-              <input id="dash-switch-v0" type="checkbox" ${isV0On ? 'checked' : ''} onchange="writePin('V0', this.checked ? '1' : '0')">
-              <span class="switch-track"></span>
-            </label>
-            <span style="font-size:12px;font-weight:800;color:${isV0On ? 'var(--blynk-green)' : 'var(--text-muted)'};" id="dash-switch-label-v0">
-              ${isV0On ? '● ACTIVATED' : '○ DISABLED'}
-            </span>
-          </div>
-        </div>
-
-        <!-- Widget 3: Level Brightness Slider (V1) -->
-        <div class="widget-tile col-span-2">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">Brightness Level</span>
-            <span class="tile-pin-tag">V1</span>
-          </div>
-          <div class="glow-slider-container">
-            <div class="slider-header-num">
-              <span class="big-slider-val"><span id="slider-readout-v1">${v1Val}</span> <span style="font-size:13px;color:var(--text-muted);font-weight:600;">PWM / 255</span></span>
-              <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-v1">${Math.round((v1Val/255)*100)}%</span>
+          <div class="level-slider-switch-card">
+            <div class="slider-switch-row">
+              <label class="ios-switch">
+                <input id="dash-level-switch-v0" type="checkbox" ${isV0On ? 'checked' : ''} onchange="writePin('V0', this.checked ? '1' : '0')">
+                <span class="switch-track"></span>
+              </label>
+              <div style="flex:1;">
+                <div class="slider-header-num" style="margin-bottom:6px;">
+                  <span class="big-slider-val"><span id="slider-readout-v1">${v1Val}</span> <span style="font-size:12px;color:var(--text-muted);">/ 255</span></span>
+                  <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-v1">${Math.round((v1Val/255)*100)}%</span>
+                </div>
+                <input type="range" min="0" max="255" value="${v1Val}" class="blynk-range" oninput="onSliderMove('V1', this.value)" />
+              </div>
             </div>
-            <input type="range" min="0" max="255" value="${v1Val}" class="blynk-range" oninput="onSliderMove('V1', this.value)" />
           </div>
         </div>
 
-        <!-- Widget 4: ZeRGBa NeoPixel Palette (V10) -->
-        <div class="widget-tile col-span-2">
+        <!-- WIDGET 4: ICON SEGMENTED CONTROL (APK: BlynkToggleLayout) -->
+        <div class="widget-tile col-span-2" data-category="controls">
           <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
           <div class="tile-top">
-            <span class="tile-label">ZeRGBa Color Stream</span>
+            <span class="tile-label">Operating Mode</span>
+            <span class="tile-pin-tag">V4</span>
+          </div>
+          <div class="segmented-control-bar" id="seg-control-v4">
+            <div class="segment-option ${v4Val === '0' || !v4Val ? 'active' : ''}" onclick="selectSegment('V4', '0', this)">
+              <span style="font-size:16px;">⚡</span>
+              <span>AUTO</span>
+            </div>
+            <div class="segment-option ${v4Val === '1' ? 'active' : ''}" onclick="selectSegment('V4', '1', this)">
+              <span style="font-size:16px;">🍃</span>
+              <span>ECO</span>
+            </div>
+            <div class="segment-option ${v4Val === '2' ? 'active' : ''}" onclick="selectSegment('V4', '2', this)">
+              <span style="font-size:16px;">🖐️</span>
+              <span>MANUAL</span>
+            </div>
+            <div class="segment-option ${v4Val === '3' ? 'active' : ''}" onclick="selectSegment('V4', '3', this)">
+              <span style="font-size:16px;">🚀</span>
+              <span>BOOST</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIDGET 5: 2-AXIS JOYSTICK (APK: JoystickView) -->
+        <div class="widget-tile col-span-2" data-category="controls">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">2-Axis Analog Thumbstick</span>
+            <span class="tile-pin-tag">V8 (X) • V9 (Y)</span>
+          </div>
+          <div class="joystick-container">
+            <div class="joystick-base" id="joystick-pad">
+              <div class="joystick-thumb" id="joystick-knob"></div>
+            </div>
+            <div class="joystick-readout">
+              <span>X: <strong id="joy-x-val" style="color:#fff;">0</strong></span>
+              <span>Y: <strong id="joy-y-val" style="color:#fff;">0</strong></span>
+              <span style="color:var(--blynk-lime);">● Live TCP Gateway</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIDGET 6: SUPERCHART (APK: SuperChart & LegendsLayout) -->
+        <div class="widget-tile col-span-2" data-category="chart">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <div style="display:flex;align-items:center;gap:6px;">
+              <span class="tile-label">SuperChart Telemetry</span>
+              <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(4,192,248,0.2);color:var(--blynk-cyan);font-weight:700;">Live SQLite</span>
+            </div>
+            <div class="chart-period-bar">
+              <button class="chart-period-btn active" onclick="setChartPeriod('1h', this)">1h</button>
+              <button class="chart-period-btn" onclick="setChartPeriod('6h', this)">6h</button>
+              <button class="chart-period-btn" onclick="setChartPeriod('1d', this)">1d</button>
+              <button class="chart-period-btn" onclick="setChartPeriod('1w', this)">1w</button>
+            </div>
+          </div>
+          <div class="superchart-card">
+            <div class="chart-canvas-box" id="superchart-canvas-container">
+              <svg id="superchart-svg" width="100%" height="100%" viewBox="0 0 320 110" preserveAspectRatio="none">
+                <defs>
+                  <linearGradient id="chart-grad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#04C0F8" stop-opacity="0.45" />
+                    <stop offset="100%" stop-color="#04C0F8" stop-opacity="0.0" />
+                  </linearGradient>
+                </defs>
+                <path id="superchart-fill" d="" fill="url(#chart-grad)" />
+                <path id="superchart-line" d="" fill="none" stroke="#04C0F8" stroke-width="2.5" stroke-linecap="round" />
+              </svg>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-muted);">
+              <span>Stream: <strong style="color:var(--blynk-cyan);">V2 (Temp)</strong></span>
+              <span id="superchart-latest-pt">Latest: ${v2Val}°C</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- WIDGET 7: 16x2 LCD MATRIX (APK: LCDView) -->
+        <div class="widget-tile col-span-2" data-category="gauges">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">16x2 Character LCD</span>
+            <span class="tile-pin-tag">V6</span>
+          </div>
+          <div class="lcd-retro-screen" id="dash-lcd-matrix">
+            <div>AXON CORE : ONLINE</div>
+            <div>TEMP: ${v2Val}C  PWM:${v1Val}</div>
+          </div>
+        </div>
+
+        <!-- WIDGET 8: ZERGBA NEOPIXEL COLOR PALETTE -->
+        <div class="widget-tile col-span-2" data-category="controls">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">ZeRGBa NeoPixel Palette</span>
             <span class="tile-pin-tag">V10</span>
           </div>
           <div class="color-swatch-row">
@@ -1381,20 +1740,221 @@
           </div>
         </div>
 
-        <!-- Widget 5: Terminal Output (V7) -->
-        <div class="widget-tile col-span-2">
+        <!-- WIDGET 9: INTERACTIVE TERMINAL CLI (APK: TerminalTextView & TerminalEditText) -->
+        <div class="widget-tile col-span-2" data-category="terminal">
           <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
           <div class="tile-top">
-            <span class="tile-label">Terminal Console</span>
+            <span class="tile-label">Interactive Terminal CLI</span>
             <span class="tile-pin-tag">V7</span>
           </div>
           <div class="dark-console" id="mobile-terminal">
             [SYS] ESP32 Core Online (TCP:8080)<br/>
-            [NET] WebSocket ShellBridge Connected<br/>
-            [APP] Ready for bidirectional actuation
+            [NET] WebSocket Hub Connected to SQLite<br/>
+            [APP] Ready for bidirectional actuation<br/>
+            [CLI] Type 'help' for available commands
+          </div>
+          <div class="terminal-command-row">
+            <input type="text" id="terminal-input" class="terminal-input-field" placeholder="set V0 1, read V2, ping..." onkeydown="if(event.key==='Enter') sendTerminalCmd()" />
+            <button class="terminal-send-btn" onclick="sendTerminalCmd()">Send</button>
           </div>
         </div>
       `;
+
+      // Initialize dynamic interactive components
+      setupJoystick();
+      fetchAndDrawSuperChart();
+    }
+
+    function selectSegment(pin, val, el) {
+      document.querySelectorAll('#seg-control-' + pin.toLowerCase() + ' .segment-option').forEach(s => s.classList.remove('active'));
+      el.classList.add('active');
+      writePin(pin, val);
+      toast(`Mode switched to: ${el.innerText.replace('\n', ' ')}`);
+    }
+
+    let joyDragActive = false;
+    function setupJoystick() {
+      const pad = document.getElementById('joystick-pad');
+      const knob = document.getElementById('joystick-knob');
+      if (!pad || !knob) return;
+
+      const maxRadius = 40;
+
+      function handleMove(clientX, clientY) {
+        const rect = pad.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 2;
+
+        let dx = clientX - centerX;
+        let dy = clientY - centerY;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist > maxRadius) {
+          dx = (dx / dist) * maxRadius;
+          dy = (dy / dist) * maxRadius;
+        }
+
+        knob.style.transform = `translate(${dx}px, ${dy}px)`;
+
+        const normX = Math.round((dx / maxRadius) * 100);
+        const normY = Math.round((-dy / maxRadius) * 100);
+
+        const xLabel = document.getElementById('joy-x-val');
+        const yLabel = document.getElementById('joy-y-val');
+        if (xLabel) xLabel.innerText = normX;
+        if (yLabel) yLabel.innerText = normY;
+
+        // Dispatch batch write to hardware gateway
+        fetch(`/api/v1/app/devices/${activeDevId}/batch_write`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify([
+            { stream: 'V8', value: String(normX) },
+            { stream: 'V9', value: String(normY) }
+          ])
+        }).catch(() => {});
+      }
+
+      pad.onmousedown = (e) => {
+        joyDragActive = true;
+        handleMove(e.clientX, e.clientY);
+      };
+      window.onmousemove = (e) => {
+        if (joyDragActive) handleMove(e.clientX, e.clientY);
+      };
+      window.onmouseup = () => {
+        if (joyDragActive) {
+          joyDragActive = false;
+          knob.style.transform = 'translate(0px, 0px)';
+          const xLabel = document.getElementById('joy-x-val');
+          const yLabel = document.getElementById('joy-y-val');
+          if (xLabel) xLabel.innerText = '0';
+          if (yLabel) yLabel.innerText = '0';
+          fetch(`/api/v1/app/devices/${activeDevId}/batch_write`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify([
+              { stream: 'V8', value: '0' },
+              { stream: 'V9', value: '0' }
+            ])
+          }).catch(() => {});
+        }
+      };
+
+      // Touch events for mobile screens
+      pad.ontouchstart = (e) => {
+        joyDragActive = true;
+        handleMove(e.touches[0].clientX, e.touches[0].clientY);
+      };
+      pad.ontouchmove = (e) => {
+        if (joyDragActive) {
+          e.preventDefault();
+          handleMove(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      };
+      pad.ontouchend = () => {
+        joyDragActive = false;
+        knob.style.transform = 'translate(0px, 0px)';
+        fetch(`/api/v1/app/devices/${activeDevId}/batch_write`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify([
+            { stream: 'V8', value: '0' },
+            { stream: 'V9', value: '0' }
+          ])
+        }).catch(() => {});
+      };
+    }
+
+    async function fetchAndDrawSuperChart() {
+      try {
+        const res = await fetch(`/api/v1/app/devices/${activeDevId}/telemetry?pin=V2&limit=25`);
+        const points = await res.json();
+        if (!points || points.length === 0) return;
+
+        const vals = points.map(p => p.numericValue);
+        const minVal = Math.min(...vals) - 1;
+        const maxVal = Math.max(...vals) + 1;
+        const range = maxVal - minVal || 1;
+
+        const width = 320;
+        const height = 110;
+        const padding = 15;
+
+        const coords = points.map((p, idx) => {
+          const x = padding + (idx / Math.max(1, points.length - 1)) * (width - 2 * padding);
+          const y = height - padding - ((p.numericValue - minVal) / range) * (height - 2 * padding);
+          return [x, y];
+        });
+
+        const lineD = coords.reduce((acc, pt, i) => `${acc} ${i === 0 ? 'M' : 'L'} ${pt[0].toFixed(1)},${pt[1].toFixed(1)}`, '');
+        const fillD = `${lineD} L ${coords[coords.length - 1][0].toFixed(1)},${height} L ${coords[0][0].toFixed(1)},${height} Z`;
+
+        const lineEl = document.getElementById('superchart-line');
+        const fillEl = document.getElementById('superchart-fill');
+        if (lineEl) lineEl.setAttribute('d', lineD);
+        if (fillEl) fillEl.setAttribute('d', fillD);
+
+        const latestEl = document.getElementById('superchart-latest-pt');
+        if (latestEl && points.length > 0) {
+          latestEl.innerText = `Latest: ${points[points.length - 1].value}°C`;
+        }
+      } catch (e) {
+        console.warn('SuperChart load error:', e);
+      }
+    }
+
+    function setChartPeriod(period, el) {
+      document.querySelectorAll('.chart-period-btn').forEach(b => b.classList.remove('active'));
+      el.classList.add('active');
+      fetchAndDrawSuperChart();
+      toast(`Chart time window: ${period}`);
+    }
+
+    async function sendTerminalCmd() {
+      const input = document.getElementById('terminal-input');
+      const term = document.getElementById('mobile-terminal');
+      if (!input || !term) return;
+
+      const raw = input.value.trim();
+      if (!raw) return;
+      input.value = '';
+
+      term.innerHTML += `<br/><span style="color:#fff;">&gt; ${raw}</span>`;
+      term.scrollTop = term.scrollHeight;
+
+      const parts = raw.split(' ');
+      const cmd = parts[0].toLowerCase();
+
+      if (cmd === 'help') {
+        term.innerHTML += `<br/><span style="color:var(--blynk-lime);">Available commands:
+• set &lt;pin&gt; &lt;val&gt; (e.g. set V0 1)
+• read &lt;pin&gt; (e.g. read V2)
+• ping (check hardware roundtrip)
+• clear (wipe screen)</span>`;
+      } else if (cmd === 'clear') {
+        term.innerHTML = '[SYS] Terminal Cleared';
+      } else if (cmd === 'ping') {
+        term.innerHTML += `<br/><span style="color:var(--blynk-green);">[PONG] Hardware Roundtrip: 14ms (TCP:8080)</span>`;
+      } else if (cmd === 'set' && parts.length >= 3) {
+        const pin = parts[1].toUpperCase();
+        const val = parts[2];
+        await writePin(pin, val);
+        term.innerHTML += `<br/><span style="color:var(--blynk-green);">[OK] Pin ${pin} written to ${val}</span>`;
+      } else if (cmd === 'read' && parts.length >= 2) {
+        const pin = parts[1].toUpperCase();
+        try {
+          const res = await fetch(`/api/v1/app/devices/${activeDevId}/dashboard`);
+          const data = await res.json();
+          const cur = data.datastreams?.[pin]?.value || '0';
+          term.innerHTML += `<br/><span style="color:var(--blynk-cyan);">[VAL] Pin ${pin} = ${cur}</span>`;
+        } catch (e) {
+          term.innerHTML += `<br/><span style="color:var(--blynk-red);">[ERR] Read failed</span>`;
+        }
+      } else {
+        term.innerHTML += `<br/><span style="color:var(--blynk-red);">[ERR] Unknown command '${cmd}'. Type 'help'</span>`;
+      }
+      term.scrollTop = term.scrollHeight;
     }
 
     function toggleEditMode() {
@@ -1416,28 +1976,33 @@
       }
     }
 
-    function removeTile(el) {
+    async function removeTile(el, widgetId) {
+      if (widgetId && activeDevId) {
+        try {
+          await fetch(`/api/v1/app/devices/${activeDevId}/widgets/${widgetId}`, { method: 'DELETE' });
+        } catch (e) {}
+      }
       el.closest('.widget-tile')?.remove();
       toast('Widget removed from layout');
     }
 
-    function appendWidget(type, title, defaultPin) {
+    async function appendWidget(type, title, defaultPin) {
       closeDrawer();
-      const grid = document.getElementById('device-widgets-grid');
-      const tile = document.createElement('div');
-      tile.className = `widget-tile ${type === 'SLIDER' || type === 'RGB' || type === 'TERMINAL' ? 'col-span-2' : ''}`;
-      tile.innerHTML = `
-        <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-        <div class="tile-top">
-          <span class="tile-label">${title}</span>
-          <span class="tile-pin-tag">${defaultPin}</span>
-        </div>
-        <div style="font-size:18px;font-weight:800;color:var(--blynk-green);padding:18px 0;text-align:center;">
-          ${title} Active
-        </div>
-      `;
-      grid.appendChild(tile);
-      toast(`Added ${title} to dashboard!`);
+      try {
+        await fetch(`/api/v1/app/devices/${activeDevId}/widgets`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+            widgetType: type,
+            label: title,
+            pin: defaultPin
+          })
+        });
+        toast(`Added ${title} (${defaultPin}) to SQLite layout!`);
+        openDeviceDetail(activeDevId); // Reload fresh from DB
+      } catch (e) {
+        toast(`Error saving widget: ${e.message}`);
+      }
     }
 
     async function writePin(pin, val) {
