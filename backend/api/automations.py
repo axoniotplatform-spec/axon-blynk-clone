@@ -18,14 +18,40 @@ class AutomationCreate(BaseModel):
 @router.get("")
 def list_automations(db: Session = Depends(get_db)):
     rules = db.query(AutomationRule).order_by(AutomationRule.created_at.desc()).all()
+    if not rules:
+        org = db.query(Organization).first()
+        org_id = org.id if org else 1
+        r1 = AutomationRule(
+            org_id=org_id,
+            name="High Temp Cooling Trigger",
+            trigger_type="DATASTREAM_VALUE",
+            trigger_config={"condition": "When Temperature (V2) > 30 °C"},
+            action_type="WRITE_PIN",
+            action_config={"action": "Turn Fan Relay (V3) ON"},
+            is_active=True
+        )
+        r2 = AutomationRule(
+            org_id=org_id,
+            name="Daily System Diagnostic",
+            trigger_type="SCHEDULE",
+            trigger_config={"condition": "Schedule: Everyday at 08:00 AM"},
+            action_type="TERMINAL_LOG",
+            action_config={"action": "Log Status to Terminal (V7)"},
+            is_active=True
+        )
+        db.add(r1)
+        db.add(r2)
+        db.commit()
+        rules = [r1, r2]
+
     return [
         {
             "id": r.id,
             "name": r.name,
             "triggerType": r.trigger_type,
-            "condition": r.trigger_config.get("condition", r.name),
+            "condition": (r.trigger_config or {}).get("condition", r.name),
             "actionType": r.action_type,
-            "action": r.action_config.get("action", r.action_type),
+            "action": (r.action_config or {}).get("action", r.action_type),
             "isActive": r.is_active,
             "createdAt": r.created_at.strftime("%b %d, %Y %I:%M %p")
         }

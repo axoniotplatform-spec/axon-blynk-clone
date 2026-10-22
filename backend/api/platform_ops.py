@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, Body, Response
+from fastapi import APIRouter, Depends, HTTPException, Body, Response, Form, File, UploadFile
 from sqlalchemy.orm import Session
 from datetime import datetime
 import io
@@ -210,11 +210,11 @@ def list_organizations(db: Session = Depends(get_db)):
         {
             "id": o.id,
             "name": o.name,
-            "planTier": o.plan_tier,
+            "plan_tier": o.plan_tier,
             "region": o.server_region,
-            "deviceCount": len(o.devices),
-            "userCount": len(o.users),
-            "createdAt": o.created_at.strftime("%b %d, %Y")
+            "device_count": len(o.devices) if hasattr(o, 'devices') else 0,
+            "user_count": len(o.users) if hasattr(o, 'users') else 0,
+            "created_at": o.created_at.strftime("%b %d, %Y")
         }
         for o in orgs
     ]
@@ -227,13 +227,22 @@ def create_organization(payload: dict = Body(...), db: Session = Depends(get_db)
     
     org = Organization(
         name=name,
-        plan_tier=payload.get("plan_tier", "FREE"),
-        server_region=payload.get("region", "ny3.blynk.cloud")
+        plan_tier=payload.get("plan_tier", "free"),
+        server_region=payload.get("region", "global")
     )
     db.add(org)
     db.commit()
     db.refresh(org)
-    return {"status": "created", "organization": {"id": org.id, "name": org.name, "planTier": org.plan_tier}}
+    return {"status": "created", "organization": {"id": org.id, "name": org.name, "plan_tier": org.plan_tier}}
+
+@router.delete("/organizations/{org_id}")
+def delete_organization(org_id: int, db: Session = Depends(get_db)):
+    org = db.query(Organization).filter(Organization.id == org_id).first()
+    if not org:
+        raise HTTPException(status_code=404, detail="Organization not found")
+    db.delete(org)
+    db.commit()
+    return {"status": "deleted"}
 
 # ==========================================
 # 5. CUSTOM DASHBOARDS API
@@ -321,11 +330,11 @@ def create_webhook(payload: dict = Body(...), db: Session = Depends(get_db)):
 def get_math_rules(db: Session = Depends(get_db)):
     rules = db.query(MathRule).all()
     if not rules:
-        r1 = MathRule(name="Celsius to Fahrenheit", input_stream="V2 (Temp °C)", expression="(V2 * 9/5) + 32", output_stream="V12 (Temp °F)")
+        r1 = MathRule(name="Celsius to Fahrenheit", input_stream="V2", expression="(x * 9/5) + 32", output_stream="V12")
         db.add(r1)
         db.commit()
         rules = [r1]
-    return [{"id": r.id, "name": r.name, "input": r.input_stream, "expression": r.expression, "output": r.output_stream, "isActive": r.is_active} for r in rules]
+    return [{"id": r.id, "name": r.name, "input_pin": r.input_stream, "expression": r.expression, "output_pin": r.output_stream, "enabled": r.is_active} for r in rules]
 
 @router.post("/devzone/rules")
 def create_math_rule(payload: dict = Body(...), db: Session = Depends(get_db)):
@@ -333,11 +342,61 @@ def create_math_rule(payload: dict = Body(...), db: Session = Depends(get_db)):
     expr = payload.get("expression", "").strip()
     if not name or not expr:
         raise HTTPException(status_code=400, detail="Rule name and expression required")
-    rule = MathRule(name=name, input_stream=payload.get("input", "V2"), expression=expr, output_stream=payload.get("output", "V12"))
+    rule = MathRule(
+        name=name,
+        input_stream=payload.get("input_pin", payload.get("input", "V2")),
+        expression=expr,
+        output_stream=payload.get("output_pin", payload.get("output", "V12"))
+    )
     db.add(rule)
     db.commit()
     db.refresh(rule)
-    return {"status": "created", "rule": {"id": rule.id, "name": rule.name, "expression": rule.expression}}
+    return {"status": "created", "rule": {"id": rule.id, "name": rule.name, "input_pin": rule.input_stream, "expression": rule.expression, "output_pin": rule.output_stream}}
+
+# ==========================================
+# 6b. OAUTH 2.0 CLIENTS
+# ==========================================
+@router.get("/devzone/oauth")
+def list_oauth_apps(db: Session = Depends(get_db)):
+    apps = db.query(OAuthApp).all()
+    return [{"id": a.id, "client_name": a.client_name, "client_id": a.client_id, "redirect_uri": a.redirect_uris, "scopes": a.scopes} for a in apps]
+
+@router.post("/devzone/oauth")
+def register_oauth_app(payload: dict = Body(...), db: Session = Depends(get_db)):
+    name = payload.get("client_name", "").strip()
+    if not name:
+        raise HTTPException(status_code=400, detail="Client name required")
+    client_id  = "axon_" + secrets.token_urlsafe(12).replace("-","").replace("_","")[:16]
+    client_sec = secrets.token_urlsafe(32)
+    app = OAuthApp(
+        client_name=name,
+        client_id=client_id,
+        client_secret=client_sec,
+        redirect_uris=payload.get("redirect_uri", "https://localhost/callback"),
+        scopes=",".join(payload.get("scopes", ["read:devices"]))
+    )
+    db.add(app)
+    db.commit()
+    db.refresh(app)
+    return {"status": "created", "client_id": app.client_id, "client_secret": app.client_secret, "name": app.client_name}
+
+# ==========================================
+# 6c. ASSET UPLOAD (stored as metadata)
+# ==========================================
+@router.post("/devzone/assets")
+async def upload_asset(name: str = Form(...), asset_type: str = Form("other"), file: UploadFile = File(None)):
+    """Stores asset metadata. In production, file would go to S3/GCS/local storage."""
+    import os
+    asset_dir = os.path.join(os.path.dirname(__file__), "..", "..", "assets")
+    os.makedirs(asset_dir, exist_ok=True)
+    saved_path = None
+    if file:
+        safe_name = name.replace(" ", "_")
+        saved_path = os.path.join(asset_dir, safe_name)
+        content = await file.read()
+        with open(saved_path, "wb") as f:
+            f.write(content)
+    return {"status": "uploaded", "name": name, "asset_type": asset_type, "path": saved_path or f"assets/{name}"}
 
 # ==========================================
 # 7. REAL CUSTOM DATA CSV EXPORT
@@ -367,6 +426,32 @@ def export_telemetry_csv(db: Session = Depends(get_db)):
         media_type="text/csv",
         headers={"Content-Disposition": "attachment; filename=blynk_telemetry_export.csv"}
     )
+
+@router.get("/custom-data/telemetry")
+def get_custom_data_telemetry(db: Session = Depends(get_db)):
+    rows = db.query(TelemetryTimeSeries).order_by(TelemetryTimeSeries.timestamp.desc()).limit(100).all()
+    if not rows:
+        ds_list = db.query(Datastream).all()
+        now_str = datetime.utcnow().strftime("%Y-%m-%d %H:%M:%S")
+        return [
+            {
+                "timestamp": now_str,
+                "pin": ds.pin,
+                "name": ds.name,
+                "value": ds.current_value,
+                "type": ds.data_type
+            }
+            for ds in ds_list
+        ]
+    return [
+        {
+            "timestamp": r.timestamp.strftime("%Y-%m-%d %H:%M:%S"),
+            "pin": r.pin,
+            "value": r.value,
+            "numericValue": r.numeric_value
+        }
+        for r in rows
+    ]
 
 # ==========================================
 # 8. IOT AI ASSISTANT API ("Ask AI")

@@ -382,7 +382,7 @@
                   <button class="btn-blynk-primary" onclick="openNewTemplateModal()">+ New Template</button>
                 </div>
 
-                <div class="template-grid">
+                <div class="template-grid" id="templates-grid">
                   <div class="template-card" onclick="openTemplateDetail(1)">
                     <div class="template-card-header">
                       <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
@@ -468,7 +468,7 @@
                     <div class="table-card" style="padding:24px;">
                       <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
                         <h3 style="font-size:16px; font-weight:700; margin:0;">Firmware Configuration</h3>
-                        <button class="filter-btn" style="padding:4px 10px; font-size:11.5px;" onclick="navigator.clipboard.writeText(document.getElementById('firmware-snippet').innerText); alert('Copied to clipboard!');">Copy Code</button>
+                        <button class="filter-btn" style="padding:4px 10px; font-size:11.5px;" onclick="navigator.clipboard.writeText(document.getElementById('firmware-snippet').innerText); showToast('Firmware snippet copied!', 'success');">Copy Code</button>
                       </div>
                       <div class="code-box" id="firmware-snippet">// Copy this configuration into your firmware sketch
 #define BLYNK_TEMPLATE_ID "TMPL2yjltoB57"
@@ -773,7 +773,7 @@ function decodeUplink(bytes) {
             <div id="dev-subview-blueprints" class="dev-subview" style="display:none;">
               <div class="view-header">
                 <h1 class="view-title">Blueprints Catalog</h1>
-                <button class="btn-blynk-primary" onclick="alert('Creating custom blueprint...')">+ Create Blueprint</button>
+                <button class="btn-blynk-primary" onclick="openNewTemplateModal()">+ Create Blueprint</button>
               </div>
               <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
                 <div class="table-card" style="padding:20px;">
@@ -801,7 +801,7 @@ function decodeUplink(bytes) {
             <div id="dev-subview-assets" class="dev-subview" style="display:none;">
               <div class="view-header">
                 <h1 class="view-title">Static Assets & Media Repository</h1>
-                <button class="btn-blynk-primary" onclick="alert('Upload asset...')">📤 Upload Asset</button>
+                <button class="btn-blynk-primary" onclick="openUploadAssetModal()">📤 Upload Asset</button>
               </div>
               <div class="table-card">
                 <table class="data-table">
@@ -870,14 +870,14 @@ function decodeUplink(bytes) {
             <div id="dev-subview-rule-engine" class="dev-subview" style="display:none;">
               <div class="view-header">
                 <h1 class="view-title">Advanced Rule Engine & Math Transforms</h1>
-                <button class="btn-blynk-primary" onclick="alert('Adding math expression rule...')">+ Add Math Rule</button>
+                <button class="btn-blynk-primary" onclick="openNewMathRuleModal()">+ Add Math Rule</button>
               </div>
               <div class="table-card">
                 <table class="data-table">
                   <thead>
                     <tr><th>RULE NAME</th><th>INPUT STREAM</th><th>MATH / LOGIC EXPRESSION</th><th>OUTPUT STREAM</th><th>STATUS</th></tr>
                   </thead>
-                  <tbody>
+                  <tbody id="rules-tbody">
                     <tr>
                       <td style="font-weight:600;">Celsius to Fahrenheit</td>
                       <td>V2 (Temperature °C)</td>
@@ -901,14 +901,14 @@ function decodeUplink(bytes) {
             <div id="dev-subview-oauth" class="dev-subview" style="display:none;">
               <div class="view-header">
                 <h1 class="view-title">OAuth 2.0 Client Applications</h1>
-                <button class="btn-blynk-primary" onclick="alert('Registering OAuth client...')">+ Register Client</button>
+                <button class="btn-blynk-primary" onclick="openNewOAuthModal()">+ Register Client</button>
               </div>
               <div class="table-card">
                 <table class="data-table">
                   <thead>
                     <tr><th>CLIENT NAME</th><th>CLIENT ID</th><th>REDIRECT URIS</th><th>SCOPES</th><th>STATUS</th></tr>
                   </thead>
-                  <tbody>
+                  <tbody id="oauth-tbody">
                     <tr>
                       <td style="font-weight:600;">Axon IoT Mobile Companion</td>
                       <td><code>axon-client-app-88219</code></td>
@@ -939,7 +939,7 @@ function decodeUplink(bytes) {
                   <thead>
                     <tr><th>WEBHOOK NAME</th><th>TRIGGER PIN</th><th>TARGET ENDPOINT URL</th><th>HTTP METHOD</th><th>STATUS</th></tr>
                   </thead>
-                  <tbody>
+                  <tbody id="webhooks-tbody">
                     <tr>
                       <td style="font-weight:600;">Discord High-Temp Dispatcher</td>
                       <td>V2 (&gt; 30°C)</td>
@@ -1280,13 +1280,8 @@ function decodeUplink(bytes) {
         <div class="table-card" style="padding:24px;">
           <h3 style="font-size:16px; font-weight:700; margin-bottom:12px;">High-Resolution Sensor History (1s Interval)</h3>
           <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Telemetry data captured across all virtual pins and hardware sessions.</p>
-          <div style="background:#0d1117; color:#c9d1d9; border-radius:6px; padding:16px; font-family:monospace; font-size:12px; max-height:260px; overflow-y:auto; line-height:1.6;">
-            <div>[2026-10-21 21:38:15] V2 (Temperature): 36.8 °C -> Logged to TimeSeries</div>
-            <div>[2026-10-21 21:38:15] V3 (Fan Relay): 1 -> Triggered by Automation Rule</div>
-            <div>[2026-10-21 21:38:14] V2 (Temperature): 34.2 °C -> Logged to TimeSeries</div>
-            <div>[2026-10-21 21:38:12] V10 (RGB NeoPixel): #fe0f00 -> WebSocket User Update</div>
-            <div>[2026-10-21 21:38:10] V8 (LCD Status): SYSTEM RUNNING -> ESP32 Boot OK</div>
-            <div>[2026-10-21 21:38:08] V1 (Brightness): 128 -> Level Slider OK</div>
+          <div id="custom-data-log-stream" style="background:#0d1117; color:#c9d1d9; border-radius:6px; padding:16px; font-family:monospace; font-size:12px; max-height:260px; overflow-y:auto; line-height:1.6;">
+            <div style="color:#8892a4;">Loading live telemetry history from SQLite database…</div>
           </div>
         </div>
       </section>
@@ -1295,7 +1290,7 @@ function decodeUplink(bytes) {
       <section id="pane-organizations" class="tab-pane">
         <div class="view-header">
           <h1 class="view-title">Organizations</h1>
-          <button class="btn-blynk-primary" onclick="alert('Creating sub-organization...')">+ New Organization</button>
+          <button class="btn-blynk-primary" onclick="openNewOrgModal()">+ New Organization</button>
         </div>
         <div class="table-card">
           <table class="data-table">
@@ -1309,15 +1304,8 @@ function decodeUplink(bytes) {
                 <th>STATUS</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td style="font-weight:700;">My organization - 2257TU (Root)</td>
-                <td><span style="padding:2px 8px; border-radius:4px; background:#d1ff39; color:#000; font-weight:700; font-size:11px;">PRO ENTERPRISE</span></td>
-                <td>1 Active</td>
-                <td>1 Member</td>
-                <td>NY3 (US East)</td>
-                <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
-              </tr>
+            <tbody id="orgs-table-body">
+              <!-- Populated dynamically from /api/v1/organizations -->
             </tbody>
           </table>
         </div>
@@ -1354,15 +1342,8 @@ function decodeUplink(bytes) {
                 <th>HEALTH / LAST PING</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td style="font-weight:700;">BLINKING LED</td>
-                <td>ESP32 (Wi-Fi)</td>
-                <td><code>v1.0.4-prod</code></td>
-                <td><code>v1.0.4-prod</code></td>
-                <td><span class="status-badge online"><span class="status-dot-sm"></span> Up-to-date</span></td>
-                <td>Just now (0% Packet Loss)</td>
-              </tr>
+            <tbody id="fleet-tbody">
+              <!-- Populated dynamically from /api/v1/devices -->
             </tbody>
           </table>
         </div>
@@ -1395,17 +1376,9 @@ function decodeUplink(bytes) {
         <div class="view-header">
           <h1 class="view-title">Predictive Maintenance & AI Diagnostics</h1>
         </div>
-        <div style="display:grid; grid-template-columns:1fr 1fr; gap:20px;">
-          <div class="table-card" style="padding:24px;">
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Hardware Health Score</h3>
-            <div style="font-size:48px; font-weight:800; color:#10f17f; margin:12px 0;">98.4%</div>
-            <p style="font-size:13px; color:var(--text-muted);">Calculated across 2,400 sensor cycles. No mechanical fatigue or overheating detected.</p>
-          </div>
-          <div class="table-card" style="padding:24px;">
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Next Scheduled Inspection</h3>
-            <div style="font-size:24px; font-weight:700; color:var(--text-main); margin:12px 0;">Nov 21, 2026 (30 Days)</div>
-            <p style="font-size:13px; color:var(--text-muted);">Automated diagnostics show optimal voltage stability and zero Wi-Fi packet drops.</p>
-          </div>
+        <div id="predictive-list">
+          <!-- Populated dynamically from /api/v1/devices health analysis -->
+          <div style="text-align:center;color:#8892a4;padding:40px;">Loading device health data…</div>
         </div>
       </section>
 
@@ -1475,12 +1448,26 @@ function decodeUplink(bytes) {
         if (typeof loadDevicesTable === 'function') loadDevicesTable();
       } else if (tabId === 'locations') {
         if (typeof loadLocationsGrid === 'function') loadLocationsGrid();
-      } else if (tabId === 'snapshots') {
+      } else if (tabId === 'fleet-management') {
+    if (typeof loadFleetManagement === 'function') loadFleetManagement();
+  } else if (tabId === 'predictive-maintenance') {
+    if (typeof loadPredictiveMaintenance === 'function') loadPredictiveMaintenance();
+  } else if (tabId === 'get-started') {
+    if (typeof loadGetStarted === 'function') loadGetStarted();
+  } else if (tabId === 'organizations') {
+    if (typeof loadOrgsTable === 'function') loadOrgsTable();
+  } else if (tabId === 'snapshots') {
         if (typeof loadSnapshotsList === 'function') loadSnapshotsList();
       } else if (tabId === 'in-app-messaging') {
         if (typeof loadBroadcastsList === 'function') loadBroadcastsList();
       } else if (tabId === 'users') {
         if (typeof loadUsersTable === 'function') loadUsersTable();
+      } else if (tabId === 'automations') {
+        if (typeof loadAutomationsTable === 'function') loadAutomationsTable();
+      } else if (tabId === 'custom-data') {
+        if (typeof loadCustomDataTable === 'function') loadCustomDataTable();
+      } else if (tabId === 'developer-zone') {
+        if (typeof loadTemplatesGrid === 'function') loadTemplatesGrid();
       }
     }
 
@@ -1493,9 +1480,7 @@ function decodeUplink(bytes) {
       document.getElementById('new-device-modal').classList.add('open');
     }
 
-    function closeNewDeviceModal() {
-      document.getElementById('new-device-modal').classList.remove('open');
-    }
+    // closeNewDeviceModal() moved to platformOps.js
 
     async function loadDevices() {
       try {
@@ -1534,23 +1519,7 @@ function decodeUplink(bytes) {
       }
     }
 
-    async function confirmCreateDevice() {
-      const name = document.getElementById('modal-device-name').value || 'New IoT Node';
-      const templateSelect = document.getElementById('modal-template-select');
-      const templateId = parseInt(templateSelect ? templateSelect.value : 1) || 1;
-      try {
-        const res = await fetch('/api/v1/devices', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ name: name, template_id: templateId })
-        });
-        const newDev = await res.json();
-        closeNewDeviceModal();
-        await loadDevices();
-      } catch (err) {
-        alert('Failed to provision device: ' + err.message);
-      }
-    }
+
 
     function openDeviceDetail(id, name) {
       if (typeof activeDeviceId !== 'undefined') {
@@ -1585,7 +1554,7 @@ function decodeUplink(bytes) {
     function copyActiveDeviceToken() {
       const tok = document.getElementById('dev-info-token').innerText;
       navigator.clipboard.writeText(tok);
-      alert('Auth Token copied to clipboard!');
+      showToast('Auth Token copied to clipboard!', 'success');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -1778,7 +1747,7 @@ function decodeUplink(bytes) {
           closeNewDatastreamModal();
           loadDatastreamsTable(activeTemplateId);
         } else {
-          alert('Error adding datastream');
+          showToast('Error adding datastream', 'error');
         }
       } catch (err) {
         console.error('Failed to create datastream:', err);
@@ -1897,7 +1866,7 @@ function decodeUplink(bytes) {
       document.getElementById('ota-modal').classList.remove('open');
     }
     function confirmOtaDeploy() {
-      alert('OTA Firmware rollout initiated! Devices will download binary and reboot.');
+      showToast('OTA Firmware rollout initiated! All devices downloading firmware...', 'success');
       closeOtaModal();
     }
   </script>
@@ -1983,7 +1952,7 @@ function decodeUplink(bytes) {
       const password = document.getElementById('user-modal-password').value;
 
       if (!name || !email) {
-        alert('Please provide name and email.');
+        showToast('Please provide name and email.', 'error'); return;
         return;
       }
 
@@ -2000,10 +1969,10 @@ function decodeUplink(bytes) {
           document.getElementById('user-modal-email').value = '';
         } else {
           const err = await res.json();
-          alert('Failed to create user: ' + (err.detail || 'Unknown error'));
+          showToast('Failed to create user: ' + (err.detail || 'Unknown error'), 'error');
         }
       } catch (e) {
-        alert('Error: ' + e.message);
+        showToast('Error: ' + e.message, 'error');
       }
     }
 
@@ -2277,6 +2246,94 @@ function decodeUplink(bytes) {
       </div>
     </div>
   </div>
+
+
+<!-- ============================================================ -->
+<!-- PHASE 5: New Organization Modal                              -->
+<!-- ============================================================ -->
+<div id="new-org-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#1a1f2e;border:1px solid #00e5ff33;border-radius:12px;padding:32px;width:440px;max-width:95vw;">
+    <h3 style="color:#00e5ff;margin:0 0 20px;font-size:18px;">🏢 New Organization</h3>
+    <label style="color:#8892a4;font-size:12px;">Organization Name</label>
+    <input id="org-modal-name" type="text" placeholder="e.g. Acme Industries" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Plan Tier</label>
+    <select id="org-modal-plan" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;">
+      <option value="free">Free</option>
+      <option value="pro">Pro</option>
+      <option value="enterprise">Enterprise</option>
+    </select>
+    <label style="color:#8892a4;font-size:12px;">Region</label>
+    <input id="org-modal-region" type="text" placeholder="e.g. us-east-1" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 20px;box-sizing:border-box;"/>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeNewOrgModal()" style="padding:10px 20px;background:#2d3748;border:none;border-radius:8px;color:#e2e8f0;cursor:pointer;">Cancel</button>
+      <button onclick="confirmCreateOrg()" style="padding:10px 24px;background:#00e5ff;border:none;border-radius:8px;color:#0d1117;font-weight:700;cursor:pointer;">Create</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 5: New Math Rule Modal                                 -->
+<!-- ============================================================ -->
+<div id="new-math-rule-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#1a1f2e;border:1px solid #00e5ff33;border-radius:12px;padding:32px;width:480px;max-width:95vw;">
+    <h3 style="color:#00e5ff;margin:0 0 20px;font-size:18px;">➗ New Math Rule</h3>
+    <label style="color:#8892a4;font-size:12px;">Rule Name</label>
+    <input id="rule-modal-name" type="text" placeholder="e.g. Celsius to Fahrenheit" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Input Datastream (pin)</label>
+    <input id="rule-modal-input" type="text" placeholder="e.g. V5" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Math Expression (use 'x' for input)</label>
+    <input id="rule-modal-expr" type="text" placeholder="e.g. (x * 9/5) + 32" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Output Datastream (pin)</label>
+    <input id="rule-modal-output" type="text" placeholder="e.g. V6" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 20px;box-sizing:border-box;"/>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeNewMathRuleModal()" style="padding:10px 20px;background:#2d3748;border:none;border-radius:8px;color:#e2e8f0;cursor:pointer;">Cancel</button>
+      <button onclick="confirmCreateMathRule()" style="padding:10px 24px;background:#00e5ff;border:none;border-radius:8px;color:#0d1117;font-weight:700;cursor:pointer;">Create Rule</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 5: New OAuth App Modal                                 -->
+<!-- ============================================================ -->
+<div id="new-oauth-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#1a1f2e;border:1px solid #00e5ff33;border-radius:12px;padding:32px;width:460px;max-width:95vw;">
+    <h3 style="color:#00e5ff;margin:0 0 20px;font-size:18px;">🔑 Register OAuth Client</h3>
+    <label style="color:#8892a4;font-size:12px;">Client App Name</label>
+    <input id="oauth-modal-name" type="text" placeholder="e.g. My Integration App" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Redirect URI</label>
+    <input id="oauth-modal-uri" type="text" placeholder="https://myapp.com/oauth/callback" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Scopes (comma-separated)</label>
+    <input id="oauth-modal-scopes" type="text" placeholder="read:devices,write:pins" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 20px;box-sizing:border-box;"/>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeNewOAuthModal()" style="padding:10px 20px;background:#2d3748;border:none;border-radius:8px;color:#e2e8f0;cursor:pointer;">Cancel</button>
+      <button onclick="confirmCreateOAuthApp()" style="padding:10px 24px;background:#00e5ff;border:none;border-radius:8px;color:#0d1117;font-weight:700;cursor:pointer;">Register</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 5: Upload Asset Modal                                  -->
+<!-- ============================================================ -->
+<div id="upload-asset-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#1a1f2e;border:1px solid #00e5ff33;border-radius:12px;padding:32px;width:440px;max-width:95vw;">
+    <h3 style="color:#00e5ff;margin:0 0 20px;font-size:18px;">📁 Upload Asset</h3>
+    <label style="color:#8892a4;font-size:12px;">Asset Name</label>
+    <input id="asset-modal-name" type="text" placeholder="e.g. firmware_v2.bin" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;"/>
+    <label style="color:#8892a4;font-size:12px;">Asset Type</label>
+    <select id="asset-modal-type" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 14px;box-sizing:border-box;">
+      <option value="firmware">Firmware Binary</option>
+      <option value="config">Config File</option>
+      <option value="certificate">Certificate</option>
+      <option value="other">Other</option>
+    </select>
+    <label style="color:#8892a4;font-size:12px;">File</label>
+    <input id="asset-modal-file" type="file" style="width:100%;padding:10px;background:#0d1117;border:1px solid #00e5ff44;border-radius:8px;color:#e2e8f0;font-size:14px;margin:6px 0 20px;box-sizing:border-box;"/>
+    <div style="display:flex;gap:10px;justify-content:flex-end;">
+      <button onclick="closeUploadAssetModal()" style="padding:10px 20px;background:#2d3748;border:none;border-radius:8px;color:#e2e8f0;cursor:pointer;">Cancel</button>
+      <button onclick="confirmUploadAsset()" style="padding:10px 24px;background:#00e5ff;border:none;border-radius:8px;color:#0d1117;font-weight:700;cursor:pointer;">Upload</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>
