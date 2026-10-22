@@ -2,346 +2,438 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <title>Blynk IoT Mobile Companion</title>
-  <link rel="stylesheet" href="/static/styles/theme.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --app-bg: #0b0f17;
-      --app-surface: #141b26;
-      --app-card: #1b2433;
-      --app-border: #263347;
-      --app-accent: #10f17f;
-      --app-primary: #0375de;
-      --app-blynk: #d1ff39;
-      --app-danger: #fe0f00;
-      --app-text: #f0f4f8;
-      --app-text-muted: #8b9bb4;
-      --app-radius: 16px;
+      --bg-base: #06090f;
+      --bg-surface: #0f1622;
+      --bg-card: rgba(21, 30, 44, 0.7);
+      --bg-card-hover: rgba(28, 40, 58, 0.85);
+      --border-subtle: rgba(255, 255, 255, 0.07);
+      --border-focus: rgba(3, 117, 222, 0.5);
+      --blynk-green: #10f17f;
+      --blynk-lime: #d1ff39;
+      --blynk-blue: #0375de;
+      --blynk-cyan: #00e5ff;
+      --blynk-amber: #ffd60a;
+      --blynk-red: #ff453a;
+      --text-primary: #f8fafc;
+      --text-secondary: #94a3b8;
+      --text-muted: #64748b;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+      --radius-xl: 28px;
+      --shadow-card: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+      --shadow-glow: 0 0 20px -5px rgba(16, 241, 127, 0.35);
     }
 
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     body {
-      background: #06090e;
-      color: var(--app-text);
+      background: #020408;
+      color: var(--text-primary);
       margin: 0;
       padding: 0;
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
+      overflow-x: hidden;
     }
 
-    /* Mobile Container Frame */
+    /* Outer Device Shell */
     .mobile-frame {
       width: 100%;
-      max-width: 430px;
-      height: 932px;
+      max-width: 420px;
+      height: 900px;
       max-height: 100vh;
-      background: var(--app-bg);
+      background: var(--bg-base);
       display: flex;
       flex-direction: column;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8);
-      border: 1px solid var(--app-border);
+      box-shadow: 0 30px 80px rgba(0,0,0,0.9), 0 0 0 1px rgba(255,255,255,0.06);
     }
 
-    @media (min-width: 600px) {
+    @media (min-width: 500px) {
       .mobile-frame {
-        border-radius: 40px;
-        border: 4px solid #263347;
+        border-radius: 46px;
+        border: 8px solid #1a2230;
         margin: 20px auto;
-        height: 880px;
+        height: 870px;
       }
     }
 
-    /* Status Bar Emulation */
+    /* iOS / Android Dynamic Island / Status Bar */
     .mobile-status-bar {
-      height: 38px;
-      padding: 10px 20px 0;
+      height: 44px;
+      padding: 12px 24px 0;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--app-text-muted);
-      background: var(--app-surface);
-      border-bottom: 1px solid rgba(255,255,255,0.03);
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text-muted);
+      background: var(--bg-surface);
+      z-index: 20;
     }
 
-    /* Top App Header */
-    .mobile-header {
-      background: var(--app-surface);
-      padding: 14px 18px;
+    .island-pill {
+      width: 80px;
+      height: 18px;
+      background: #000;
+      border-radius: 20px;
+    }
+
+    /* Top Brand Navigation */
+    .mobile-top-bar {
+      background: var(--bg-surface);
+      padding: 12px 20px 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid var(--app-border);
-      z-index: 10;
+      border-bottom: 1px solid var(--border-subtle);
+      z-index: 15;
     }
 
-    .brand-group {
+    .brand-cluster {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .brand-logo {
-      width: 32px;
-      height: 32px;
-      background: var(--app-blynk);
+    .blynk-badge {
+      width: 34px;
+      height: 34px;
+      background: var(--blynk-lime);
       color: #000;
-      border-radius: 8px;
+      border-radius: 10px;
       font-weight: 900;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      letter-spacing: -0.5px;
+      font-size: 20px;
+      box-shadow: 0 4px 14px rgba(209, 255, 57, 0.4);
     }
 
-    .brand-info {
+    .brand-titles {
       display: flex;
       flex-direction: column;
     }
 
-    .brand-title {
-      font-size: 14px;
-      font-weight: 700;
+    .brand-org {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.3px;
       color: #fff;
     }
 
-    .brand-sub {
+    .brand-cloud-meta {
       font-size: 11px;
-      color: var(--app-accent);
+      color: var(--text-muted);
       display: flex;
       align-items: center;
-      gap: 4px;
+      gap: 5px;
+      margin-top: 2px;
     }
 
-    .status-dot {
+    .dot-live {
       width: 6px;
       height: 6px;
-      background: var(--app-accent);
+      background: var(--blynk-green);
       border-radius: 50%;
-      box-shadow: 0 0 8px var(--app-accent);
+      box-shadow: 0 0 10px var(--blynk-green);
+      animation: pulseGlow 2s infinite;
     }
 
-    /* Mobile Screens Host */
-    .screens-container {
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(0.85); }
+    }
+
+    /* Screen Views Manager */
+    .screen-scroller {
       flex: 1;
       overflow-y: auto;
       position: relative;
-      scroll-behavior: smooth;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
     }
 
     .app-screen {
       display: none;
-      padding: 16px;
       flex-direction: column;
       gap: 16px;
-      min-height: 100%;
+      animation: fadeIn 0.2s ease-out;
     }
 
     .app-screen.active {
       display: flex;
     }
 
-    /* Search & Filter Bar */
-    .search-filter-box {
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Polished Search & Filters */
+    .search-row {
       display: flex;
       gap: 8px;
       align-items: center;
     }
 
-    .search-input-wrap {
+    .search-box {
       flex: 1;
       position: relative;
     }
 
-    .search-input-wrap input {
+    .search-box input {
       width: 100%;
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      border-radius: 10px;
-      padding: 10px 12px 10px 34px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 12px 14px 12px 38px;
       color: #fff;
-      font-size: 13px;
+      font-size: 13.5px;
       outline: none;
-    }
-
-    .search-input-wrap svg {
-      position: absolute;
-      left: 10px;
-      top: 10px;
-      color: var(--app-text-muted);
-    }
-
-    .filter-chips {
-      display: flex;
-      gap: 6px;
-      overflow-x: auto;
-      padding-bottom: 2px;
-    }
-
-    .filter-chip {
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--app-text-muted);
-      cursor: pointer;
-      white-space: nowrap;
       transition: all 0.2s;
     }
 
-    .filter-chip.active {
-      background: rgba(3, 117, 222, 0.2);
-      border-color: var(--app-primary);
-      color: #fff;
+    .search-box input:focus {
+      border-color: var(--blynk-blue);
+      box-shadow: 0 0 0 3px rgba(3, 117, 222, 0.2);
     }
 
-    /* Device Card in List View */
-    .device-card {
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      border-radius: var(--app-radius);
+    .search-box svg {
+      position: absolute;
+      left: 12px;
+      top: 13px;
+      color: var(--text-muted);
+    }
+
+    .filter-track {
+      display: flex;
+      gap: 6px;
+      overflow-x: auto;
+      scrollbar-width: none;
+      padding-bottom: 2px;
+    }
+
+    .filter-track::-webkit-scrollbar { display: none; }
+
+    .chip-filter {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-secondary);
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .chip-filter:active {
+      transform: scale(0.95);
+    }
+
+    .chip-filter.active {
+      background: rgba(3, 117, 222, 0.18);
+      border-color: var(--blynk-blue);
+      color: #fff;
+      box-shadow: 0 2px 10px rgba(3, 117, 222, 0.3);
+    }
+
+    /* Glassmorphic Device Cards */
+    .device-card-pro {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
       padding: 16px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 14px;
       cursor: pointer;
-      transition: transform 0.15s, border-color 0.15s;
+      box-shadow: var(--shadow-card);
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
 
-    .device-card:active {
+    .device-card-pro::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    }
+
+    .device-card-pro:active {
       transform: scale(0.98);
-      border-color: var(--app-primary);
+      border-color: var(--blynk-blue);
     }
 
-    .card-top {
+    .card-header-line {
       display: flex;
       justify-content: space-between;
       align-items: center;
     }
 
-    .card-title-group {
+    .card-id-block {
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
     }
 
-    .card-icon {
-      width: 36px;
-      height: 36px;
-      background: rgba(3, 117, 222, 0.15);
-      border-radius: 10px;
+    .mcu-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, rgba(3, 117, 222, 0.2), rgba(0, 229, 255, 0.1));
+      border: 1px solid rgba(3, 117, 222, 0.3);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--app-primary);
+      color: var(--blynk-cyan);
     }
 
-    .card-name {
-      font-size: 15px;
-      font-weight: 700;
+    .card-title-text {
+      font-size: 16px;
+      font-weight: 800;
       color: #fff;
+      letter-spacing: -0.3px;
     }
 
-    .card-meta {
+    .card-mcu-badge {
       font-size: 11.5px;
-      color: var(--app-text-muted);
+      color: var(--text-muted);
+      margin-top: 2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    .online-badge {
+    .pill-status {
       display: inline-flex;
       align-items: center;
       gap: 5px;
       font-size: 11px;
-      font-weight: 700;
-      padding: 3px 8px;
-      border-radius: 10px;
-      background: rgba(16, 241, 127, 0.15);
-      color: var(--app-accent);
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 20px;
+      background: rgba(16, 241, 127, 0.12);
+      color: var(--blynk-green);
+      border: 1px solid rgba(16, 241, 127, 0.25);
     }
 
-    .online-badge.offline {
-      background: rgba(254, 15, 0, 0.15);
-      color: var(--app-danger);
+    .pill-status.offline {
+      background: rgba(255, 69, 58, 0.12);
+      color: var(--blynk-red);
+      border-color: rgba(255, 69, 58, 0.25);
     }
 
-    /* Summary Widgets Grid inside Device Card */
-    .card-widgets-preview {
+    /* Card Live Interactive Preview Bar */
+    .card-preview-strip {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      padding-top: 6px;
-      border-top: 1px solid rgba(255,255,255,0.04);
+      padding-top: 10px;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
     }
 
-    .mini-widget {
-      background: var(--app-card);
-      border: 1px solid rgba(255,255,255,0.04);
-      border-radius: 10px;
-      padding: 10px;
+    .strip-tile {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(255, 255, 255, 0.04);
+      border-radius: 12px;
+      padding: 10px 12px;
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: space-between;
     }
 
-    .mini-label {
+    .strip-label {
       font-size: 11px;
-      color: var(--app-text-muted);
-      display: flex;
-      justify-content: space-between;
+      color: var(--text-muted);
+      font-weight: 600;
     }
 
-    .mini-val {
-      font-size: 17px;
-      font-weight: 700;
+    .strip-val {
+      font-size: 14px;
+      font-weight: 800;
       color: #fff;
-      margin-top: 4px;
     }
 
-    /* Device Canvas Screen (Dedicated Dashboard View) */
-    .dashboard-header {
+    /* Real iOS/Blynk Smooth Sliding Toggle Switch */
+    .ios-switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 28px;
+      cursor: pointer;
+    }
+
+    .ios-switch input { opacity: 0; width: 0; height: 0; }
+
+    .switch-track {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #243042;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 34px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .switch-track:before {
+      position: absolute;
+      content: "";
+      height: 22px;
+      width: 22px;
+      left: 2px;
+      bottom: 2px;
+      background-color: #fff;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 50%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    }
+
+    .ios-switch input:checked + .switch-track {
+      background-color: var(--blynk-green);
+      box-shadow: 0 0 16px rgba(16, 241, 127, 0.45);
+    }
+
+    .ios-switch input:checked + .switch-track:before {
+      transform: translateX(20px);
+      background-color: #000;
+    }
+
+    /* Dedicated Dashboard Screen */
+    .dash-nav-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding-bottom: 12px;
-      border-bottom: 1px solid var(--app-border);
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
     }
 
-    .btn-back {
-      background: none;
-      border: none;
-      color: var(--app-primary);
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 13.5px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 4px 0;
-    }
-
-    .dash-action-icons {
-      display: flex;
-      gap: 8px;
-    }
-
-    .icon-btn {
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      color: var(--app-text-muted);
+    .btn-icon-soft {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-secondary);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -349,526 +441,483 @@
       transition: all 0.2s;
     }
 
-    .icon-btn.active {
-      background: var(--app-blynk);
+    .btn-icon-soft:active { transform: scale(0.92); }
+
+    .btn-icon-soft.active {
+      background: var(--blynk-lime);
       color: #000;
-      border-color: var(--app-blynk);
+      border-color: var(--blynk-lime);
+      box-shadow: 0 4px 14px rgba(209, 255, 57, 0.3);
     }
 
-    /* Subtabs inside device dashboard */
-    .subtabs-bar {
+    /* Subtab pills in Dashboard */
+    .subtabs-row {
       display: flex;
-      gap: 8px;
-      border-bottom: 1px solid var(--app-border);
-      padding-bottom: 8px;
+      gap: 6px;
+      background: var(--bg-surface);
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
     }
 
-    .subtab-pill {
+    .subtab-btn {
+      flex: 1;
+      padding: 8px 10px;
+      text-align: center;
       font-size: 12px;
-      font-weight: 600;
-      color: var(--app-text-muted);
-      padding: 4px 10px;
-      border-radius: 6px;
+      font-weight: 700;
+      color: var(--text-muted);
+      border-radius: 10px;
       cursor: pointer;
+      transition: all 0.2s;
     }
 
-    .subtab-pill.active {
-      background: var(--app-primary);
+    .subtab-btn.active {
+      background: var(--blynk-blue);
       color: #fff;
+      box-shadow: 0 2px 10px rgba(3, 117, 222, 0.4);
     }
 
-    /* Full Widgets Grid on Dashboard */
-    .widgets-grid {
+    /* Widget Grid on Dashboard Canvas */
+    .dashboard-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
     }
 
-    .widget-box {
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      border-radius: var(--app-radius);
-      padding: 14px;
+    .widget-tile {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      position: relative;
-      min-height: 120px;
+      min-height: 130px;
+      box-shadow: var(--shadow-card);
       transition: all 0.2s;
+      position: relative;
     }
 
-    .widget-box.wide {
+    .widget-tile.col-span-2 {
       grid-column: span 2;
     }
 
-    .edit-mode .widget-box {
-      border: 2px dashed rgba(209, 255, 57, 0.4);
+    .edit-mode .widget-tile {
+      border: 2px dashed rgba(209, 255, 57, 0.5);
+      animation: wiggle 0.4s ease-in-out infinite alternate;
     }
 
-    .widget-del-btn {
+    @keyframes wiggle {
+      from { transform: rotate(-0.4deg); }
+      to { transform: rotate(0.4deg); }
+    }
+
+    .tile-remove-badge {
       display: none;
       position: absolute;
       top: -8px;
       right: -8px;
-      width: 22px;
-      height: 22px;
-      background: var(--app-danger);
-      color: #fff;
-      border-radius: 50%;
-      font-size: 12px;
-      font-weight: 900;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.5);
-    }
-
-    .edit-mode .widget-del-btn {
-      display: flex;
-    }
-
-    .widget-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--app-text-muted);
-    }
-
-    .widget-pin-pill {
-      font-family: monospace;
-      font-size: 10px;
-      background: rgba(255,255,255,0.06);
-      padding: 2px 6px;
-      border-radius: 4px;
-      color: #a0aec0;
-    }
-
-    /* Widget Types Styles */
-    .btn-actuator {
-      width: 100%;
-      padding: 12px;
-      border-radius: 12px;
-      border: none;
-      font-weight: 800;
-      font-size: 14px;
-      cursor: pointer;
-      margin-top: 10px;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-    }
-
-    .btn-actuator.on {
-      background: var(--app-primary);
-      color: #fff;
-      box-shadow: 0 4px 16px rgba(3, 117, 222, 0.4);
-    }
-
-    .btn-actuator.off {
-      background: var(--app-card);
-      color: var(--app-text-muted);
-    }
-
-    .slider-range-wrap {
-      margin-top: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
-
-    .slider-val-readout {
-      font-size: 20px;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    input[type=range] {
-      width: 100%;
-      accent-color: var(--app-accent);
-      cursor: pointer;
-    }
-
-    .gauge-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      padding: 8px 0;
-    }
-
-    .gauge-circle {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 6px solid #263347;
-      border-top-color: var(--app-accent);
-      border-right-color: var(--app-accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      margin: 4px auto;
-    }
-
-    .gauge-val {
-      font-size: 18px;
-      font-weight: 900;
-      color: #fff;
-    }
-
-    .gauge-units {
-      font-size: 10px;
-      color: var(--app-text-muted);
-    }
-
-    /* RGB NeoPixel Interactive Bar */
-    .rgb-palette {
-      display: flex;
-      gap: 8px;
-      margin-top: 10px;
-      justify-content: space-between;
-    }
-
-    .color-dot {
       width: 24px;
       height: 24px;
+      background: var(--blynk-red);
+      color: #fff;
       border-radius: 50%;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 900;
       cursor: pointer;
-      border: 2px solid transparent;
+      box-shadow: 0 4px 10px rgba(255, 69, 58, 0.5);
+    }
+
+    .edit-mode .tile-remove-badge {
+      display: flex;
+    }
+
+    .tile-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .tile-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-secondary);
+    }
+
+    .tile-pin-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 700;
+      color: var(--blynk-cyan);
+      background: rgba(0, 229, 255, 0.08);
+      border: 1px solid rgba(0, 229, 255, 0.2);
+      padding: 2px 6px;
+      border-radius: 6px;
+    }
+
+    /* Radial SVG Gauge Widget */
+    .radial-gauge-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 6px 0;
+    }
+
+    .radial-gauge-svg {
+      width: 100px;
+      height: 100px;
+      transform: rotate(-90deg);
+    }
+
+    .gauge-bg-circle {
+      fill: none;
+      stroke: #1f2a3a;
+      stroke-width: 8;
+    }
+
+    .gauge-progress-circle {
+      fill: none;
+      stroke: url(#gaugeGradient);
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-dasharray: 251.2;
+      stroke-dashoffset: 60;
+      transition: stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .radial-text-stack {
+      position: absolute;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .gauge-num {
+      font-size: 22px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #fff;
+    }
+
+    .gauge-unit {
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--text-muted);
+    }
+
+    /* Custom Filled Gradient Range Slider */
+    .glow-slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .slider-header-num {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+    }
+
+    .big-slider-val {
+      font-size: 26px;
+      font-weight: 900;
+      color: #fff;
+      font-feature-settings: "tnum";
+    }
+
+    input[type=range].blynk-range {
+      -webkit-appearance: none;
+      width: 100%;
+      height: 10px;
+      border-radius: 8px;
+      background: #1e2838;
+      outline: none;
+      margin: 8px 0;
+    }
+
+    input[type=range].blynk-range::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: var(--blynk-green);
+      cursor: pointer;
+      box-shadow: 0 0 16px var(--blynk-green);
+      border: 3px solid #000;
       transition: transform 0.15s;
     }
 
-    .color-dot:active {
-      transform: scale(1.2);
+    input[type=range].blynk-range::-webkit-slider-thumb:active {
+      transform: scale(1.25);
     }
 
-    /* Terminal Console Widget */
-    .terminal-box {
-      background: #060a10;
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius: 8px;
-      padding: 8px;
-      font-family: monospace;
-      font-size: 11px;
-      height: 80px;
-      overflow-y: auto;
-      color: var(--app-accent);
-      margin-top: 8px;
-      line-height: 1.5;
+    /* ZeRGBa Color Palette */
+    .color-swatch-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-top: 12px;
     }
 
-    /* Floating Action Button (Add Widget / Device) */
-    .fab-btn {
-      position: absolute;
-      right: 20px;
-      bottom: 84px;
-      width: 52px;
-      height: 52px;
+    .swatch-dot {
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
-      background: var(--app-blynk);
+      cursor: pointer;
+      border: 2px solid transparent;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .swatch-dot:active {
+      transform: scale(1.3);
+    }
+
+    /* Terminal Console */
+    .dark-console {
+      background: #04060a;
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      height: 90px;
+      overflow-y: auto;
+      color: var(--blynk-green);
+      line-height: 1.6;
+      margin-top: 8px;
+    }
+
+    /* Floating Frosted Glass Bottom Navigation */
+    .floating-bottom-dock {
+      position: absolute;
+      bottom: 14px;
+      left: 18px;
+      right: 18px;
+      height: 64px;
+      background: rgba(18, 25, 37, 0.85);
+      backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 26px;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      box-shadow: 0 14px 40px rgba(0,0,0,0.7);
+      z-index: 30;
+      padding: 0 8px;
+    }
+
+    .dock-tab {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 16px;
+      transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .dock-tab:active { transform: scale(0.9); }
+
+    .dock-tab.active {
+      color: var(--blynk-lime);
+      background: rgba(209, 255, 57, 0.1);
+    }
+
+    .dock-tab svg { width: 22px; height: 22px; }
+
+    /* FAB */
+    .blynk-fab {
+      position: absolute;
+      right: 24px;
+      bottom: 90px;
+      width: 54px;
+      height: 54px;
+      border-radius: 50%;
+      background: var(--blynk-lime);
       color: #000;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 26px;
       font-weight: 900;
-      box-shadow: 0 6px 20px rgba(209, 255, 57, 0.4);
+      box-shadow: 0 8px 25px rgba(209, 255, 57, 0.5);
       cursor: pointer;
-      z-index: 20;
-      transition: transform 0.15s;
+      z-index: 25;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .fab-btn:active {
-      transform: scale(0.9);
-    }
+    .blynk-fab:active { transform: scale(0.88); }
 
-    /* Bottom Navigation Bar */
-    .mobile-bottom-nav {
-      height: 68px;
-      background: var(--app-surface);
-      border-top: 1px solid var(--app-border);
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      padding-bottom: 6px;
-      z-index: 15;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      color: var(--app-text-muted);
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: color 0.15s;
-    }
-
-    .nav-item.active {
-      color: var(--app-blynk);
-    }
-
-    .nav-item svg {
-      width: 22px;
-      height: 22px;
-    }
-
-    /* Sliding Drawer: Widget Box */
-    .drawer-overlay {
+    /* Drawer: Widget Box */
+    .drawer-scrim {
       position: absolute;
       inset: 0;
-      background: rgba(0,0,0,0.6);
-      backdrop-filter: blur(4px);
-      z-index: 50;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(8px);
+      z-index: 60;
       display: none;
       align-items: flex-end;
     }
 
-    .drawer-overlay.open {
-      display: flex;
-    }
+    .drawer-scrim.open { display: flex; }
 
-    .drawer-sheet {
+    .drawer-card {
       width: 100%;
       max-height: 75%;
-      background: var(--app-surface);
-      border-top-left-radius: 24px;
-      border-top-right-radius: 24px;
-      border: 1px solid var(--app-border);
-      padding: 20px;
+      background: #111824;
+      border-top-left-radius: 32px;
+      border-top-right-radius: 32px;
+      border: 1px solid var(--border-subtle);
+      padding: 22px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 16px;
-      box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
-      animation: slideUp 0.25s ease-out;
+      box-shadow: 0 -20px 60px rgba(0,0,0,0.8);
+      animation: sheetSlideUp 0.28s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
-    @keyframes slideUp {
+    @keyframes sheetSlideUp {
       from { transform: translateY(100%); }
       to { transform: translateY(0); }
     }
 
-    .drawer-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-bottom: 1px solid var(--app-border);
-      padding-bottom: 12px;
-    }
-
-    .drawer-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: #fff;
-    }
-
-    .widget-catalog-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
-
-    .catalog-item {
-      background: var(--app-card);
-      border: 1px solid var(--app-border);
-      border-radius: 12px;
-      padding: 12px;
+    .catalog-tile {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
       cursor: pointer;
-      transition: border-color 0.15s;
+      transition: all 0.2s;
     }
 
-    .catalog-item:active {
-      border-color: var(--app-blynk);
-      background: rgba(209, 255, 57, 0.08);
+    .catalog-tile:active {
+      background: rgba(209, 255, 57, 0.1);
+      border-color: var(--blynk-lime);
+      transform: scale(0.96);
     }
 
-    .catalog-icon {
-      font-size: 20px;
-    }
-
-    .catalog-meta {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .catalog-name {
-      font-size: 13px;
-      font-weight: 700;
-      color: #fff;
-    }
-
-    .catalog-cost {
-      font-size: 11px;
-      color: var(--app-blynk);
-    }
-
-    /* Toast Notification inside App */
-    .mobile-toast {
-      position: absolute;
-      top: 50px;
-      left: 16px;
-      right: 16px;
-      background: #10f17f;
-      color: #000;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+    .catalog-icon-box {
+      width: 36px;
+      height: 36px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 10px;
       display: flex;
       align-items: center;
-      gap: 8px;
-      transform: translateY(-80px);
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    /* Mobile In-App Toast */
+    .app-toast-banner {
+      position: absolute;
+      top: 54px;
+      left: 18px;
+      right: 18px;
+      background: var(--blynk-green);
+      color: #000;
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-size: 13.5px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+      transform: translateY(-90px);
       opacity: 0;
-      transition: all 0.3s;
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       z-index: 100;
     }
 
-    .mobile-toast.show {
+    .app-toast-banner.show {
       transform: translateY(0);
       opacity: 1;
-    }
-
-    .mobile-toast.error {
-      background: #fe0f00;
-      color: #fff;
-    }
-
-    /* Modal Form Styling */
-    .mobile-modal-overlay {
-      position: absolute;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      backdrop-filter: blur(6px);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 20px;
-      z-index: 60;
-    }
-
-    .mobile-modal-overlay.open {
-      display: flex;
-    }
-
-    .mobile-modal-box {
-      width: 100%;
-      background: var(--app-surface);
-      border: 1px solid var(--app-border);
-      border-radius: 20px;
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .modal-input {
-      width: 100%;
-      background: var(--app-bg);
-      border: 1px solid var(--app-border);
-      border-radius: 10px;
-      padding: 12px;
-      color: #fff;
-      font-size: 13px;
-      outline: none;
-    }
-
-    .modal-actions {
-      display: flex;
-      gap: 10px;
-      justify-content: flex-end;
-      margin-top: 6px;
-    }
-
-    .btn-modal-cancel {
-      padding: 10px 16px;
-      background: #2a3447;
-      color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .btn-modal-submit {
-      padding: 10px 20px;
-      background: var(--app-blynk);
-      color: #000;
-      border: none;
-      border-radius: 8px;
-      font-weight: 800;
-      cursor: pointer;
     }
   </style>
 </head>
 <body>
 
+  <!-- SVG Radial Gradient Definition for Gauges -->
+  <svg style="width:0;height:0;position:absolute;" aria-hidden="true" focusable="false">
+    <linearGradient id="gaugeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#00e5ff" />
+      <stop offset="50%" stop-color="#10f17f" />
+      <stop offset="100%" stop-color="#d1ff39" />
+    </linearGradient>
+  </svg>
+
   <div class="mobile-frame">
-    <!-- Emulated iOS / Android Top Status Bar -->
+    <!-- Status Bar -->
     <div class="mobile-status-bar">
       <span>9:41</span>
-      <span>●●● 5G ⚡</span>
+      <div class="island-pill"></div>
+      <span>5G ● 100%</span>
     </div>
 
-    <!-- App Header -->
-    <header class="mobile-header">
-      <div class="brand-group">
-        <div class="brand-logo">B</div>
-        <div class="brand-info">
-          <span class="brand-title" id="top-org-name">My organization</span>
-          <span class="brand-sub">
-            <span class="status-dot"></span>
-            <span id="top-ws-status">Blynk Cloud • NY3</span>
+    <!-- Top Navigation Header -->
+    <header class="mobile-top-bar">
+      <div class="brand-cluster">
+        <div class="blynk-badge">B</div>
+        <div class="brand-titles">
+          <span class="brand-org" id="app-org-name">My organization</span>
+          <span class="brand-cloud-meta">
+            <span class="dot-live"></span>
+            <span id="app-cloud-region">Blynk Cloud • NY3 Live</span>
           </span>
         </div>
       </div>
       <div style="display:flex;gap:6px;">
-        <div class="icon-btn" onclick="openNotificationsScreen()" title="Notifications">
+        <div class="btn-icon-soft" onclick="switchScreen('notifications')" title="Notifications">
           <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         </div>
       </div>
     </header>
 
-    <!-- App In-Screen Toast -->
-    <div id="mobile-toast" class="mobile-toast">
+    <!-- In-App Floating Toast -->
+    <div id="app-toast" class="app-toast-banner">
       <span>⚡</span>
-      <span id="mobile-toast-msg">Notification</span>
+      <span id="toast-text">System update</span>
     </div>
 
-    <!-- Main Screens Container -->
-    <div class="screens-container">
+    <!-- Scroller Area -->
+    <div class="screen-scroller">
 
       <!-- ========================================== -->
       <!-- SCREEN 1: DEVICES LIST                     -->
       <!-- ========================================== -->
       <section id="screen-devices" class="app-screen active">
-        <div class="search-filter-box">
-          <div class="search-input-wrap">
-            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-            <input type="text" id="device-search-input" placeholder="Search devices..." oninput="filterDevicesList()" />
+        <div class="search-row">
+          <div class="search-box">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" id="dev-search-input" placeholder="Search devices..." oninput="filterDevices()" />
           </div>
         </div>
 
-        <div class="filter-chips">
-          <div class="filter-chip active" onclick="setDeviceFilter('all', this)">All Devices</div>
-          <div class="filter-chip" onclick="setDeviceFilter('online', this)">🟢 Online</div>
-          <div class="filter-chip" onclick="setDeviceFilter('offline', this)">🔴 Offline</div>
+        <div class="filter-track">
+          <div class="chip-filter active" onclick="setChipFilter('all', this)">All Devices</div>
+          <div class="chip-filter" onclick="setChipFilter('online', this)">🟢 Online</div>
+          <div class="chip-filter" onclick="setChipFilter('offline', this)">🔴 Offline</div>
         </div>
 
-        <!-- Dynamic Devices List Container -->
-        <div id="devices-list-container" style="display:flex;flex-direction:column;gap:12px;">
+        <div id="devices-container" style="display:flex;flex-direction:column;gap:14px;">
           <!-- Loaded dynamically from /api/v1/app/devices -->
-          <div style="text-align:center;color:var(--app-text-muted);padding:40px 0;">Loading devices from SQLite...</div>
+          <div style="text-align:center;color:var(--text-muted);padding:40px 0;">Loading devices from SQLite...</div>
         </div>
       </section>
 
@@ -876,388 +925,322 @@
       <!-- SCREEN 2: DEDICATED DEVICE DASHBOARD CANVAS-->
       <!-- ========================================== -->
       <section id="screen-device-dashboard" class="app-screen">
-        <div class="dashboard-header">
-          <button class="btn-back" onclick="switchScreen('devices')">
-            <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            Devices
+        <div class="dash-nav-header">
+          <button class="btn-icon-soft" onclick="switchScreen('devices')" title="Back to Devices" style="width:auto;padding:0 12px;gap:6px;">
+            <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            <span style="font-size:12px;font-weight:800;">Devices</span>
           </button>
           <div style="text-align:center;">
-            <div id="dash-device-name" style="font-size:15px;font-weight:700;color:#fff;">BLINKING LED</div>
-            <div id="dash-device-status" style="font-size:11px;color:var(--app-accent);">● Online • ESP32</div>
+            <div id="active-device-name" style="font-size:15px;font-weight:800;color:#fff;">BLINKING LED</div>
+            <div id="active-device-status" style="font-size:11px;color:var(--blynk-green);font-weight:600;">● Online • ESP32</div>
           </div>
-          <div class="dash-action-icons">
-            <div class="icon-btn" id="btn-edit-mode" onclick="toggleDashboardEditMode()" title="Edit Dashboard Mode">
+          <div style="display:flex;gap:6px;">
+            <div class="btn-icon-soft" id="btn-edit-mode" onclick="toggleEditMode()" title="Edit Dashboard Mode">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
             </div>
-            <div class="icon-btn" onclick="openDeviceInfoModal()" title="Device Settings">
+            <div class="btn-icon-soft" onclick="openTokenSheet()" title="Device Auth Token">
               <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
             </div>
           </div>
         </div>
 
-        <!-- Subtabs -->
-        <div class="subtabs-bar">
-          <div class="subtab-pill active" onclick="switchDashSubtab('controls', this)">Main Controls</div>
-          <div class="subtab-pill" onclick="switchDashSubtab('telemetry', this)">Telemetry & Graphs</div>
-          <div class="subtab-pill" onclick="switchDashSubtab('terminal', this)">Terminal Log</div>
+        <div class="subtabs-row">
+          <div class="subtab-btn active" onclick="switchSubtab('controls', this)">Controls</div>
+          <div class="subtab-btn" onclick="switchSubtab('charts', this)">Analytics</div>
+          <div class="subtab-btn" onclick="switchSubtab('console', this)">Terminal</div>
         </div>
 
-        <!-- Interactive Dynamic Widgets Canvas -->
-        <div id="mobile-widgets-canvas" class="widgets-grid">
-          <!-- Populated dynamically from /api/v1/app/devices/{id}/dashboard -->
+        <!-- Dynamic Widget Canvas -->
+        <div id="device-widgets-grid" class="dashboard-grid">
+          <!-- Populated from /api/v1/app/devices/{id}/dashboard -->
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- SCREEN 3: AUTOMATIONS SCREEN               -->
+      <!-- SCREEN 3: AUTOMATIONS                      -->
       <!-- ========================================== -->
       <section id="screen-automations" class="app-screen">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <h2 style="font-size:18px;font-weight:800;margin:0;">⚡ Automations</h2>
-          <button class="btn-modal-submit" onclick="openNewAutomationModal()" style="padding:6px 12px;font-size:12px;">+ Add</button>
+          <div>
+            <h2 style="font-size:20px;font-weight:800;margin:0;">⚡ Automations</h2>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">Real-time threshold and schedule triggers</div>
+          </div>
+          <button onclick="promptCreateAuto()" style="padding:8px 14px;background:var(--blynk-lime);border:none;border-radius:12px;color:#000;font-weight:800;font-size:12px;cursor:pointer;">+ Add</button>
         </div>
-        <p style="font-size:12px;color:var(--app-text-muted);margin:0;">Automate hardware logic based on sensor thresholds & time.</p>
 
-        <div id="mobile-automations-list" style="display:flex;flex-direction:column;gap:12px;">
-          <!-- Loaded dynamically from /api/v1/automations -->
+        <div id="mobile-autos-container" style="display:flex;flex-direction:column;gap:12px;">
+          <!-- Loaded from /api/v1/automations -->
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- SCREEN 4: NOTIFICATIONS INBOX              -->
+      <!-- SCREEN 4: ALERTS / BROADCASTS              -->
       <!-- ========================================== -->
       <section id="screen-notifications" class="app-screen">
         <div style="display:flex;justify-content:space-between;align-items:center;">
-          <h2 style="font-size:18px;font-weight:800;margin:0;">🔔 Notifications</h2>
-          <button class="btn-modal-submit" onclick="openSendBroadcastModal()" style="padding:6px 12px;font-size:12px;">📢 Broadcast</button>
+          <div>
+            <h2 style="font-size:20px;font-weight:800;margin:0;">🔔 Notifications</h2>
+            <div style="font-size:12px;color:var(--text-muted);margin-top:2px;">In-app broadcasts and system alerts</div>
+          </div>
+          <button onclick="promptBroadcast()" style="padding:8px 14px;background:var(--blynk-lime);border:none;border-radius:12px;color:#000;font-weight:800;font-size:12px;cursor:pointer;">📢 Broadcast</button>
         </div>
-        <p style="font-size:12px;color:var(--app-text-muted);margin:0;">Real-time broadcasts and system alarms.</p>
 
-        <div id="mobile-notifications-list" style="display:flex;flex-direction:column;gap:10px;">
-          <!-- Loaded dynamically from /api/v1/broadcasts -->
+        <div id="mobile-broadcasts-container" style="display:flex;flex-direction:column;gap:12px;">
+          <!-- Loaded from /api/v1/broadcasts -->
         </div>
       </section>
 
       <!-- ========================================== -->
-      <!-- SCREEN 5: MORE / PROFILE / SETTINGS        -->
+      <!-- SCREEN 5: ACCOUNT & PROFILE                -->
       <!-- ========================================== -->
       <section id="screen-profile" class="app-screen">
-        <h2 style="font-size:18px;font-weight:800;margin:0;">👤 Account & Settings</h2>
-        
-        <div style="background:var(--app-surface);border:1px solid var(--app-border);border-radius:16px;padding:16px;display:flex;align-items:center;gap:14px;">
-          <div style="width:48px;height:48px;background:var(--app-primary);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;" id="prof-avatar">S</div>
+        <h2 style="font-size:20px;font-weight:800;margin:0;">👤 Account & Settings</h2>
+
+        <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;padding:18px;display:flex;align-items:center;gap:16px;">
+          <div style="width:52px;height:52px;background:var(--blynk-blue);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:900;" id="acc-avatar">S</div>
           <div>
-            <div style="font-size:16px;font-weight:700;" id="prof-name">Sam Developer</div>
-            <div style="font-size:12px;color:var(--app-text-muted);" id="prof-email">samblynkk@gmail.com</div>
-            <div style="font-size:11px;color:var(--app-blynk);margin-top:2px;">Pro Administrator • NY3</div>
+            <div style="font-size:17px;font-weight:800;" id="acc-name">Sam Developer</div>
+            <div style="font-size:12.5px;color:var(--text-muted);" id="acc-email">samblynkk@gmail.com</div>
+            <div style="font-size:11px;color:var(--blynk-lime);font-weight:700;margin-top:2px;">Pro Administrator • NY3</div>
           </div>
         </div>
 
-        <div style="background:var(--app-surface);border:1px solid var(--app-border);border-radius:16px;overflow:hidden;">
-          <div style="padding:14px 16px;border-bottom:1px solid var(--app-border);display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:13px;font-weight:600;">Organization</span>
-            <span style="font-size:12px;color:var(--app-text-muted);" id="prof-org">My organization - 2257TU</span>
+        <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:20px;overflow:hidden;">
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:700;">Organization</span>
+            <span style="font-size:12px;color:var(--text-muted);" id="acc-org">My organization - 2257TU</span>
           </div>
-          <div style="padding:14px 16px;border-bottom:1px solid var(--app-border);display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:13px;font-weight:600;">Blynk Hardware Protocol</span>
-            <span style="font-size:12px;color:var(--app-accent);">Active (Port 8080)</span>
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:700;">Hardware Protocol</span>
+            <span style="font-size:12px;color:var(--blynk-green);font-weight:700;">● Port 8080 Active</span>
           </div>
-          <div style="padding:14px 16px;border-bottom:1px solid var(--app-border);display:flex;justify-content:space-between;align-items:center;">
-            <span style="font-size:13px;font-weight:600;">Web Console Sync</span>
-            <span style="font-size:12px;color:var(--app-blynk);">WebSocket Online</span>
+          <div style="padding:14px 18px;border-bottom:1px solid var(--border-subtle);display:flex;justify-content:space-between;align-items:center;">
+            <span style="font-size:13px;font-weight:700;">WebSocket Core</span>
+            <span style="font-size:12px;color:var(--blynk-cyan);font-weight:700;">Connected</span>
           </div>
-          <div style="padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="openRegisterUserModal()">
-            <span style="font-size:13px;font-weight:600;color:var(--app-primary);">+ Register New User Account</span>
-            <span style="color:var(--app-primary);">&rarr;</span>
+          <div style="padding:14px 18px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;" onclick="promptRegister()">
+            <span style="font-size:13px;font-weight:700;color:var(--blynk-blue);">+ Add Sub-User Account</span>
+            <span style="color:var(--blynk-blue);">&rarr;</span>
           </div>
         </div>
 
-        <button onclick="window.location.href='/'" style="width:100%;padding:14px;background:var(--app-card);border:1px solid var(--app-border);border-radius:12px;color:#fff;font-weight:700;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
-          <span>🖥️</span> Open Full Web Console
+        <button onclick="window.location.href='/'" style="width:100%;padding:14px;background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:14px;color:#fff;font-weight:800;font-size:13px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <span>🖥️</span> Open Web Console Dashboard
         </button>
       </section>
 
     </div>
 
-    <!-- Floating Action Button (+ Add Widget in Edit Mode / + Add Device) -->
-    <div id="mobile-fab" class="fab-btn" onclick="handleFabClick()" title="Add">
+    <!-- Floating Action Button -->
+    <div id="dock-fab" class="blynk-fab" onclick="handleFabTap()" title="Add">
       +
     </div>
 
-    <!-- Bottom Navigation Bar (4 Authentic Blynk Mobile Tabs) -->
-    <nav class="mobile-bottom-nav">
-      <div class="nav-item active" onclick="switchScreen('devices', this)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
+    <!-- Floating Frosted Glass Bottom Navigation -->
+    <nav class="floating-bottom-dock">
+      <div class="dock-tab active" onclick="switchScreen('devices', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect><line x1="12" y1="18" x2="12.01" y2="18"></line></svg>
         <span>Devices</span>
       </div>
-      <div class="nav-item" onclick="switchScreen('automations', this)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-        <span>Automations</span>
+      <div class="dock-tab" onclick="switchScreen('automations', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+        <span>Rules</span>
       </div>
-      <div class="nav-item" onclick="switchScreen('notifications', this)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+      <div class="dock-tab" onclick="switchScreen('notifications', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
         <span>Alerts</span>
       </div>
-      <div class="nav-item" onclick="switchScreen('profile', this)">
-        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
+      <div class="dock-tab" onclick="switchScreen('profile', this)">
+        <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><circle cx="12" cy="7" r="4"></circle><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path></svg>
         <span>Account</span>
       </div>
     </nav>
 
-    <!-- ========================================== -->
-    <!-- SLIDING DRAWER: BLYNK WIDGET BOX           -->
-    <!-- ========================================== -->
-    <div id="drawer-widget-box" class="drawer-overlay" onclick="closeWidgetBoxDrawer(event)">
-      <div class="drawer-sheet" onclick="event.stopPropagation()">
-        <div class="drawer-header">
+    <!-- Drawer: Blynk Widget Box -->
+    <div id="drawer-widget-box" class="drawer-scrim" onclick="closeDrawer(event)">
+      <div class="drawer-card" onclick="event.stopPropagation()">
+        <div style="display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--border-subtle);padding-bottom:14px;">
           <div>
-            <div class="drawer-title">Widget Box</div>
-            <div style="font-size:11px;color:var(--app-text-muted);">Energy Available: 1,840 ⚡</div>
+            <div style="font-size:17px;font-weight:800;color:#fff;">Widget Box</div>
+            <div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;">Energy: <span style="color:var(--blynk-lime);font-weight:700;">1,950 ⚡ Free</span></div>
           </div>
-          <button onclick="closeWidgetBoxDrawer()" style="background:none;border:none;color:#fff;font-size:18px;cursor:pointer;">✕</button>
+          <button onclick="closeDrawer()" style="background:none;border:none;color:#fff;font-size:20px;cursor:pointer;">✕</button>
         </div>
 
-        <div style="font-size:12px;font-weight:700;color:var(--app-text-muted);text-transform:uppercase;">Controllers</div>
-        <div class="widget-catalog-grid">
-          <div class="catalog-item" onclick="addWidgetToDashboard('BUTTON', 'Button', 'V0')">
-            <span class="catalog-icon">🔘</span>
-            <div class="catalog-meta"><span class="catalog-name">Button</span><span class="catalog-cost">100 ⚡</span></div>
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;">Controllers</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="catalog-tile" onclick="appendWidget('BUTTON', 'Push Switch', 'V0')">
+            <div class="catalog-icon-box">🔘</div>
+            <div><div style="font-size:13px;font-weight:700;">Button</div><div style="font-size:10.5px;color:var(--blynk-lime);">100 ⚡</div></div>
           </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('SWITCH', 'Styled Switch', 'V3')">
-            <span class="catalog-icon">🎚️</span>
-            <div class="catalog-meta"><span class="catalog-name">Styled Switch</span><span class="catalog-cost">150 ⚡</span></div>
+          <div class="catalog-tile" onclick="appendWidget('SWITCH', 'Fan Relay', 'V3')">
+            <div class="catalog-icon-box">🎚️</div>
+            <div><div style="font-size:13px;font-weight:700;">Relay Switch</div><div style="font-size:10.5px;color:var(--blynk-lime);">150 ⚡</div></div>
           </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('SLIDER', 'Level Slider', 'V1')">
-            <span class="catalog-icon">🎛️</span>
-            <div class="catalog-meta"><span class="catalog-name">Slider</span><span class="catalog-cost">200 ⚡</span></div>
+          <div class="catalog-tile" onclick="appendWidget('SLIDER', 'Level Slider', 'V1')">
+            <div class="catalog-icon-box">🎛️</div>
+            <div><div style="font-size:13px;font-weight:700;">Slider</div><div style="font-size:10.5px;color:var(--blynk-lime);">200 ⚡</div></div>
           </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('RGB', 'ZeRGBa Color', 'V10')">
-            <span class="catalog-icon">🎨</span>
-            <div class="catalog-meta"><span class="catalog-name">ZeRGBa Color</span><span class="catalog-cost">300 ⚡</span></div>
+          <div class="catalog-tile" onclick="appendWidget('RGB', 'ZeRGBa Color', 'V10')">
+            <div class="catalog-icon-box">🎨</div>
+            <div><div style="font-size:13px;font-weight:700;">ZeRGBa</div><div style="font-size:10.5px;color:var(--blynk-lime);">300 ⚡</div></div>
           </div>
         </div>
 
-        <div style="font-size:12px;font-weight:700;color:var(--app-text-muted);text-transform:uppercase;margin-top:6px;">Displays & Gauges</div>
-        <div class="widget-catalog-grid">
-          <div class="catalog-item" onclick="addWidgetToDashboard('GAUGE', 'Radial Gauge', 'V2')">
-            <span class="catalog-icon">⏱️</span>
-            <div class="catalog-meta"><span class="catalog-name">Radial Gauge</span><span class="catalog-cost">250 ⚡</span></div>
+        <div style="font-size:11px;font-weight:800;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:6px;">Displays & Meters</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="catalog-tile" onclick="appendWidget('GAUGE', 'Temperature', 'V2')">
+            <div class="catalog-icon-box">⏱️</div>
+            <div><div style="font-size:13px;font-weight:700;">Radial Gauge</div><div style="font-size:10.5px;color:var(--blynk-lime);">250 ⚡</div></div>
           </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('VALUE', 'Value Display', 'V5')">
-            <span class="catalog-icon">📊</span>
-            <div class="catalog-meta"><span class="catalog-name">Value Display</span><span class="catalog-cost">100 ⚡</span></div>
+          <div class="catalog-tile" onclick="appendWidget('VALUE', 'Humidity Display', 'V5')">
+            <div class="catalog-icon-box">📊</div>
+            <div><div style="font-size:13px;font-weight:700;">Value Display</div><div style="font-size:10.5px;color:var(--blynk-lime);">100 ⚡</div></div>
           </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('TERMINAL', 'Terminal Log', 'V7')">
-            <span class="catalog-icon">💻</span>
-            <div class="catalog-meta"><span class="catalog-name">Terminal</span><span class="catalog-cost">200 ⚡</span></div>
-          </div>
-          <div class="catalog-item" onclick="addWidgetToDashboard('CHART', 'SuperGraph', 'V2')">
-            <span class="catalog-icon">📈</span>
-            <div class="catalog-meta"><span class="catalog-name">SuperGraph</span><span class="catalog-cost">400 ⚡</span></div>
+          <div class="catalog-tile" onclick="appendWidget('TERMINAL', 'Terminal Log', 'V7')">
+            <div class="catalog-icon-box">💻</div>
+            <div><div style="font-size:13px;font-weight:700;">Terminal</div><div style="font-size:10.5px;color:var(--blynk-lime);">200 ⚡</div></div>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- ========================================== -->
-    <!-- MODAL: ADD NEW DEVICE                      -->
-    <!-- ========================================== -->
-    <div id="modal-add-device" class="mobile-modal-overlay">
-      <div class="mobile-modal-box">
-        <h3 style="margin:0;color:#fff;font-size:16px;">📱 Provision New Device</h3>
-        <label style="font-size:11.5px;color:var(--app-text-muted);">Device Name</label>
-        <input id="mobile-dev-name" class="modal-input" placeholder="e.g. Smart Irrigation Node" />
-        <label style="font-size:11.5px;color:var(--app-text-muted);">Device Template</label>
-        <select id="mobile-dev-tmpl" class="modal-input">
-          <option value="1">BLINKING LED (ESP32)</option>
-        </select>
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" onclick="closeModal('modal-add-device')">Cancel</button>
-          <button class="btn-modal-submit" onclick="submitMobileNewDevice()">Create Device</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODAL: DEVICE INFO & TOKEN                 -->
-    <!-- ========================================== -->
-    <div id="modal-device-info" class="mobile-modal-overlay">
-      <div class="mobile-modal-box">
-        <h3 style="margin:0;color:#fff;font-size:16px;">⚙️ Device Details</h3>
-        <div style="font-size:12px;color:var(--app-text-muted);">Auth Token (Hardware Protocol)</div>
-        <div style="background:#090d14;border:1px solid var(--app-border);padding:10px;border-radius:8px;font-family:monospace;font-size:12px;word-break:break-all;color:var(--app-blynk);" id="info-auth-token">—</div>
-        <button onclick="copyMobileToken()" style="background:var(--app-primary);border:none;color:#fff;padding:8px;border-radius:8px;font-weight:700;cursor:pointer;">📋 Copy Auth Token</button>
-        <div style="font-size:12px;color:var(--app-text-muted);margin-top:6px;">Connect hardware using <code>Blynk.begin(auth, ssid, pass, "127.0.0.1", 8080)</code></div>
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" onclick="closeModal('modal-device-info')">Close</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODAL: REGISTER USER ACCOUNT               -->
-    <!-- ========================================== -->
-    <div id="modal-register-user" class="mobile-modal-overlay">
-      <div class="mobile-modal-box">
-        <h3 style="margin:0;color:#fff;font-size:16px;">👤 Register User Account</h3>
-        <input id="reg-name" class="modal-input" placeholder="Full Name" />
-        <input id="reg-email" class="modal-input" placeholder="Email Address" />
-        <input id="reg-pass" type="password" class="modal-input" placeholder="Password" />
-        <div class="modal-actions">
-          <button class="btn-modal-cancel" onclick="closeModal('modal-register-user')">Cancel</button>
-          <button class="btn-modal-submit" onclick="submitMobileUserRegister()">Register</button>
-        </div>
+    <!-- Device Token Modal Sheet -->
+    <div id="sheet-device-token" class="drawer-scrim" onclick="closeTokenSheet(event)">
+      <div class="drawer-card" onclick="event.stopPropagation()">
+        <h3 style="margin:0;font-size:16px;">🔑 Hardware Auth Token</h3>
+        <p style="font-size:12px;color:var(--text-muted);margin:0;">Use this token to connect your ESP32 / Arduino directly on Port 8080.</p>
+        <div style="background:#000;border:1px solid var(--border-subtle);padding:14px;border-radius:12px;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--blynk-lime);word-break:break-all;" id="sheet-token-val">—</div>
+        <button onclick="copyTokenFromSheet()" style="padding:12px;background:var(--blynk-blue);border:none;border-radius:12px;color:#fff;font-weight:800;font-size:13px;cursor:pointer;">📋 Copy Token to Clipboard</button>
       </div>
     </div>
 
   </div>
 
-  <!-- Mobile Controller Script -->
+  <!-- Mobile App Controller -->
   <script>
-    let currentScreen = 'devices';
-    let currentFilter = 'all';
-    let isEditMode = false;
-    let activeDeviceId = 1;
-    let devicesCache = [];
-    let currentDeviceData = null;
+    let activeScreen = 'devices';
+    let activeFilter = 'all';
+    let isEditing = false;
+    let activeDevId = 1;
+    let cachedDevices = [];
     let ws = null;
 
-    // Toast Notification Helper
-    function showAppToast(msg, type = 'success') {
-      const t = document.getElementById('mobile-toast');
-      const m = document.getElementById('mobile-toast-msg');
-      if (!t || !m) return;
-      m.innerText = msg;
-      t.className = `mobile-toast show ${type === 'error' ? 'error' : ''}`;
-      setTimeout(() => t.className = 'mobile-toast', 3000);
+    function toast(msg) {
+      const el = document.getElementById('app-toast');
+      const txt = document.getElementById('toast-text');
+      if (!el || !txt) return;
+      txt.innerText = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2800);
     }
 
-    // Modal helpers
-    function openModal(id) { document.getElementById(id).classList.add('open'); }
-    function closeModal(id) { document.getElementById(id).classList.remove('open'); }
-
-    // Screen Navigation
-    function switchScreen(screenName, navEl) {
-      currentScreen = screenName;
+    function switchScreen(name, navItem) {
+      activeScreen = name;
       document.querySelectorAll('.app-screen').forEach(s => s.classList.remove('active'));
-      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.querySelectorAll('.dock-tab').forEach(t => t.classList.remove('active'));
 
-      const targetScreen = document.getElementById(`screen-${screenName}`);
-      if (targetScreen) targetScreen.classList.add('active');
+      const s = document.getElementById(`screen-${name}`);
+      if (s) s.classList.add('active');
 
-      if (navEl) {
-        navEl.classList.add('active');
+      if (navItem) {
+        navItem.classList.add('active');
       } else {
-        const idx = ['devices', 'automations', 'notifications', 'profile'].indexOf(screenName);
-        const navItems = document.querySelectorAll('.nav-item');
-        if (idx >= 0 && navItems[idx]) navItems[idx].classList.add('active');
+        const idx = ['devices', 'automations', 'notifications', 'profile'].indexOf(name);
+        const tabs = document.querySelectorAll('.dock-tab');
+        if (idx >= 0 && tabs[idx]) tabs[idx].classList.add('active');
       }
 
-      // Hide or show FAB
-      const fab = document.getElementById('mobile-fab');
-      if (screenName === 'devices') {
+      const fab = document.getElementById('dock-fab');
+      if (name === 'devices') {
         fab.style.display = 'flex';
-        fab.innerText = '+';
-        loadMobileDevices();
-      } else if (screenName === 'device-dashboard') {
-        fab.style.display = isEditMode ? 'flex' : 'none';
-        fab.innerText = '+';
-      } else if (screenName === 'automations') {
+        loadDevices();
+      } else if (name === 'device-dashboard') {
+        fab.style.display = isEditing ? 'flex' : 'none';
+      } else if (name === 'automations') {
         fab.style.display = 'none';
-        loadMobileAutomations();
-      } else if (screenName === 'notifications') {
+        loadAutomations();
+      } else if (name === 'notifications') {
         fab.style.display = 'none';
-        loadMobileNotifications();
+        loadBroadcasts();
       } else {
         fab.style.display = 'none';
       }
     }
 
-    function openNotificationsScreen() {
-      switchScreen('notifications');
-    }
-
-    // Floating Action Button Action
-    function handleFabClick() {
-      if (currentScreen === 'devices') {
-        openModal('modal-add-device');
-      } else if (currentScreen === 'device-dashboard' && isEditMode) {
+    function handleFabTap() {
+      if (activeScreen === 'devices') {
+        promptCreateDevice();
+      } else if (activeScreen === 'device-dashboard' && isEditing) {
         document.getElementById('drawer-widget-box').classList.add('open');
       }
     }
 
-    function closeWidgetBoxDrawer(e) {
+    function closeDrawer() {
       document.getElementById('drawer-widget-box').classList.remove('open');
     }
 
-    // ─────────────────────────────────────────────
-    // 1. DEVICES SCREEN
-    // ─────────────────────────────────────────────
-    async function loadMobileDevices() {
-      const container = document.getElementById('devices-list-container');
+    // ── Devices Screen ──────────────────────────────
+    async function loadDevices() {
+      const container = document.getElementById('devices-container');
       try {
         const res = await fetch('/api/v1/app/devices');
         const devices = await res.json();
-        devicesCache = devices;
-        renderDevicesList(devices);
+        cachedDevices = devices;
+        renderDeviceCards(devices);
       } catch (err) {
-        container.innerHTML = `<div style="color:var(--app-danger);padding:30px;text-align:center;">Failed to load devices: ${err.message}</div>`;
+        container.innerHTML = `<div style="text-align:center;color:var(--blynk-red);padding:40px;">Load error: ${err.message}</div>`;
       }
     }
 
-    function renderDevicesList(devices) {
-      const container = document.getElementById('devices-list-container');
-      let filtered = devices;
+    function renderDeviceCards(devices) {
+      const container = document.getElementById('devices-container');
+      let list = devices;
 
-      if (currentFilter === 'online') {
-        filtered = devices.filter(d => d.status === 'ONLINE');
-      } else if (currentFilter === 'offline') {
-        filtered = devices.filter(d => d.status !== 'ONLINE');
-      }
+      if (activeFilter === 'online') list = devices.filter(d => d.status === 'ONLINE');
+      else if (activeFilter === 'offline') list = devices.filter(d => d.status !== 'ONLINE');
 
-      const q = (document.getElementById('device-search-input')?.value || '').toLowerCase();
-      if (q) {
-        filtered = filtered.filter(d => d.name.toLowerCase().includes(q));
-      }
+      const q = (document.getElementById('dev-search-input')?.value || '').toLowerCase();
+      if (q) list = list.filter(d => d.name.toLowerCase().includes(q));
 
-      if (!filtered.length) {
-        container.innerHTML = '<div style="text-align:center;color:var(--app-text-muted);padding:40px;">No devices found. Tap + to add one.</div>';
+      if (!list.length) {
+        container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:40px;">No devices found.</div>';
         return;
       }
 
-      container.innerHTML = filtered.map(d => {
+      container.innerHTML = list.map(d => {
         const isOnline = d.status === 'ONLINE';
         const vals = d.summaryValues || {};
-        const btnOn = String(vals.button) === '1';
+        const isLedOn = String(vals.button) === '1';
 
         return `
-          <div class="device-card" onclick="openDeviceDashboard(${d.id})">
-            <div class="card-top">
-              <div class="card-title-group">
-                <div class="card-icon">
-                  <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line><line x1="20" y1="9" x2="23" y2="9"></line><line x1="20" y1="14" x2="23" y2="14"></line><line x1="1" y1="9" x2="4" y2="9"></line><line x1="1" y1="14" x2="4" y2="14"></line></svg>
+          <div class="device-card-pro" onclick="openDeviceDetail(${d.id})">
+            <div class="card-header-line">
+              <div class="card-id-block">
+                <div class="mcu-avatar">
+                  <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line><line x1="9" y1="20" x2="9" y2="23"></line><line x1="15" y1="20" x2="15" y2="23"></line></svg>
                 </div>
                 <div>
-                  <div class="card-name">${d.name}</div>
-                  <div class="card-meta">${d.hardware || 'ESP32'} • Token: ${(d.authToken || '').substring(0,6)}...</div>
+                  <div class="card-title-text">${d.name}</div>
+                  <div class="card-mcu-badge">${d.hardware || 'ESP32 (Wi-Fi)'} • Token: ${(d.authToken || '').substring(0, 8)}...</div>
                 </div>
               </div>
-              <span class="online-badge ${isOnline ? '' : 'offline'}">
-                <span class="status-dot" style="${isOnline ? '' : 'background:var(--app-danger);box-shadow:none;'}"></span>
-                ${isOnline ? 'Online' : 'Offline'}
+              <span class="pill-status ${isOnline ? '' : 'offline'}">
+                ● ${isOnline ? 'Online' : 'Offline'}
               </span>
             </div>
 
-            <div class="card-widgets-preview" onclick="event.stopPropagation()">
-              <div class="mini-widget">
-                <div class="mini-label"><span>Power LED</span><span style="font-family:monospace;">V0</span></div>
-                <button class="btn-actuator ${btnOn ? 'on' : 'off'}" style="padding:6px;font-size:12px;margin-top:6px;" onclick="togglePinDirect(${d.id}, 'V0', '${vals.button || 0}')">
-                  ${btnOn ? '● ON' : '○ OFF'}
-                </button>
+            <div class="card-preview-strip" onclick="event.stopPropagation()">
+              <div class="strip-tile">
+                <span class="strip-label">Power (V0)</span>
+                <label class="ios-switch">
+                  <input type="checkbox" ${isLedOn ? 'checked' : ''} onchange="togglePinFromCard(${d.id}, 'V0', this.checked)">
+                  <span class="switch-track"></span>
+                </label>
               </div>
-              <div class="mini-widget">
-                <div class="mini-label"><span>Temperature</span><span style="font-family:monospace;">V2</span></div>
-                <div class="mini-val" id="mini-temp-${d.id}">${vals.temperature || '25.0'}°C</div>
+              <div class="strip-tile">
+                <span class="strip-label">Temp (V2)</span>
+                <span class="strip-val" id="strip-temp-${d.id}">${vals.temperature || '28.5'}°C</span>
               </div>
             </div>
           </div>
@@ -1265,469 +1248,426 @@
       }).join('');
     }
 
-    function setDeviceFilter(filter, el) {
-      currentFilter = filter;
-      document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    function setChipFilter(filter, el) {
+      activeFilter = filter;
+      document.querySelectorAll('.chip-filter').forEach(c => c.classList.remove('active'));
       el.classList.add('active');
-      renderDevicesList(devicesCache);
+      renderDeviceCards(cachedDevices);
     }
 
-    function filterDevicesList() {
-      renderDevicesList(devicesCache);
+    function filterDevices() {
+      renderDeviceCards(cachedDevices);
     }
 
-    // ─────────────────────────────────────────────
-    // 2. DEVICE CANVAS & DASHBOARD
-    // ─────────────────────────────────────────────
-    async function openDeviceDashboard(deviceId) {
-      activeDeviceId = deviceId;
-      switchScreen('device-dashboard');
-      const canvas = document.getElementById('mobile-widgets-canvas');
-      canvas.innerHTML = '<div style="color:var(--app-text-muted);padding:30px;text-align:center;grid-column:span 2;">Loading device dashboard from SQLite...</div>';
-
-      try {
-        const res = await fetch(`/api/v1/app/devices/${deviceId}/dashboard`);
-        const data = await res.json();
-        currentDeviceData = data;
-
-        document.getElementById('dash-device-name').innerText = data.device.name;
-        const isOnline = data.device.status === 'ONLINE';
-        document.getElementById('dash-device-status').innerHTML = `
-          <span style="color:${isOnline ? 'var(--app-accent)' : 'var(--app-danger)'};">
-            ${isOnline ? '● Online' : '○ Offline'} • ${data.device.hardware || 'ESP32'}
-          </span>
-        `;
-        document.getElementById('info-auth-token').innerText = data.device.authToken || '—';
-
-        renderDeviceWidgets(data);
-      } catch (err) {
-        canvas.innerHTML = `<div style="color:var(--app-danger);padding:30px;text-align:center;grid-column:span 2;">Dashboard load failed: ${err.message}</div>`;
-      }
-    }
-
-    function renderDeviceWidgets(data) {
-      const canvas = document.getElementById('mobile-widgets-canvas');
-      const ds = data.datastreams || {};
-      const widgets = data.widgets || [];
-
-      // If template has no custom widgets configured, render the standard 5-widget Blynk suite
-      if (!widgets.length) {
-        const v0Val = ds['V0']?.value || '0';
-        const v1Val = ds['V1']?.value || '128';
-        const v2Val = ds['V2']?.value || '28.5';
-        const v5Val = ds['V5']?.value || '55';
-        const isV0On = String(v0Val) === '1';
-
-        canvas.innerHTML = `
-          <!-- Button Widget -->
-          <div class="widget-box">
-            <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-            <div class="widget-header">
-              <span>LED Light</span>
-              <span class="widget-pin-pill">V0</span>
-            </div>
-            <button id="widget-btn-v0" class="btn-actuator ${isV0On ? 'on' : 'off'}" onclick="toggleDevicePin('V0', '${v0Val}')">
-              ${isV0On ? '● SWITCH ON' : '○ SWITCH OFF'}
-            </button>
-          </div>
-
-          <!-- Gauge Widget -->
-          <div class="widget-box">
-            <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-            <div class="widget-header">
-              <span>Temperature</span>
-              <span class="widget-pin-pill">V2</span>
-            </div>
-            <div class="gauge-container">
-              <div class="gauge-circle">
-                <span class="gauge-val" id="widget-val-v2">${v2Val}</span>
-                <span class="gauge-units">°C</span>
-              </div>
-            </div>
-          </div>
-
-          <!-- Slider Widget -->
-          <div class="widget-box wide">
-            <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-            <div class="widget-header">
-              <span>Brightness Level</span>
-              <span class="widget-pin-pill">V1</span>
-            </div>
-            <div class="slider-range-wrap">
-              <div class="slider-val-readout"><span id="widget-slider-val-v1">${v1Val}</span> <span style="font-size:12px;color:var(--app-text-muted);">/ 255</span></div>
-              <input type="range" min="0" max="255" value="${v1Val}" oninput="onMobileSlider('V1', this.value)" />
-            </div>
-          </div>
-
-          <!-- ZeRGBa RGB Color Picker Widget -->
-          <div class="widget-box wide">
-            <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-            <div class="widget-header">
-              <span>ZeRGBa NeoPixel (RGB)</span>
-              <span class="widget-pin-pill">V10</span>
-            </div>
-            <div class="rgb-palette">
-              <div class="color-dot" style="background:#ff0044;" onclick="sendMobileColor('V10', '#ff0044')"></div>
-              <div class="color-dot" style="background:#ffaa00;" onclick="sendMobileColor('V10', '#ffaa00')"></div>
-              <div class="color-dot" style="background:#10f17f;" onclick="sendMobileColor('V10', '#10f17f')"></div>
-              <div class="color-dot" style="background:#00e5ff;" onclick="sendMobileColor('V10', '#00e5ff')"></div>
-              <div class="color-dot" style="background:#0375de;" onclick="sendMobileColor('V10', '#0375de')"></div>
-              <div class="color-dot" style="background:#b026ff;" onclick="sendMobileColor('V10', '#b026ff')"></div>
-              <div class="color-dot" style="background:#ffffff;" onclick="sendMobileColor('V10', '#ffffff')"></div>
-            </div>
-          </div>
-
-          <!-- Terminal Output Widget -->
-          <div class="widget-box wide">
-            <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-            <div class="widget-header">
-              <span>Terminal Console</span>
-              <span class="widget-pin-pill">V7</span>
-            </div>
-            <div class="terminal-box" id="widget-terminal-output">
-              [SYSTEM] ESP32 Core Online via TCP:8080<br/>
-              [STATUS] Telemetry streaming active<br/>
-              [RULES] High Temp Cooling trigger armed
-            </div>
-          </div>
-        `;
-        return;
-      }
-
-      // Render custom widgets from template
-      canvas.innerHTML = widgets.map(w => `
-        <div class="widget-box ${w.widgetType === 'SLIDER' || w.widgetType === 'RGB' || w.widgetType === 'TERMINAL' ? 'wide' : ''}">
-          <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-          <div class="widget-header">
-            <span>${w.label || w.widgetType}</span>
-            <span class="widget-pin-pill">${w.pin}</span>
-          </div>
-          <div style="font-size:22px;font-weight:800;padding:16px 0;text-align:center;color:var(--app-accent);">
-            ${w.currentValue}
-          </div>
-        </div>
-      `).join('');
-    }
-
-    // Toggle Dashboard Edit Mode (Wrench / Edit Icon)
-    function toggleDashboardEditMode() {
-      isEditMode = !isEditMode;
-      const canvas = document.getElementById('mobile-widgets-canvas');
-      const btn = document.getElementById('btn-edit-mode');
-      const fab = document.getElementById('mobile-fab');
-
-      if (isEditMode) {
-        canvas.classList.add('edit-mode');
-        btn.classList.add('active');
-        fab.style.display = 'flex';
-        showAppToast('Edit Mode: Tap + to add widgets or ✕ to remove', 'info');
-      } else {
-        canvas.classList.remove('edit-mode');
-        btn.classList.remove('active');
-        fab.style.display = 'none';
-        showAppToast('Dashboard saved', 'success');
-      }
-    }
-
-    function removeWidgetBox(btn) {
-      const box = btn.closest('.widget-box');
-      if (box) {
-        box.remove();
-        showAppToast('Widget removed from layout', 'info');
-      }
-    }
-
-    function addWidgetToDashboard(type, name, defaultPin) {
-      closeWidgetBoxDrawer();
-      const canvas = document.getElementById('mobile-widgets-canvas');
-      const newBox = document.createElement('div');
-      newBox.className = `widget-box ${type === 'SLIDER' || type === 'RGB' || type === 'TERMINAL' ? 'wide' : ''}`;
-      newBox.innerHTML = `
-        <div class="widget-del-btn" onclick="removeWidgetBox(this)">✕</div>
-        <div class="widget-header">
-          <span>${name}</span>
-          <span class="widget-pin-pill">${defaultPin}</span>
-        </div>
-        <div style="font-size:18px;font-weight:700;color:var(--app-accent);padding:14px 0;text-align:center;">
-          ${name} Active
-        </div>
-      `;
-      canvas.appendChild(newBox);
-      showAppToast(`Added ${name} to dashboard!`, 'success');
-    }
-
-    // Actuate Pin (Write)
-    async function toggleDevicePin(pin, currentVal) {
-      const targetVal = String(currentVal) === '1' ? '0' : '1';
-      try {
-        await fetch(`/api/v1/app/devices/${activeDeviceId}/write`, {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ stream: pin, value: targetVal })
-        });
-        updateLocalPinUI(pin, targetVal);
-      } catch (err) {
-        showAppToast('Failed to toggle pin: ' + err.message, 'error');
-      }
-    }
-
-    async function togglePinDirect(devId, pin, currentVal) {
-      const targetVal = String(currentVal) === '1' ? '0' : '1';
+    async function togglePinFromCard(devId, pin, isChecked) {
+      const val = isChecked ? '1' : '0';
       try {
         await fetch(`/api/v1/app/devices/${devId}/write`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ stream: pin, value: targetVal })
+          body: JSON.stringify({ stream: pin, value: val })
         });
-        showAppToast(`Pin ${pin} updated to ${targetVal}`, 'success');
-        loadMobileDevices();
+        toast(`Pin ${pin} updated: ${isChecked ? 'ON' : 'OFF'}`);
       } catch (err) {
-        showAppToast('Write failed', 'error');
+        toast('Write failed: ' + err.message);
       }
     }
 
-    let sliderTimer = null;
-    function onMobileSlider(pin, val) {
-      const readout = document.getElementById('widget-slider-val-v1');
-      if (readout) readout.innerText = val;
+    // ── Dedicated Dashboard Screen ──────────────────
+    async function openDeviceDetail(deviceId) {
+      activeDevId = deviceId;
+      switchScreen('device-dashboard');
+      const grid = document.getElementById('device-widgets-grid');
+      grid.innerHTML = '<div style="grid-column:span 2;text-align:center;color:var(--text-muted);padding:40px;">Loading live device dashboard from SQLite...</div>';
 
-      clearTimeout(sliderTimer);
-      sliderTimer = setTimeout(async () => {
-        try {
-          await fetch(`/api/v1/app/devices/${activeDeviceId}/write`, {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ stream: pin, value: val })
-          });
-        } catch (e) {
-          console.error('Slider write failed:', e);
-        }
-      }, 80);
+      try {
+        const res = await fetch(`/api/v1/app/devices/${deviceId}/dashboard`);
+        const data = await res.json();
+
+        document.getElementById('active-device-name').innerText = data.device.name;
+        const isOnline = data.device.status === 'ONLINE';
+        document.getElementById('active-device-status').innerHTML = `<span style="color:${isOnline ? 'var(--blynk-green)' : 'var(--blynk-red)'};font-weight:700;">● ${isOnline ? 'Online' : 'Offline'} • ${data.device.hardware || 'ESP32'}</span>`;
+        document.getElementById('sheet-token-val').innerText = data.device.authToken || '—';
+
+        renderDashboardWidgets(data);
+      } catch (err) {
+        grid.innerHTML = `<div style="grid-column:span 2;color:var(--blynk-red);padding:30px;">Error loading dashboard: ${err.message}</div>`;
+      }
     }
 
-    async function sendMobileColor(pin, hex) {
+    function renderDashboardWidgets(data) {
+      const grid = document.getElementById('device-widgets-grid');
+      const ds = data.datastreams || {};
+
+      const v0Val = ds['V0']?.value || '0';
+      const v1Val = ds['V1']?.value || '128';
+      const v2Val = ds['V2']?.value || '28.5';
+      const v5Val = ds['V5']?.value || '55';
+      const isV0On = String(v0Val) === '1';
+
+      // SVG progress offset calculation
+      const tempNum = Math.min(Math.max(parseFloat(v2Val) || 0, 0), 50);
+      const strokeOffset = 251.2 - (tempNum / 50) * 200;
+
+      grid.innerHTML = `
+        <!-- Widget 1: Radial Gauge (Temperature V2) -->
+        <div class="widget-tile">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">Temperature</span>
+            <span class="tile-pin-tag">V2</span>
+          </div>
+          <div class="radial-gauge-wrap">
+            <svg class="radial-gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg-circle" cx="50" cy="50" r="40" />
+              <circle id="gauge-circle-v2" class="gauge-progress-circle" cx="50" cy="50" r="40" style="stroke-dashoffset:${strokeOffset};" />
+            </svg>
+            <div class="radial-text-stack">
+              <span class="gauge-num" id="gauge-val-v2">${v2Val}</span>
+              <span class="gauge-unit">°C Celsius</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Widget 2: Power Toggle Switch (V0) -->
+        <div class="widget-tile">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">LED Power</span>
+            <span class="tile-pin-tag">V0</span>
+          </div>
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;">
+            <label class="ios-switch" style="transform:scale(1.25);">
+              <input id="dash-switch-v0" type="checkbox" ${isV0On ? 'checked' : ''} onchange="writePin('V0', this.checked ? '1' : '0')">
+              <span class="switch-track"></span>
+            </label>
+            <span style="font-size:12px;font-weight:800;color:${isV0On ? 'var(--blynk-green)' : 'var(--text-muted)'};" id="dash-switch-label-v0">
+              ${isV0On ? '● ACTIVATED' : '○ DISABLED'}
+            </span>
+          </div>
+        </div>
+
+        <!-- Widget 3: Level Brightness Slider (V1) -->
+        <div class="widget-tile col-span-2">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">Brightness Level</span>
+            <span class="tile-pin-tag">V1</span>
+          </div>
+          <div class="glow-slider-container">
+            <div class="slider-header-num">
+              <span class="big-slider-val"><span id="slider-readout-v1">${v1Val}</span> <span style="font-size:13px;color:var(--text-muted);font-weight:600;">PWM / 255</span></span>
+              <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-v1">${Math.round((v1Val/255)*100)}%</span>
+            </div>
+            <input type="range" min="0" max="255" value="${v1Val}" class="blynk-range" oninput="onSliderMove('V1', this.value)" />
+          </div>
+        </div>
+
+        <!-- Widget 4: ZeRGBa NeoPixel Palette (V10) -->
+        <div class="widget-tile col-span-2">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">ZeRGBa Color Stream</span>
+            <span class="tile-pin-tag">V10</span>
+          </div>
+          <div class="color-swatch-row">
+            <div class="swatch-dot" style="background:#ff0044;" onclick="writeColor('V10', '#ff0044')"></div>
+            <div class="swatch-dot" style="background:#ffaa00;" onclick="writeColor('V10', '#ffaa00')"></div>
+            <div class="swatch-dot" style="background:#10f17f;" onclick="writeColor('V10', '#10f17f')"></div>
+            <div class="swatch-dot" style="background:#00e5ff;" onclick="writeColor('V10', '#00e5ff')"></div>
+            <div class="swatch-dot" style="background:#0375de;" onclick="writeColor('V10', '#0375de')"></div>
+            <div class="swatch-dot" style="background:#b026ff;" onclick="writeColor('V10', '#b026ff')"></div>
+            <div class="swatch-dot" style="background:#ffffff;" onclick="writeColor('V10', '#ffffff')"></div>
+          </div>
+        </div>
+
+        <!-- Widget 5: Terminal Output (V7) -->
+        <div class="widget-tile col-span-2">
+          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">Terminal Console</span>
+            <span class="tile-pin-tag">V7</span>
+          </div>
+          <div class="dark-console" id="mobile-terminal">
+            [SYS] ESP32 Core Online (TCP:8080)<br/>
+            [NET] WebSocket ShellBridge Connected<br/>
+            [APP] Ready for bidirectional actuation
+          </div>
+        </div>
+      `;
+    }
+
+    function toggleEditMode() {
+      isEditing = !isEditing;
+      const grid = document.getElementById('device-widgets-grid');
+      const btn = document.getElementById('btn-edit-mode');
+      const fab = document.getElementById('dock-fab');
+
+      if (isEditing) {
+        grid.classList.add('edit-mode');
+        btn.classList.add('active');
+        fab.style.display = 'flex';
+        toast('Edit Mode: Tap + for Widget Box or ✕ to remove');
+      } else {
+        grid.classList.remove('edit-mode');
+        btn.classList.remove('active');
+        fab.style.display = 'none';
+        toast('Dashboard layout saved');
+      }
+    }
+
+    function removeTile(el) {
+      el.closest('.widget-tile')?.remove();
+      toast('Widget removed from layout');
+    }
+
+    function appendWidget(type, title, defaultPin) {
+      closeDrawer();
+      const grid = document.getElementById('device-widgets-grid');
+      const tile = document.createElement('div');
+      tile.className = `widget-tile ${type === 'SLIDER' || type === 'RGB' || type === 'TERMINAL' ? 'col-span-2' : ''}`;
+      tile.innerHTML = `
+        <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
+        <div class="tile-top">
+          <span class="tile-label">${title}</span>
+          <span class="tile-pin-tag">${defaultPin}</span>
+        </div>
+        <div style="font-size:18px;font-weight:800;color:var(--blynk-green);padding:18px 0;text-align:center;">
+          ${title} Active
+        </div>
+      `;
+      grid.appendChild(tile);
+      toast(`Added ${title} to dashboard!`);
+    }
+
+    async function writePin(pin, val) {
       try {
-        await fetch(`/api/v1/app/devices/${activeDeviceId}/write`, {
+        await fetch(`/api/v1/app/devices/${activeDevId}/write`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({ stream: pin, value: val })
+        });
+        const lbl = document.getElementById(`dash-switch-label-${pin.toLowerCase()}`);
+        if (lbl) {
+          const isOn = String(val) === '1';
+          lbl.innerText = isOn ? '● ACTIVATED' : '○ DISABLED';
+          lbl.style.color = isOn ? 'var(--blynk-green)' : 'var(--text-muted)';
+        }
+      } catch (e) {
+        toast('Write failed: ' + e.message);
+      }
+    }
+
+    let sliderDebounce = null;
+    function onSliderMove(pin, val) {
+      document.getElementById('slider-readout-v1').innerText = val;
+      document.getElementById('slider-pct-v1').innerText = Math.round((val/255)*100) + '%';
+      clearTimeout(sliderDebounce);
+      sliderDebounce = setTimeout(() => writePin(pin, val), 60);
+    }
+
+    async function writeColor(pin, hex) {
+      try {
+        await fetch(`/api/v1/app/devices/${activeDevId}/write`, {
           method: 'POST',
           headers: {'Content-Type': 'application/json'},
           body: JSON.stringify({ stream: pin, value: hex })
         });
-        showAppToast(`NeoPixel Color set to ${hex}!`, 'success');
+        toast(`ZeRGBa NeoPixel set to ${hex}!`);
       } catch (e) {
-        showAppToast('Color update failed', 'error');
+        toast('Color failed');
       }
     }
 
-    function updateLocalPinUI(pin, val) {
-      if (pin === 'V0') {
-        const btn = document.getElementById('widget-btn-v0');
-        if (btn) {
-          const isOn = String(val) === '1';
-          btn.className = `btn-actuator ${isOn ? 'on' : 'off'}`;
-          btn.innerHTML = isOn ? '● SWITCH ON' : '○ SWITCH OFF';
-          btn.setAttribute('onclick', `toggleDevicePin('V0', '${val}')`);
-        }
-      } else if (pin === 'V2') {
-        const t = document.getElementById('widget-val-v2');
-        if (t) t.innerText = val;
-      }
-    }
-
-    // ─────────────────────────────────────────────
-    // 3. AUTOMATIONS SCREEN
-    // ─────────────────────────────────────────────
-    async function loadMobileAutomations() {
-      const container = document.getElementById('mobile-automations-list');
+    // ── Automations Screen ──────────────────────────
+    async function loadAutomations() {
+      const container = document.getElementById('mobile-autos-container');
       try {
         const res = await fetch('/api/v1/automations');
-        const automations = await res.json();
-        if (!automations.length) {
-          container.innerHTML = '<div style="color:var(--app-text-muted);padding:30px;text-align:center;">No automations. Tap + Add to create one.</div>';
+        const list = await res.json();
+        if (!list.length) {
+          container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:30px;">No automations created yet.</div>';
           return;
         }
 
-        container.innerHTML = automations.map(a => `
-          <div style="background:var(--app-surface);border:1px solid var(--app-border);border-radius:14px;padding:14px;display:flex;align-items:center;justify-content:space-between;">
+        container.innerHTML = list.map(a => `
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:18px;padding:16px;display:flex;align-items:center;justify-content:space-between;">
             <div style="flex:1;">
-              <div style="font-weight:700;font-size:14px;color:#fff;">${a.name}</div>
-              <div style="font-size:11.5px;color:var(--app-primary);margin-top:2px;">Trigger: ${a.condition}</div>
-              <div style="font-size:11.5px;color:var(--app-blynk);">Action: ${a.action}</div>
+              <div style="font-weight:800;font-size:15px;color:#fff;">${a.name}</div>
+              <div style="font-size:12px;color:var(--blynk-cyan);margin-top:3px;">Trigger: ${a.condition}</div>
+              <div style="font-size:12px;color:var(--blynk-lime);">Action: ${a.action}</div>
             </div>
-            <button onclick="toggleMobileAutomation(${a.id})" style="padding:6px 12px;border-radius:20px;border:none;font-weight:700;font-size:11px;cursor:pointer;background:${a.isActive ? 'rgba(16,241,127,0.2)' : 'rgba(255,255,255,0.06)'};color:${a.isActive ? 'var(--app-accent)' : 'var(--app-text-muted)'};">
-              ${a.isActive ? '● Active' : '○ Off'}
-            </button>
+            <label class="ios-switch">
+              <input type="checkbox" ${a.isActive ? 'checked' : ''} onchange="toggleAutoRule(${a.id})">
+              <span class="switch-track"></span>
+            </label>
           </div>
         `).join('');
-      } catch (err) {
-        container.innerHTML = '<div style="color:var(--app-danger);padding:20px;">Error loading automations</div>';
+      } catch (e) {
+        container.innerHTML = '<div style="color:var(--blynk-red);padding:20px;">Failed to load rules</div>';
       }
     }
 
-    async function toggleMobileAutomation(id) {
-      try {
-        await fetch(`/api/v1/automations/${id}/toggle`, { method: 'PATCH' });
-        showAppToast('Automation status updated', 'success');
-        loadMobileAutomations();
-      } catch (err) {
-        showAppToast('Failed to toggle automation', 'error');
-      }
+    async function toggleAutoRule(id) {
+      await fetch(`/api/v1/automations/${id}/toggle`, { method: 'PATCH' });
+      toast('Automation rule toggled!');
     }
 
-    // ─────────────────────────────────────────────
-    // 4. NOTIFICATIONS INBOX
-    // ─────────────────────────────────────────────
-    async function loadMobileNotifications() {
-      const container = document.getElementById('mobile-notifications-list');
+    async function promptCreateAuto() {
+      const name = prompt('Automation Rule Name:');
+      if (!name) return;
+      const cond = prompt('Trigger Condition (e.g. When V2 > 30°C):');
+      if (!cond) return;
+      const act = prompt('Action (e.g. Turn V3 ON):');
+      if (!act) return;
+
+      await fetch('/api/v1/automations', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, trigger_condition: cond, action_desc: act, is_active: true })
+      });
+      toast(`Rule "${name}" saved!`);
+      loadAutomations();
+    }
+
+    // ── Notifications Screen ────────────────────────
+    async function loadBroadcasts() {
+      const container = document.getElementById('mobile-broadcasts-container');
       try {
         const res = await fetch('/api/v1/broadcasts');
         const data = await res.json();
-        const broadcasts = data.broadcasts || data || [];
-
-        if (!broadcasts.length) {
-          container.innerHTML = '<div style="color:var(--app-text-muted);padding:30px;text-align:center;">No notifications yet.</div>';
+        const list = data.broadcasts || data || [];
+        if (!list.length) {
+          container.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:30px;">No alerts.</div>';
           return;
         }
 
-        container.innerHTML = broadcasts.map(b => `
-          <div style="background:var(--app-surface);border:1px solid var(--app-border);border-radius:12px;padding:12px;display:flex;flex-direction:column;gap:4px;">
+        container.innerHTML = list.map(b => `
+          <div style="background:var(--bg-card);border:1px solid var(--border-subtle);border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:6px;">
             <div style="display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-weight:700;font-size:13px;color:#fff;">📢 ${b.title || 'System Alert'}</span>
-              <span style="font-size:10px;color:var(--app-text-muted);">${b.createdAt || 'Just now'}</span>
+              <span style="font-weight:800;font-size:14px;color:#fff;">📢 ${b.title || 'System Alert'}</span>
+              <span style="font-size:11px;color:var(--text-muted);">${b.createdAt || 'Just now'}</span>
             </div>
-            <div style="font-size:12px;color:var(--app-text-muted);">${b.message}</div>
+            <div style="font-size:12.5px;color:var(--text-secondary);">${b.message}</div>
           </div>
         `).join('');
-      } catch (err) {
-        container.innerHTML = '<div style="color:var(--app-danger);padding:20px;">Error loading notifications</div>';
+      } catch (e) {
+        container.innerHTML = '<div style="color:var(--blynk-red);padding:20px;">Failed to load notifications</div>';
       }
     }
 
-    async function openSendBroadcastModal() {
+    async function promptBroadcast() {
       const title = prompt('Broadcast Title:');
       if (!title) return;
-      const msg = prompt('Broadcast Message:');
-      if (!msg) return;
+      const message = prompt('Broadcast Message:');
+      if (!message) return;
 
-      try {
-        await fetch('/api/v1/broadcasts', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ title, message: msg })
-        });
-        showAppToast('Broadcast dispatched to all devices!', 'success');
-        loadMobileNotifications();
-      } catch (err) {
-        showAppToast('Broadcast failed', 'error');
-      }
+      await fetch('/api/v1/broadcasts', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ title, message })
+      });
+      toast('Broadcast dispatched to all devices!');
+      loadBroadcasts();
     }
 
-    // ─────────────────────────────────────────────
-    // 5. PROVISION DEVICE & REGISTER USER
-    // ─────────────────────────────────────────────
-    async function submitMobileNewDevice() {
-      const name = document.getElementById('mobile-dev-name').value.trim();
-      const tmpl = document.getElementById('mobile-dev-tmpl').value;
-      if (!name) { showAppToast('Device name required', 'error'); return; }
-
-      try {
-        const res = await fetch('/api/v1/devices', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ name, template_id: parseInt(tmpl) })
-        });
-        if (!res.ok) throw new Error('Provisioning failed');
-        closeModal('modal-add-device');
-        showAppToast(`Device "${name}" provisioned in SQLite!`, 'success');
-        loadMobileDevices();
-      } catch (err) {
-        showAppToast('Failed to create device: ' + err.message, 'error');
-      }
+    // ── Modals & Actions ────────────────────────────
+    function openTokenSheet() {
+      document.getElementById('sheet-device-token').classList.add('open');
     }
 
-    function openDeviceInfoModal() {
-      openModal('modal-device-info');
+    function closeTokenSheet() {
+      document.getElementById('sheet-device-token').classList.remove('open');
     }
 
-    function copyMobileToken() {
-      const tok = document.getElementById('info-auth-token').innerText;
+    function copyTokenFromSheet() {
+      const tok = document.getElementById('sheet-token-val').innerText;
       navigator.clipboard.writeText(tok);
-      showAppToast('Auth Token copied to clipboard!', 'success');
+      toast('Token copied to clipboard!');
+      closeTokenSheet();
     }
 
-    function openRegisterUserModal() {
-      openModal('modal-register-user');
+    async function promptCreateDevice() {
+      const name = prompt('New Device Name (e.g. Hydroponics ESP32):');
+      if (!name) return;
+      await fetch('/api/v1/devices', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, template_id: 1 })
+      });
+      toast(`Device "${name}" created in SQLite!`);
+      loadDevices();
     }
 
-    async function submitMobileUserRegister() {
-      const name = document.getElementById('reg-name').value.trim();
-      const email = document.getElementById('reg-email').value.trim();
-      const password = document.getElementById('reg-pass').value.trim();
-      if (!name || !email) { showAppToast('Name and email required', 'error'); return; }
+    async function promptRegister() {
+      const name = prompt('Sub-User Name:');
+      if (!name) return;
+      const email = prompt('Sub-User Email:');
+      if (!email) return;
 
-      try {
-        const res = await fetch('/api/v1/users', {
-          method: 'POST',
-          headers: {'Content-Type': 'application/json'},
-          body: JSON.stringify({ name, email, role: 'Staff', password: password || '123456' })
-        });
-        if (!res.ok) throw new Error('Registration failed');
-        closeModal('modal-register-user');
-        showAppToast(`Account created for ${name}!`, 'success');
-        document.getElementById('prof-name').innerText = name;
-        document.getElementById('prof-email').innerText = email;
-        document.getElementById('prof-avatar').innerText = name[0].toUpperCase();
-      } catch (err) {
-        showAppToast('Registration failed: ' + err.message, 'error');
-      }
+      await fetch('/api/v1/users', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({ name, email, role: 'Staff', password: 'password123' })
+      });
+      toast(`Sub-user "${name}" registered!`);
     }
 
-    // ─────────────────────────────────────────────
-    // 6. REAL-TIME WEBSOCKET SHELLBRIDGE
-    // ─────────────────────────────────────────────
-    function initMobileWebSocket() {
+    // ── WebSocket ShellBridge Connection ────────────
+    function startMobileWS() {
       const loc = window.location;
-      const wsUrl = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
-      console.log('[MobileApp] Connecting WebSocket to:', wsUrl);
-
-      ws = new WebSocket(wsUrl);
+      const url = (loc.protocol === 'https:' ? 'wss://' : 'ws://') + loc.host + '/ws';
+      ws = new WebSocket(url);
 
       ws.onopen = () => {
-        document.getElementById('top-ws-status').innerText = 'Connected (Live Sync)';
-        document.querySelector('.status-dot').style.background = 'var(--app-accent)';
+        document.getElementById('app-cloud-region').innerText = 'Blynk Cloud • NY3 Live';
       };
 
       ws.onmessage = (event) => {
         try {
           const msg = JSON.parse(event.data);
           if (msg.event === 'onValueUpdated') {
-            const data = msg.data;
-            if (data.deviceId === activeDeviceId) {
-              updateLocalPinUI(data.stream, data.value);
+            const d = msg.data;
+            if (d.deviceId === activeDevId) {
+              if (d.stream === 'V2') {
+                const el = document.getElementById('gauge-val-v2');
+                if (el) el.innerText = d.value;
+                const tempNum = Math.min(Math.max(parseFloat(d.value) || 0, 0), 50);
+                const circle = document.getElementById('gauge-circle-v2');
+                if (circle) circle.style.strokeDashoffset = 251.2 - (tempNum / 50) * 200;
+              } else if (d.stream === 'V0') {
+                const sw = document.getElementById('dash-switch-v0');
+                if (sw) sw.checked = String(d.value) === '1';
+                const lbl = document.getElementById('dash-switch-label-v0');
+                if (lbl) {
+                  const isOn = String(d.value) === '1';
+                  lbl.innerText = isOn ? '● ACTIVATED' : '○ DISABLED';
+                  lbl.style.color = isOn ? 'var(--blynk-green)' : 'var(--text-muted)';
+                }
+              }
             }
-            // Update terminal if on screen
-            const term = document.getElementById('widget-terminal-output');
+            const strip = document.getElementById(`strip-temp-${d.deviceId}`);
+            if (strip && d.stream === 'V2') strip.innerText = d.value + '°C';
+
+            // Terminal
+            const term = document.getElementById('mobile-terminal');
             if (term) {
-              const timeStr = new Date().toLocaleTimeString();
-              term.innerHTML += `<br/>[${timeStr}] ${data.stream} &rarr; ${data.value}`;
+              const tStr = new Date().toLocaleTimeString();
+              term.innerHTML += `<br/>[${tStr}] ${d.stream} &rarr; ${d.value}`;
               term.scrollTop = term.scrollHeight;
             }
           } else if (msg.event === 'onBroadcastDispatched') {
-            showAppToast(`📢 ${msg.data.title}: ${msg.data.message}`, 'info');
+            toast(`📢 ${msg.data.title}: ${msg.data.message}`);
           }
         } catch (e) {}
       };
 
-      ws.onclose = () => {
-        document.getElementById('top-ws-status').innerText = 'Reconnecting...';
-        document.querySelector('.status-dot').style.background = 'var(--app-danger)';
-        setTimeout(initMobileWebSocket, 3000);
-      };
+      ws.onclose = () => setTimeout(startMobileWS, 3000);
     }
 
-    // Initialize App on DOM Load
     document.addEventListener('DOMContentLoaded', () => {
-      initMobileWebSocket();
-      loadMobileDevices();
+      startMobileWS();
+      loadDevices();
     });
   </script>
 </body>
