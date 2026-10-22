@@ -125,6 +125,69 @@ body {
   margin: 10px 4px;
 }
 
+.sidebar-chevron {
+  margin-left: auto;
+  width: 14px !important;
+  height: 14px !important;
+  color: #8b98a5;
+}
+
+.predictive-icon-box {
+  width: 24px;
+  height: 24px;
+  background: #000;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.predictive-icon-box svg {
+  width: 14px !important;
+  height: 14px !important;
+}
+
+.sidebar-collapse-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  color: var(--text-secondary);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-top: 1px solid var(--border-color);
+  user-select: none;
+  transition: all 0.15s ease;
+}
+
+.sidebar-collapse-btn:hover {
+  background-color: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.sidebar.collapsed {
+  width: 68px;
+}
+
+.sidebar.collapsed .blynk-logo-title,
+.sidebar.collapsed .sidebar-nav-item span,
+.sidebar.collapsed .sidebar-chevron,
+.sidebar.collapsed .sidebar-collapse-btn span {
+  display: none;
+}
+
+.sidebar.collapsed .sidebar-nav-item {
+  justify-content: center;
+  padding: 10px 0;
+}
+
+.sidebar.collapsed .sidebar-collapse-btn {
+  justify-content: center;
+  padding: 14px 0;
+}
+
 /* Main Layout */
 .main-layout {
   flex: 1;
