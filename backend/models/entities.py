@@ -142,3 +142,99 @@ class AutomationRule(Base):
     action_config = Column(JSON, default=dict)
     is_active = Column(Boolean, default=True)
     created_at = Column(DateTime, default=datetime.utcnow)
+
+
+class LocationSite(Base):
+    __tablename__ = "location_sites"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    name = Column(String(255), nullable=False)
+    address = Column(String(255), default="")
+    status = Column(String(50), default="Operational")
+    device_count = Column(Integer, default=1)
+    latitude = Column(Float, default=6.5244)
+    longitude = Column(Float, default=3.3792)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class DeviceSnapshot(Base):
+    __tablename__ = "device_snapshots"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    name = Column(String(255), nullable=False)
+    description = Column(String(255), default="")
+    state_data = Column(JSON, default=dict)
+    size_kb = Column(Integer, default=142)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class InAppBroadcast(Base):
+    __tablename__ = "in_app_broadcasts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    title = Column(String(255), nullable=False)
+    message = Column(Text, nullable=False)
+    severity = Column(String(50), default="ALERT")
+    target_audience = Column(String(100), default="All Users")
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class StaticToken(Base):
+    __tablename__ = "static_tokens"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    device_id = Column(Integer, ForeignKey("devices.id"), nullable=True)
+    token_id = Column(String(50), unique=True, index=True, nullable=False)
+    token_value = Column(String(64), nullable=False)
+    expiration = Column(String(50), default="Never (Permanent)")
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class WebhookSubscription(Base):
+    __tablename__ = "webhook_subscriptions"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    name = Column(String(255), nullable=False)
+    trigger_pin = Column(String(20), default="V2")
+    endpoint_url = Column(String(500), nullable=False)
+    http_method = Column(String(10), default="POST")
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class MathRule(Base):
+    __tablename__ = "math_rules"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    name = Column(String(255), nullable=False)
+    input_stream = Column(String(50), nullable=False)
+    expression = Column(String(255), nullable=False)
+    output_stream = Column(String(50), nullable=False)
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class OAuthApp(Base):
+    __tablename__ = "oauth_apps"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    client_name = Column(String(255), nullable=False)
+    client_id = Column(String(100), unique=True, index=True, nullable=False)
+    client_secret = Column(String(100), nullable=False)
+    redirect_uris = Column(String(500), default="https://localhost/oauth/callback")
+    scopes = Column(String(255), default="devices.read, devices.write")
+    is_active = Column(Boolean, default=True)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class CustomDashboard(Base):
+    __tablename__ = "custom_dashboards"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    template_id = Column(Integer, ForeignKey("device_templates.id"), nullable=True)
+    slug = Column(String(100), unique=True, index=True, nullable=False)
+    title = Column(String(255), nullable=False)
+    description = Column(String(255), default="")
+    created_at = Column(DateTime, default=datetime.utcnow)
