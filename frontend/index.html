@@ -788,36 +788,356 @@ function decodeUplink(bytes) {
               </div>
             </div>
 
-            <!-- Other Dev Subviews (Blueprints, Assets, etc.) -->
+            <!-- Complete Suite of All 12 Secondary Developer Zone Subviews -->
+            
+            <!-- 1. Blueprints -->
             <div id="dev-subview-blueprints" class="dev-subview" style="display:none;">
-              <div class="view-header"><h1 class="view-title">Blueprints</h1></div>
-              <div class="table-card" style="padding:24px;">
-                <p style="color:var(--text-muted); font-size:13.5px;">Ready-to-use production blueprints for Weather Stations, Smart Agriculture, and Smart Energy Monitoring.</p>
+              <div class="view-header">
+                <h1 class="view-title">Blueprints Catalog</h1>
+                <button class="btn-blynk-primary" onclick="alert('Creating custom blueprint...')">+ Create Blueprint</button>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                <div class="table-card" style="padding:20px;">
+                  <div style="font-size:28px; margin-bottom:8px;">🌾</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:4px;">Smart Agriculture Node</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Pre-configured for ESP32 with Soil Moisture, Ambient Temp, Humidity, and Valve Relay.</p>
+                  <button class="btn-blynk-primary" style="font-size:12px; padding:6px 12px;" onclick="alert('Cloning Smart Agriculture blueprint...')">Use Blueprint</button>
+                </div>
+                <div class="table-card" style="padding:20px;">
+                  <div style="font-size:28px; margin-bottom:8px;">🌤️</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:4px;">Weather Monitoring Station</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Includes Barometric Pressure, Solar Radiation, Wind Speed, and Rain Gauge datastreams.</p>
+                  <button class="btn-blynk-primary" style="font-size:12px; padding:6px 12px;" onclick="alert('Cloning Weather Station blueprint...')">Use Blueprint</button>
+                </div>
+                <div class="table-card" style="padding:20px;">
+                  <div style="font-size:28px; margin-bottom:8px;">⚡</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:4px;">Smart Energy Monitor</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">CT Clamp current sensing, RMS voltage, active power, and energy consumption KPI tile.</p>
+                  <button class="btn-blynk-primary" style="font-size:12px; padding:6px 12px;" onclick="alert('Cloning Energy Monitor blueprint...')">Use Blueprint</button>
+                </div>
               </div>
             </div>
 
+            <!-- 2. Assets -->
+            <div id="dev-subview-assets" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Static Assets & Media Repository</h1>
+                <button class="btn-blynk-primary" onclick="alert('Upload asset...')">📤 Upload Asset</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>ASSET NAME</th><th>TYPE</th><th>SIZE</th><th>ASSOCIATED TEMPLATE</th><th>UPLOADED AT</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr><td style="font-weight:600;">esp32_icon.svg</td><td>Vector SVG</td><td>4.2 KB</td><td>BLINKING LED</td><td>Oct 20, 2026</td></tr>
+                    <tr><td style="font-weight:600;">firmware_v1.0.4.bin</td><td>Binary (ELF)</td><td>842 KB</td><td>BLINKING LED</td><td>Oct 21, 2026</td></tr>
+                    <tr><td style="font-weight:600;">sensor_pinout.png</td><td>PNG Image</td><td>128 KB</td><td>test</td><td>Oct 19, 2026</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 3. Blynk.Air (OTA) -->
             <div id="dev-subview-blynk-air" class="dev-subview" style="display:none;">
-              <div class="view-header"><h1 class="view-title">Blynk.Air (OTA Updates)</h1><button class="btn-blynk-primary" onclick="openOtaModal()">New Ship Firmware</button></div>
-              <div class="table-card" style="padding:24px;">
-                <p style="color:var(--text-muted); font-size:13.5px;">Manage Over-The-Air firmware deployments across device groups and architectures.</p>
+              <div class="view-header">
+                <h1 class="view-title">Blynk.Air (OTA Firmware Deployments)</h1>
+                <button class="btn-blynk-primary" onclick="openOtaModal()">🚀 New OTA Shipment</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>SHIPMENT NAME</th><th>TARGET HARDWARE</th><th>FIRMWARE VERSION</th><th>PROGRESS</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">Production Release 1.0.4</td>
+                      <td>ESP32 (Wi-Fi)</td>
+                      <td><code>v1.0.4-prod</code></td>
+                      <td>100% (1/1 Device)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Completed</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">Beta Testing Rollout</td>
+                      <td>ESP8266</td>
+                      <td><code>v1.1.0-rc2</code></td>
+                      <td>0% (Pending approval)</td>
+                      <td><span class="status-badge"><span class="status-dot-sm"></span> Staged</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
+            <!-- 4. Static Tokens -->
+            <div id="dev-subview-static-tokens" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Static Device Tokens</h1>
+                <button class="btn-blynk-primary" onclick="alert('Generating new static token...')">+ Generate Static Token</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>TOKEN ID</th><th>ASSIGNED DEVICE</th><th>TOKEN VALUE</th><th>EXPIRATION</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">TOK-STATIC-001</td>
+                      <td>BLINKING LED</td>
+                      <td><code>yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk</code></td>
+                      <td>Never (Permanent)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">TOK-STATIC-002</td>
+                      <td>Greenhouse Unit - ESP8266</td>
+                      <td><code>wZ3DBgWkDZ4aO9bwHvccU0rR0MUuD4xq</code></td>
+                      <td>Never (Permanent)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 5. Rule Engine -->
+            <div id="dev-subview-rule-engine" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Advanced Rule Engine & Math Transforms</h1>
+                <button class="btn-blynk-primary" onclick="alert('Adding math expression rule...')">+ Add Math Rule</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>RULE NAME</th><th>INPUT STREAM</th><th>MATH / LOGIC EXPRESSION</th><th>OUTPUT STREAM</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">Celsius to Fahrenheit</td>
+                      <td>V2 (Temperature °C)</td>
+                      <td><code>(V2 * 9/5) + 32</code></td>
+                      <td>V12 (Temp °F)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Running</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">Soil Heat Index</td>
+                      <td>V2, V5</td>
+                      <td><code>-42.379 + 2.04901523*V2 + 10.14333127*V5</code></td>
+                      <td>V13 (Heat Index)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Running</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 6. OAuth 2.0 -->
+            <div id="dev-subview-oauth" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">OAuth 2.0 Client Applications</h1>
+                <button class="btn-blynk-primary" onclick="alert('Registering OAuth client...')">+ Register Client</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>CLIENT NAME</th><th>CLIENT ID</th><th>REDIRECT URIS</th><th>SCOPES</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">Axon IoT Mobile Companion</td>
+                      <td><code>axon-client-app-88219</code></td>
+                      <td><code>https://app.axoniot.com/oauth/callback</code></td>
+                      <td><code>devices.read, devices.write</code></td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Enabled</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">Grafana Dashboard Exporter</td>
+                      <td><code>grafana-connector-99120</code></td>
+                      <td><code>https://grafana.internal/login/generic_oauth</code></td>
+                      <td><code>telemetry.read</code></td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Enabled</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 7. Webhooks -->
             <div id="dev-subview-webhooks" class="dev-subview" style="display:none;">
-              <div class="view-header"><h1 class="view-title">Webhooks</h1><button class="btn-blynk-primary">+ Create Webhook</button></div>
-              <div class="table-card" style="padding:24px;">
-                <p style="color:var(--text-muted); font-size:13.5px;">Forward streaming sensor data to external HTTP endpoints in real time.</p>
+              <div class="view-header">
+                <h1 class="view-title">Webhooks (Real-Time HTTP Egress)</h1>
+                <button class="btn-blynk-primary" onclick="alert('Creating webhook...')">+ Create Webhook</button>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>WEBHOOK NAME</th><th>TRIGGER PIN</th><th>TARGET ENDPOINT URL</th><th>HTTP METHOD</th><th>STATUS</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-weight:600;">Discord High-Temp Dispatcher</td>
+                      <td>V2 (&gt; 30°C)</td>
+                      <td><code>https://discord.com/api/webhooks/axon-alerts</code></td>
+                      <td>POST (JSON)</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                    </tr>
+                    <tr>
+                      <td style="font-weight:600;">Telemetry S3 Backup Sink</td>
+                      <td>Periodic (1h)</td>
+                      <td><code>https://s3.amazonaws.com/axon-telemetry-lake</code></td>
+                      <td>PUT</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Active</span></td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
+            <!-- 8. Integrations & AI -->
+            <div id="dev-subview-integrations" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Cloud Ecosystem & AI Integrations</h1>
+              </div>
+              <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+                <div class="table-card" style="padding:22px;">
+                  <div style="font-size:26px; margin-bottom:8px;">☁️</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:6px;">AWS IoT Core Bridge</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Synchronize virtual pin datastreams to AWS IoT Device Shadows via MQTT.</p>
+                  <span class="status-badge online"><span class="status-dot-sm"></span> Connected</span>
+                </div>
+                <div class="table-card" style="padding:22px;">
+                  <div style="font-size:26px; margin-bottom:8px;">🔷</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:6px;">Microsoft Azure IoT Hub</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Ingest device telemetry directly into Azure Digital Twins and Stream Analytics.</p>
+                  <span class="status-badge"><span class="status-dot-sm"></span> Configured</span>
+                </div>
+                <div class="table-card" style="padding:22px;">
+                  <div style="font-size:26px; margin-bottom:8px;">🧠</div>
+                  <h3 style="font-size:15px; font-weight:700; margin-bottom:6px;">Blynk AI Copilot</h3>
+                  <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:14px;">Autonomous diagnostic agent answering queries and optimizing sensor thresholds.</p>
+                  <span class="status-badge online"><span class="status-dot-sm"></span> Active</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 9. Provisioning Sessions -->
+            <div id="dev-subview-provisioning-sessions" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Device Provisioning Sessions (BLE / Wi-Fi)</h1>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>SESSION ID</th><th>HARDWARE MAC</th><th>PROVISIONING PROTOCOL</th><th>DURATION</th><th>RESULT</th><th>TIMESTAMP</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td style="font-family:monospace; font-weight:600;">sess-99218-a</td>
+                      <td>24:6F:28:B4:9C:12</td>
+                      <td>Blynk.Edgent Wi-Fi AP</td>
+                      <td>4.2s</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Success</span></td>
+                      <td>Oct 21, 2026 21:38:00</td>
+                    </tr>
+                    <tr>
+                      <td style="font-family:monospace; font-weight:600;">sess-99214-b</td>
+                      <td>A0:B1:C2:D3:E4:F5</td>
+                      <td>Bluetooth LE (BLE)</td>
+                      <td>3.1s</td>
+                      <td><span class="status-badge online"><span class="status-dot-sm"></span> Success</span></td>
+                      <td>Oct 20, 2026 14:12:10</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 10. Crash Reports -->
+            <div id="dev-subview-crash-reports" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">Hardware Crash & Panic Reports</h1>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>REPORT ID</th><th>DEVICE</th><th>MCU ARCHITECTURE</th><th>CRASH REASON</th><th>STACK TRACE</th><th>TIMESTAMP</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>CRASH-001</code></td>
+                      <td style="font-weight:600;">BLINKING LED</td>
+                      <td>ESP32-WROOM-32</td>
+                      <td>Watchdog Timer Reset (Task WDT)</td>
+                      <td><code>pc=0x4008129c sp=0x3ffb1d40</code></td>
+                      <td>Oct 19, 2026 09:14:02</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- 11. Errors -->
             <div id="dev-subview-errors" class="dev-subview" style="display:none;">
-              <div class="view-header"><h1 class="view-title">System Error Logs</h1></div>
-              <div class="table-card" style="padding:24px;">
-                <p style="color:var(--text-muted); font-size:13.5px;">Zero critical errors logged. All TCP and WebSocket connections are operating normally.</p>
+              <div class="view-header">
+                <h1 class="view-title">System Error Diagnostics</h1>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>ERROR ID</th><th>SUBSYSTEM</th><th>SEVERITY</th><th>MESSAGE</th><th>TIMESTAMP</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>ERR-NET-104</code></td>
+                      <td>TCP Gateway (8080)</td>
+                      <td><span class="status-badge"><span class="status-dot-sm"></span> Low</span></td>
+                      <td>Client socket disconnected gracefully (FIN packet received)</td>
+                      <td>Oct 22, 2026 02:59:18</td>
+                    </tr>
+                  </tbody>
+                </table>
               </div>
             </div>
 
-          </div>
+            <!-- 12. Requests Log -->
+            <div id="dev-subview-requests-log" class="dev-subview" style="display:none;">
+              <div class="view-header">
+                <h1 class="view-title">HTTP & WebSocket Requests Log</h1>
+              </div>
+              <div class="table-card">
+                <table class="data-table">
+                  <thead>
+                    <tr><th>TIMESTAMP</th><th>METHOD</th><th>PATH / ENDPOINT</th><th>CLIENT IP</th><th>STATUS</th><th>LATENCY</th></tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Oct 22, 02:59:18</td>
+                      <td><span style="font-weight:700; color:#10f17f;">GET</span></td>
+                      <td><code>/external/api/update?token=...&V2=29.8</code></td>
+                      <td>127.0.0.1</td>
+                      <td><span style="font-weight:700; color:#10f17f;">200 OK</span></td>
+                      <td>1.2 ms</td>
+                    </tr>
+                    <tr>
+                      <td>Oct 22, 02:59:19</td>
+                      <td><span style="font-weight:700; color:#0375de;">POST</span></td>
+                      <td><code>/api/v1/devices</code></td>
+                      <td>127.0.0.1</td>
+                      <td><span style="font-weight:700; color:#10f17f;">200 OK</span></td>
+                      <td>3.4 ms</td>
+                    </tr>
+                    <tr>
+                      <td>Oct 22, 02:59:20</td>
+                      <td><span style="font-weight:700; color:#4f46e5;">WS</span></td>
+                      <td><code>/ws (ShellBridge RPC)</code></td>
+                      <td>127.0.0.1</td>
+                      <td><span style="font-weight:700; color:#10f17f;">101 SWITCH</span></td>
+                      <td>0.4 ms</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>          </div>
         </div>
       </section>
 
