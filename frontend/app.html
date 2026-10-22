@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Blynk IoT Mobile App</title>
+  <link rel="stylesheet" href="/static/styles/theme.css" />
+  <style>
+    body {
+      background: #0f141c;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    .mobile-frame {
+      width: 100%;
+      max-width: 414px;
+      height: 896px;
+      max-height: 100vh;
+      background: #181f2a;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+      border-radius: 36px;
+      overflow: hidden;
+      border: 4px solid #2a3447;
+    }
+
+    /* App Header */
+    .app-header {
+      padding: 24px 20px 16px;
+      background: #181f2a;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #242f42;
+    }
+
+    .app-logo-badge {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-b-logo {
+      width: 28px;
+      height: 28px;
+      background: #d1ff39;
+      color: #000;
+      border-radius: 6px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .app-org-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .app-user-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #0375de;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    /* App Body Scrollable */
+    .app-body {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    /* Device Card */
+    .app-device-card {
+      background: #202b3b;
+      border: 1px solid #2b394e;
+      border-radius: 18px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .app-device-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .app-device-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    .app-device-meta {
+      font-size: 12px;
+      color: #8fa0b5;
+      margin-top: 2px;
+    }
+
+    .app-status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 12px;
+      background: rgba(16, 241, 127, 0.15);
+      color: #10f17f;
+    }
+
+    .app-status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #10f17f;
+    }
+
+    /* App Control Tiles Grid */
+    .app-tiles-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .app-tile {
+      background: #17212e;
+      border: 1px solid #243347;
+      border-radius: 14px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 90px;
+    }
+
+    .app-tile-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 11.5px;
+      color: #8fa0b5;
+      font-weight: 600;
+    }
+
+    .app-tile-pin {
+      font-family: monospace;
+      font-size: 10px;
+      background: #202c3d;
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: #c9d5e3;
+    }
+
+    /* Mobile Buttons & Toggles */
+    .mobile-toggle-btn {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      font-weight: 800;
+      font-size: 13.5px;
+      cursor: pointer;
+      margin-top: 8px;
+      transition: all 0.2s;
+    }
+
+    .mobile-toggle-btn.on {
+      background: #0375de;
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(3, 117, 222, 0.4);
+    }
+
+    .mobile-toggle-btn.off {
+      background: #2a374b;
+      color: #8fa0b5;
+    }
+
+    .mobile-metric-value {
+      font-size: 24px;
+      font-weight: 800;
+      color: #fff;
+      margin-top: 6px;
+    }
+
+    .mobile-metric-units {
+      font-size: 12px;
+      color: #8fa0b5;
+      font-weight: 500;
+      margin-left: 2px;
+    }
+
+    .mobile-slider {
+      width: 100%;
+      accent-color: #10f17f;
+      margin-top: 8px;
+      cursor: pointer;
+    }
+
+    /* Bottom App Bar */
+    .app-bottom-nav {
+      height: 68px;
+      background: #181f2a;
+      border-top: 1px solid #242f42;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding-bottom: 8px;
+    }
+
+    .app-nav-btn {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      color: #6c7d93;
+      font-size: 11px;
+      font-weight: 600;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .app-nav-btn.active {
+      color: #d1ff39;
+    }
+
+    .app-nav-btn svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    /* Auth Modal inside App */
+    .app-modal-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      backdrop-filter: blur(8px);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 100;
+      padding: 24px;
+    }
+
+    .app-modal-overlay.open {
+      display: flex;
+    }
+
+    .app-modal-box {
+      width: 100%;
+      background: #202b3b;
+      border: 1px solid #2b394e;
+      border-radius: 20px;
+      padding: 24px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.6);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="mobile-frame">
+    <!-- Mobile App Header -->
+    <header class="app-header">
+      <div class="app-logo-badge">
+        <div class="app-b-logo">B</div>
+        <div>
+          <div class="app-org-title" id="app-org-name">My organization</div>
+          <div style="font-size:11px; color:#8fa0b5;">Blynk IoT Cloud • NY3</div>
+        </div>
+      </div>
+      <div class="app-user-avatar" id="app-user-avatar-btn" onclick="openAppAuthModal()">S</div>
+    </header>
+
+    <!-- Mobile Body -->
+    <main class="app-body" id="app-main-body">
+      <!-- Device Card -->
+      <div class="app-device-card">
+        <div class="app-device-header">
+          <div>
+            <div class="app-device-name" id="app-device-title">BLINKING LED</div>
+            <div class="app-device-meta">ESP32 (Wi-Fi) • Node #1</div>
+          </div>
+          <span class="app-status-badge">
+            <span class="app-status-dot"></span> Online
+          </span>
+        </div>
+
+        <!-- 4 Quick Control Tiles -->
+        <div class="app-tiles-grid">
+          <!-- Tile 1: Main Power Relay (V0) -->
+          <div class="app-tile">
+            <div class="app-tile-header">
+              <span>Main Relay</span>
+              <span class="app-tile-pin">V0</span>
+            </div>
+            <button id="app-btn-v0" class="mobile-toggle-btn off" onclick="appTogglePin('V0')">OFF</button>
+          </div>
+
+          <!-- Tile 2: Fan Relay (V3) -->
+          <div class="app-tile">
+            <div class="app-tile-header">
+              <span>Fan Relay</span>
+              <span class="app-tile-pin">V3</span>
+            </div>
+            <button id="app-btn-v3" class="mobile-toggle-btn off" onclick="appTogglePin('V3')">OFF</button>
+          </div>
+
+          <!-- Tile 3: Temperature (V2) -->
+          <div class="app-tile">
+            <div class="app-tile-header">
+              <span>Ambient Temp</span>
+              <span class="app-tile-pin">V2</span>
+            </div>
+            <div class="mobile-metric-value">
+              <span id="app-val-v2">29.8</span><span class="mobile-metric-units">°C</span>
+            </div>
+          </div>
+
+          <!-- Tile 4: Humidity (V5) -->
+          <div class="app-tile">
+            <div class="app-tile-header">
+              <span>Humidity</span>
+              <span class="app-tile-pin">V5</span>
+            </div>
+            <div class="mobile-metric-value" style="color:#10f17f;">
+              <span id="app-val-v5">64.2</span><span class="mobile-metric-units">%</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tile 5: Level Slider (V1) -->
+        <div class="app-tile" style="margin-top:2px;">
+          <div class="app-tile-header">
+            <span>Brightness Slider Control</span>
+            <span class="app-tile-pin">V1</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:8px;">
+            <span style="font-size:12px; color:#8fa0b5;">Intensity:</span>
+            <span id="app-slider-val-v1" style="font-size:18px; font-weight:800; color:#10f17f;">128</span>
+          </div>
+          <input type="range" min="0" max="255" value="128" class="mobile-slider" id="app-slider-input" oninput="appOnSliderChange('V1', this.value)" />
+        </div>
+      </div>
+
+      <!-- Sync Status Banner -->
+      <div style="background:#17212e; border:1px solid #243347; border-radius:14px; padding:14px; display:flex; align-items:center; gap:12px;">
+        <div style="width:10px; height:10px; border-radius:50%; background:#10f17f; box-shadow:0 0 8px #10f17f;"></div>
+        <div style="font-size:12px; color:#c9d5e3;">
+          <strong>Real-Time Sync Active:</strong> Changes made here immediately update Web Console and ESP32 hardware via WebSocket.
+        </div>
+      </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar -->
+    <nav class="app-bottom-nav">
+      <div class="app-nav-btn active" onclick="switchAppTab('devices', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+        <span>Devices</span>
+      </div>
+      <div class="app-nav-btn" onclick="switchAppTab('automations', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"></path></svg>
+        <span>Automations</span>
+      </div>
+      <div class="app-nav-btn" onclick="switchAppTab('notifications', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+        <span>Alerts</span>
+      </div>
+      <div class="app-nav-btn" onclick="openAppAuthModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+        <span>Account</span>
+      </div>
+    </nav>
+
+    <!-- Mobile Account Registration & Login Modal -->
+    <div id="app-auth-modal" class="app-modal-overlay">
+      <div class="app-modal-box">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+          <h3 style="margin:0; font-size:17px; font-weight:800; color:#fff;" id="app-auth-title">Blynk Account Sync</h3>
+          <button onclick="closeAppAuthModal()" style="border:none;background:none;color:#8fa0b5;font-size:18px;cursor:pointer;">✕</button>
+        </div>
+
+        <p style="font-size:12.5px; color:#8fa0b5; margin-bottom:16px; line-height:1.4;">
+          Create a unified Blynk account. Registering here enables immediate login across both Mobile App and Web Console.
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:#8fa0b5;">Full Name</label>
+            <input type="text" id="app-auth-name" class="form-input" style="background:#17212e; color:#fff; border-color:#2a3a50;" value="Alex Engineer" />
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:#8fa0b5;">Email Address</label>
+            <input type="email" id="app-auth-email" class="form-input" style="background:#17212e; color:#fff; border-color:#2a3a50;" value="alex.engineer@axon.io" />
+          </div>
+          <div>
+            <label style="font-size:11.5px; font-weight:600; color:#8fa0b5;">Password</label>
+            <input type="password" id="app-auth-password" class="form-input" style="background:#17212e; color:#fff; border-color:#2a3a50;" value="secret123" />
+          </div>
+          <button class="btn-blynk-primary" style="margin-top:8px; padding:12px; font-size:14px;" onclick="appSubmitRegistration()">
+            Register & Sync Account
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WebSocket & Mobile Sync Logic -->
+  <script>
+    let appSocket = null;
+    let currentV0 = "0";
+    let currentV3 = "0";
+    let activeDeviceId = 1;
+
+    function initAppWebSocket() {
+      const wsUrl = `ws://${window.location.host}/ws`;
+      appSocket = new WebSocket(wsUrl);
+
+      appSocket.onopen = () => {
+        console.log("[MobileApp] Connected to Axon WebSocket Hub");
+      };
+
+      appSocket.onmessage = (event) => {
+        try {
+          const msg = JSON.parse(event.data);
+          if (msg.event === "onValueUpdated") {
+            handleLiveIncomingValue(msg.data.stream, msg.data.value);
+          } else if (msg.event === "onUserCreated") {
+            console.log("[MobileApp] User registered & synced across cloud:", msg.data);
+          }
+        } catch (e) {
+          console.error("[MobileApp] Error parsing message:", e);
+        }
+      };
+
+      appSocket.onclose = () => {
+        setTimeout(initAppWebSocket, 2000);
+      };
+    }
+
+    function handleLiveIncomingValue(stream, val) {
+      if (stream === "V0") {
+        currentV0 = String(val);
+        const btn = document.getElementById("app-btn-v0");
+        if (btn) {
+          btn.className = `mobile-toggle-btn ${val === "1" ? "on" : "off"}`;
+          btn.innerText = val === "1" ? "ON" : "OFF";
+        }
+      } else if (stream === "V3") {
+        currentV3 = String(val);
+        const btn = document.getElementById("app-btn-v3");
+        if (btn) {
+          btn.className = `mobile-toggle-btn ${val === "1" ? "on" : "off"}`;
+          btn.innerText = val === "1" ? "ON" : "OFF";
+        }
+      } else if (stream === "V1") {
+        const slider = document.getElementById("app-slider-input");
+        const valDisp = document.getElementById("app-slider-val-v1");
+        if (slider) slider.value = val;
+        if (valDisp) valDisp.innerText = val;
+      } else if (stream === "V2") {
+        const tempDisp = document.getElementById("app-val-v2");
+        if (tempDisp) tempDisp.innerText = parseFloat(val).toFixed(1);
+      } else if (stream === "V5") {
+        const humDisp = document.getElementById("app-val-v5");
+        if (humDisp) humDisp.innerText = parseFloat(val).toFixed(1);
+      }
+    }
+
+    async function appTogglePin(pin) {
+      let targetVal = "1";
+      if (pin === "V0") {
+        targetVal = currentV0 === "1" ? "0" : "1";
+      } else if (pin === "V3") {
+        targetVal = currentV3 === "1" ? "0" : "1";
+      }
+
+      try {
+        await fetch(`/api/v1/app/devices/${activeDeviceId}/write`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ stream: pin, value: targetVal })
+        });
+        handleLiveIncomingValue(pin, targetVal);
+      } catch (e) {
+        console.error("Failed to write pin from mobile:", e);
+      }
+    }
+
+    let sliderDebounce = null;
+    function appOnSliderChange(pin, val) {
+      document.getElementById("app-slider-val-v1").innerText = val;
+      clearTimeout(sliderDebounce);
+      sliderDebounce = setTimeout(async () => {
+        try {
+          await fetch(`/api/v1/app/devices/${activeDeviceId}/write`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ stream: pin, value: val })
+          });
+        } catch (e) {
+          console.error("Failed to write slider:", e);
+        }
+      }, 100);
+    }
+
+    function openAppAuthModal() {
+      document.getElementById('app-auth-modal').classList.add('open');
+    }
+
+    function closeAppAuthModal() {
+      document.getElementById('app-auth-modal').classList.remove('open');
+    }
+
+    async function appSubmitRegistration() {
+      const name = document.getElementById('app-auth-name').value;
+      const email = document.getElementById('app-auth-email').value;
+      const password = document.getElementById('app-auth-password').value;
+
+      try {
+        const res = await fetch('/api/v1/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password })
+        });
+        const data = await res.json();
+        if (res.ok) {
+          alert(`Account created for ${data.user.name}! Syncing with Web Console...`);
+          document.getElementById('app-user-avatar-btn').innerText = data.user.name[0].toUpperCase();
+          closeAppAuthModal();
+        } else {
+          alert("Error: " + (data.detail || "Registration failed"));
+        }
+      } catch (e) {
+        alert("Registration failed: " + e.message);
+      }
+    }
+
+    function switchAppTab(tabName, el) {
+      document.querySelectorAll('.app-nav-btn').forEach(btn => btn.classList.remove('active'));
+      if (el) el.classList.add('active');
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      initAppWebSocket();
+    });
+  </script>
+</body>
+</html>

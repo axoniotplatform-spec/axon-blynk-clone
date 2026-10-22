@@ -23,6 +23,12 @@ document.addEventListener("DOMContentLoaded", async () => {
     onValueUpdated: (data) => {
       console.log("[AxonApp] Live update received:", data);
       handleLivePinUpdate(data.stream, data.value);
+    },
+    onUserCreated: (data) => {
+      console.log("[AxonApp] Real-time user created/registered:", data);
+      if (typeof loadUsersTable === 'function') {
+        loadUsersTable();
+      }
     }
   });
 

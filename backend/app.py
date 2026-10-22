@@ -5,7 +5,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from backend.database import engine, Base, SessionLocal
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
-from backend.api import devices, templates, automations, external
+from backend.api import devices, templates, automations, external, auth, mobile
 from backend.websocket_hub import hub
 from backend.hardware_gateway import hardware_gateway
 import asyncio
@@ -33,6 +33,9 @@ app.include_router(devices.router)
 app.include_router(templates.router)
 app.include_router(automations.router)
 app.include_router(external.router)
+app.include_router(auth.router)
+app.include_router(auth.users_router)
+app.include_router(mobile.router)
 
 @app.on_event("startup")
 async def on_startup():
@@ -276,3 +279,10 @@ def serve_index():
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return {"message": "Axon IoT Core API is running."}
+
+@app.get("/app")
+def serve_mobile_app():
+    app_file = os.path.join(frontend_dir, "app.html")
+    if os.path.exists(app_file):
+        return FileResponse(app_file)
+    return {"message": "Mobile App UI is running."}
