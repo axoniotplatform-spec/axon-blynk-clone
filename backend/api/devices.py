@@ -2,11 +2,55 @@ from fastapi import APIRouter, Depends, HTTPException, Query, Request
 from sqlalchemy.orm import Session
 from typing import List, Optional
 from datetime import datetime
+import secrets
+from pydantic import BaseModel
 from backend.database import get_db
 from backend.models.entities import Device, Datastream, DashboardWidget, DeviceTemplate, TelemetryTimeSeries
 from backend.websocket_hub import hub
 
+class DeviceCreate(BaseModel):
+    name: str
+    template_id: int
+    org_id: Optional[int] = 1
+
 router = APIRouter(prefix="/api/v1/devices", tags=["devices"])
+
+@router.post("")
+def create_device(payload: DeviceCreate, db: Session = Depends(get_db)):
+    tmpl = db.query(DeviceTemplate).filter(DeviceTemplate.id == payload.template_id).first()
+    if not tmpl:
+        raise HTTPException(status_code=400, detail="Template not found")
+    
+    token = secrets.token_urlsafe(24).replace("-", "").replace("_", "")[:32]
+    while len(token) < 32:
+        token += secrets.token_hex(4)
+    token = token[:32]
+
+    dev = Device(
+        org_id=payload.org_id or tmpl.org_id,
+        template_id=tmpl.id,
+        name=payload.name,
+        auth_token=token,
+        status="ONLINE",
+        firmware_version="1.0.0",
+        blynk_library_version="1.3.5",
+        last_reported_at=datetime.utcnow(),
+        last_connected_at=datetime.utcnow()
+    )
+    db.add(dev)
+    db.commit()
+    db.refresh(dev)
+    return {
+        "id": dev.id,
+        "name": dev.name,
+        "authToken": dev.auth_token,
+        "status": dev.status,
+        "templateId": tmpl.template_id,
+        "templateName": tmpl.name,
+        "hardware": tmpl.hardware_mcu,
+        "connectionType": tmpl.connection_type,
+        "firmwareVersion": dev.firmware_version
+    }
 
 @router.get("")
 def list_devices(db: Session = Depends(get_db)):

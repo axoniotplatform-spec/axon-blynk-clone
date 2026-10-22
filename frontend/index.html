@@ -786,15 +786,75 @@ void loop() {
       document.getElementById('new-device-modal').classList.remove('open');
     }
 
-    function confirmCreateDevice() {
-      const name = document.getElementById('modal-device-name').value;
-      alert(`Device '${name}' provisioned! Auth Token generated.`);
-      closeNewDeviceModal();
+    async function loadDevices() {
+      try {
+        const res = await fetch('/api/v1/devices');
+        const devices = await res.json();
+        const tbody = document.getElementById('devices-table-body');
+        if (!tbody) return;
+        tbody.innerHTML = '';
+        devices.forEach(dev => {
+          const isOnline = dev.status === 'ONLINE';
+          const tr = document.createElement('tr');
+          tr.style.cursor = 'pointer';
+          tr.onclick = () => openDeviceDetail(dev.id, dev.name);
+          tr.innerHTML = `
+            <td><input type="checkbox" onclick="event.stopPropagation()" /></td>
+            <td style="font-weight:600;color:#0375de;">${dev.name}</td>
+            <td style="font-family:monospace;color:var(--text-muted);">${(dev.authToken || '').substring(0, 8)} - ••••</td>
+            <td>samblynkk@gmail.com (you)</td>
+            <td>
+              <span class="status-badge ${isOnline ? 'online' : ''}">
+                <span class="status-dot-sm"></span> ${isOnline ? 'Online' : 'Offline'}
+              </span>
+            </td>
+            <td style="color:var(--text-muted);">${dev.lastReportedAt ? new Date(dev.lastReportedAt).toLocaleTimeString() : 'Just now'}</td>
+            <td>My organization - 2257TU</td>
+            <td>${dev.templateName || 'BLINKING LED'}</td>
+            <td>${dev.firmwareVersion || '1.0.0'}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+
+        const pill = document.querySelector('.segmented-pill.active');
+        if (pill) pill.innerText = `All ${devices.length}`;
+      } catch (err) {
+        console.error('Failed to load devices:', err);
+      }
     }
 
-    function openDeviceDetail(id) {
+    async function confirmCreateDevice() {
+      const name = document.getElementById('modal-device-name').value || 'New IoT Node';
+      const templateSelect = document.getElementById('modal-template-select');
+      const templateId = parseInt(templateSelect ? templateSelect.value : 1) || 1;
+      try {
+        const res = await fetch('/api/v1/devices', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name: name, template_id: templateId })
+        });
+        const newDev = await res.json();
+        closeNewDeviceModal();
+        await loadDevices();
+      } catch (err) {
+        alert('Failed to provision device: ' + err.message);
+      }
+    }
+
+    function openDeviceDetail(id, name) {
+      if (typeof activeDeviceId !== 'undefined') {
+        activeDeviceId = id;
+      }
+      const title = document.querySelector('#pane-dashboards .view-title');
+      if (title && name) {
+        title.innerText = `${name} Dashboard`;
+      }
       switchTab('dashboards');
     }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      loadDevices();
+    });
 
     function filterDeviceTable() {
       const query = document.getElementById('device-search-input').value.toLowerCase();
