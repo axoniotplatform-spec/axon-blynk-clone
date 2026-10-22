@@ -282,6 +282,7 @@ def serve_index():
     return {"message": "Axon IoT Core API is running."}
 
 @app.get("/app")
+@app.get("/app.html")
 def serve_mobile_app():
     app_file = os.path.join(frontend_dir, "app.html")
     if os.path.exists(app_file):
