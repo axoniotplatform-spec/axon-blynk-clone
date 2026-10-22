@@ -679,3 +679,29 @@ body {
   background: #ffffff;
   box-shadow: 0 2px 6px rgba(0,0,0,0.06);
 }
+
+
+.dev-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: all 0.15s ease;
+}
+
+.dev-nav-item:hover {
+  background: var(--bg-hover);
+  color: var(--text-main);
+}
+
+.dev-nav-item.active {
+  background: #eef2ff;
+  color: #4f46e5;
+  font-weight: 600;
+}

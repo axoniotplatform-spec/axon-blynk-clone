@@ -131,190 +131,373 @@
     <!-- Content Router Views -->
     <main class="page-container">
       
-      <!-- TAB 1: DEVICES VIEW (EXACT MATCH TO USER SCREENSHOT) -->
+      <!-- TAB 1: DEVICES VIEW (TABLE LIST & DEDICATED DEVICE SUBTABS) -->
       <section id="pane-devices" class="tab-pane active">
-        <div class="view-header">
-          <h1 class="view-title">Devices</h1>
-          <button class="btn-blynk-primary" onclick="openNewDeviceModal()">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>New Device</span>
-          </button>
-        </div>
-
-        <div class="filter-toolbar">
-          <div style="display:flex;gap:12px;align-items:center;">
-            <div class="search-box">
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-              <input type="text" id="device-search-input" placeholder="Start typing" onkeyup="filterDeviceTable()" />
-            </div>
-
-            <button class="filter-btn">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
-              <span>Add Filter</span>
+        <!-- Device List Table View -->
+        <div id="device-table-view">
+          <div class="view-header">
+            <h1 class="view-title">Devices</h1>
+            <button class="btn-blynk-primary" onclick="openNewDeviceModal()">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+              <span>New Device</span>
             </button>
           </div>
 
-          <div style="display:flex;gap:12px;align-items:center;">
-            <div class="segmented-pill-group">
-              <div class="segmented-pill active">All 1</div>
-              <div class="segmented-pill">My devices</div>
+          <div class="filter-toolbar">
+            <div style="display:flex;gap:12px;align-items:center;">
+              <div class="search-box">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="2"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <input type="text" id="device-search-input" placeholder="Start typing" onkeyup="filterDeviceTable()" />
+              </div>
+
+              <button class="filter-btn">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                <span>Add Filter</span>
+              </button>
             </div>
+
+            <div style="display:flex;gap:12px;align-items:center;">
+              <div class="segmented-pill-group">
+                <div class="segmented-pill active">All 1</div>
+                <div class="segmented-pill">My devices</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Devices Table -->
+          <div class="table-card">
+            <table class="data-table">
+              <thead>
+                <tr>
+                  <th style="width:40px;"><input type="checkbox" /></th>
+                  <th>Name</th>
+                  <th>Auth Token</th>
+                  <th>Device Owner</th>
+                  <th>Status</th>
+                  <th>Last Reported At</th>
+                  <th>Organization</th>
+                  <th>Template Name</th>
+                  <th>Firmware</th>
+                </tr>
+              </thead>
+              <tbody id="devices-table-body">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
           </div>
         </div>
 
-        <!-- Devices Table -->
-        <div class="table-card">
-          <table class="data-table">
-            <thead>
-              <tr>
-                <th style="width:40px;"><input type="checkbox" /></th>
-                <th>Name</th>
-                <th>Auth Token</th>
-                <th>Device Owner</th>
-                <th>Status</th>
-                <th>Last Reported At</th>
-                <th>Organization</th>
-                <th>Template Name</th>
-                <th>Firmware</th>
-              </tr>
-            </thead>
-            <tbody id="devices-table-body">
-              <tr onclick="openDeviceDetail(1)" style="cursor:pointer;">
-                <td><input type="checkbox" onclick="event.stopPropagation()" /></td>
-                <td style="font-weight:600;color:#0375de;">BLINKING LED</td>
-                <td style="font-family:monospace;color:var(--text-muted);">yhdHK6Vu - ••••</td>
-                <td>samblynkk@gmail.com (you)</td>
-                <td>
-                  <span id="device-row-status" class="status-badge online">
-                    <span class="status-dot-sm"></span> Online
-                  </span>
-                </td>
-                <td style="color:var(--text-muted);">Just now</td>
-                <td>My organization - 2257TU</td>
-                <td>BLINKING LED</td>
-                <td>1.0.0</td>
-              </tr>
-            </tbody>
-          </table>
+        <!-- Dedicated Device Subtabs View (Device Dashboard, Timeline, Device Info, Metadata) -->
+        <div id="device-subtabs-view" style="display:none;">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+            <div style="display:flex; align-items:center; gap:12px;">
+              <button class="filter-btn" onclick="closeDeviceSubtabs()">← Back to Devices</button>
+              <h2 id="device-subtab-title" style="font-size:20px; font-weight:700; margin:0;">BLINKING LED</h2>
+              <span id="device-subtab-badge" class="status-badge online"><span class="status-dot-sm"></span> Online</span>
+              <span id="device-subtab-tmpl" style="font-family:monospace; font-size:12px; background:#f0f2f5; padding:3px 8px; border-radius:4px;">TMPL2yjltoB57</span>
+            </div>
+            <div style="display:flex; gap:10px;">
+              <button class="filter-btn" onclick="copyActiveDeviceToken()">📋 Copy Token</button>
+              <button class="btn-blynk-primary" onclick="openNewAutomationModal()">+ Add Automation</button>
+            </div>
+          </div>
+
+          <!-- Exact Device Subtabs Bar -->
+          <div class="subtabs-bar">
+            <div class="subtab-item active" onclick="switchDeviceSubTab('dashboard', this)">Device Dashboard</div>
+            <div class="subtab-item" onclick="switchDeviceSubTab('timeline', this)">Timeline</div>
+            <div class="subtab-item" onclick="switchDeviceSubTab('info', this)">Device Info</div>
+            <div class="subtab-item" onclick="switchDeviceSubTab('metadata', this)">Metadata</div>
+          </div>
+
+          <!-- Subtab 1: Device Dashboard -->
+          <div id="dev-pane-dashboard" class="dev-pane">
+            <div id="device-inner-widget-canvas" style="display:grid; grid-template-columns:repeat(12,1fr); gap:20px;">
+              <!-- Cloned from widget suite -->
+            </div>
+          </div>
+
+          <!-- Subtab 2: Timeline -->
+          <div id="dev-pane-timeline" class="dev-pane" style="display:none;">
+            <div class="table-card" style="padding:24px;">
+              <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Device Activity Timeline</h3>
+              <div style="display:flex; flex-direction:column; gap:14px; font-size:13px; border-left:2px solid #e6ecf0; padding-left:16px; margin-left:8px;">
+                <div>
+                  <span style="font-weight:700; color:#10f17f;">● Just now</span>
+                  <div style="color:var(--text-main); font-weight:600; margin-top:2px;">Hardware Ping Received (0x06 PING)</div>
+                  <div style="color:var(--text-muted); font-size:12px;">Port 8080 TCP Keep-alive heartbeat acknowledged</div>
+                </div>
+                <div>
+                  <span style="font-weight:700; color:#0375de;">● 2 mins ago</span>
+                  <div style="color:var(--text-main); font-weight:600; margin-top:2px;">Telemetry Ingested (V2 Temperature = 29.8°C)</div>
+                  <div style="color:var(--text-muted); font-size:12px;">Hardware write command (0x14 HARDWARE) logged to TimeSeries</div>
+                </div>
+                <div>
+                  <span style="font-weight:700; color:#8b98a5;">● 15 mins ago</span>
+                  <div style="color:var(--text-main); font-weight:600; margin-top:2px;">Device Session Authenticated (0x02 LOGIN)</div>
+                  <div style="color:var(--text-muted); font-size:12px;">Client connected from 127.0.0.1 with Token yhdHK6Vu</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtab 3: Device Info -->
+          <div id="dev-pane-info" class="dev-pane" style="display:none;">
+            <div class="table-card" style="padding:24px;">
+              <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Device Hardware & Connection Properties</h3>
+              <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:13.5px;">
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">Auth Token</div>
+                  <div style="font-family:monospace; font-weight:700;" id="dev-info-token">yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk</div>
+                </div>
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">IP Address</div>
+                  <div style="font-weight:600;">127.0.0.1 (Local Gateway)</div>
+                </div>
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">MAC Address</div>
+                  <div style="font-family:monospace; font-weight:600;">24:6F:28:B4:9C:12</div>
+                </div>
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">Hardware MCU</div>
+                  <div style="font-weight:600;">ESP32-WROOM-32 (Wi-Fi)</div>
+                </div>
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">Blynk Library Version</div>
+                  <div style="font-weight:600;">v1.3.5</div>
+                </div>
+                <div style="border-bottom:1px solid var(--border-light); padding-bottom:10px;">
+                  <div style="color:var(--text-muted); font-size:12px;">Heartbeat Interval</div>
+                  <div style="font-weight:600;">40 seconds</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Subtab 4: Metadata -->
+          <div id="dev-pane-metadata" class="dev-pane" style="display:none;">
+            <div class="table-card" style="padding:24px;">
+              <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Assigned Metadata Properties</h3>
+              <table class="data-table">
+                <thead>
+                  <tr>
+                    <th>METADATA KEY</th>
+                    <th>VALUE</th>
+                    <th>INHERITED FROM</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td style="font-weight:600;">Location</td>
+                    <td>Factory Floor Unit 1</td>
+                    <td>Template Default</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:600;">Firmware Version</td>
+                    <td><code>v1.0.4-prod</code></td>
+                    <td>Device Firmware Header</td>
+                  </tr>
+                  <tr>
+                    <td style="font-weight:600;">Hardware Serial</td>
+                    <td><code>AXN-ESP32-88219</code></td>
+                    <td>Factory OTP</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- TAB 2: DASHBOARDS VIEW (REAL-TIME WIDGET CANVAS) -->
+      <!-- TAB 2: DASHBOARDS VIEW (EXACT BLYNK SPLIT LAYOUT) -->
       <section id="pane-dashboards" class="tab-pane">
-        <div class="view-header">
-          <div>
-            <h1 class="view-title">BLINKING LED Dashboard</h1>
-            <div style="font-size:13px;color:var(--text-muted);margin-top:4px;">
-              Template: <strong>TMPL2yjltoB57</strong> • Hardware: <strong>ESP32 (Wi-Fi)</strong>
+        <div style="display:flex; height: calc(100vh - 120px); margin:-24px;">
+          <!-- Left Complementary: My Dashboards -->
+          <div style="width:240px; background:#fbfcfd; border-right:1px solid var(--border-color); padding:20px 16px; flex-shrink:0; display:flex; flex-direction:column; gap:16px;">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <span style="font-size:15px; font-weight:700; color:var(--text-main);">My Dashboards</span>
+              <button class="filter-btn" style="padding:2px 8px; font-size:11px;" onclick="alert('Creating new dashboard...')">+ Add</button>
+            </div>
+
+            <div style="display:flex; flex-direction:column; gap:6px;">
+              <div class="dashboard-list-item active" style="padding:10px 12px; border-radius:6px; background:#eef2ff; color:#4f46e5; font-weight:700; font-size:13.5px; cursor:pointer;">
+                📊 BLINKING LED
+              </div>
+              <div class="dashboard-list-item" style="padding:10px 12px; border-radius:6px; color:var(--text-secondary); font-weight:500; font-size:13.5px; cursor:pointer;" onclick="alert('Switching dashboard...')">
+                📊 Smart Greenhouse
+              </div>
+            </div>
+
+            <div style="margin-top:auto; background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:14px; font-size:12px; color:var(--text-muted); line-height:1.5;">
+              <strong>Add more Dashboards!</strong><br/>
+              Create additional dashboards and share them with users in sub-organizations.
             </div>
           </div>
-          <div style="display:flex; gap:10px;">
-            <button id="btn-edit-main-dash" class="filter-btn" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
-            <button class="filter-btn" onclick="switchTab('devices')">← Back to Devices</button>
-          </div>
-        </div>
 
-        <div id="widget-canvas" style="display:grid;grid-template-columns:repeat(12,1fr);gap:20px;">
-          <!-- Loaded dynamically by app.js -->
+          <!-- Main Dashboard Canvas Area -->
+          <div style="flex:1; overflow-y:auto; padding:24px;">
+            <div class="view-header" style="margin-bottom:18px;">
+              <div>
+                <h1 class="view-title">BLINKING LED</h1>
+                <div style="font-size:12.5px; color:var(--text-muted); margin-top:4px;">
+                  Template: <strong>TMPL2yjltoB57</strong> • Hardware: <strong>ESP32 (Wi-Fi)</strong> • Organization: <strong>All organizations</strong>
+                </div>
+              </div>
+
+              <div style="display:flex; align-items:center; gap:12px;">
+                <!-- Segmented Control Time Intervals matching real Blynk -->
+                <div class="segmented-pill-group">
+                  <div class="segmented-pill active" onclick="setChartInterval('1h', this)">1h</div>
+                  <div class="segmented-pill" onclick="setChartInterval('6h', this)">6h</div>
+                  <div class="segmented-pill" onclick="setChartInterval('1d', this)">1d</div>
+                  <div class="segmented-pill" onclick="setChartInterval('1w', this)">1w</div>
+                </div>
+
+                <button class="filter-btn" onclick="alert('Filtering dashboard...')">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+                  <span>Filter</span>
+                </button>
+
+                <button id="btn-edit-main-dash" class="btn-blynk-primary" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
+              </div>
+            </div>
+
+            <div id="widget-canvas" style="display:grid; grid-template-columns:repeat(12,1fr); gap:20px;">
+              <!-- Loaded dynamically by app.js -->
+            </div>
+          </div>
         </div>
       </section>
 
       <!-- TAB 3: DEVELOPER ZONE (TEMPLATES) -->
       <section id="pane-developer-zone" class="tab-pane">
-        <!-- List View -->
-        <div id="template-list-view">
-          <div class="view-header">
-            <h1 class="view-title">Templates</h1>
-            <button class="btn-blynk-primary" onclick="alert('Creating new template...')">+ New Template</button>
+        <div style="display:flex; height: calc(100vh - 120px); margin:-24px;">
+          <!-- Secondary Nav Sidebar matching real Blynk Developer Zone -->
+          <div style="width:220px; background:#fbfcfd; border-right:1px solid var(--border-color); padding:16px 8px; flex-shrink:0; overflow-y:auto;">
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; padding:4px 12px 8px;">Developer Zone</div>
+            <div class="dev-nav-item active" onclick="switchDevSubView('templates', this)">🗂️ My Templates</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('blueprints', this)">📐 Blueprints</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('assets', this)">📦 Assets</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('blynk-air', this)">🚀 Blynk.Air (OTA)</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('static-tokens', this)">🔑 Static Tokens</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('rule-engine', this)">⚡ Rule Engine</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('oauth', this)">🛡️ OAuth 2.0</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('webhooks', this)">🪝 Webhooks</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('integrations', this)">🤖 Integrations & AI</div>
+            <div style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px; padding:16px 12px 8px;">Debugging</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('provisioning-sessions', this)">🔄 Provisioning Sessions</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('crash-reports', this)">💥 Crash Reports</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('errors', this)">⚠️ Errors</div>
+            <div class="dev-nav-item" onclick="switchDevSubView('requests-log', this)">📋 Requests log</div>
           </div>
 
-          <div class="template-grid">
-            <div class="template-card" onclick="openTemplateDetail(1)">
-              <div class="template-card-header">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
-              </div>
-              <div class="template-card-body">
-                <div>
-                  <div>BLINKING LED</div>
-                  <div class="template-card-sub">1 Device • ESP32</div>
+          <!-- Main Content Area for Developer Zone -->
+          <div style="flex:1; overflow-y:auto; padding:24px;">
+            <!-- View: My Templates -->
+            <div id="dev-subview-templates" class="dev-subview">
+              <!-- List View -->
+              <div id="template-list-view">
+                <div class="view-header">
+                  <h1 class="view-title">Templates</h1>
+                  <button class="btn-blynk-primary" onclick="alert('Creating new template...')">+ New Template</button>
                 </div>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </div>
-            </div>
 
-            <div class="template-card" onclick="openTemplateDetail(2)">
-              <div class="template-card-header">
-                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
-              </div>
-              <div class="template-card-body">
-                <div>
-                  <div>test</div>
-                  <div class="template-card-sub">No devices • ESP8266</div>
-                </div>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Template Detail View -->
-        <div id="template-detail-view" style="display: none;">
-          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <button class="filter-btn" onclick="closeTemplateDetail()">← Back to Templates</button>
-              <h2 id="tmpl-detail-name" style="font-size:20px; font-weight:700; margin:0;">BLINKING LED</h2>
-              <span id="tmpl-detail-id" style="font-family:monospace; font-size:12px; background:#f0f2f5; padding:3px 8px; border-radius:4px;">TMPL2yjltoB57</span>
-              <span style="font-size:12px; font-weight:600; padding:3px 8px; border-radius:4px; background:#eef2ff; color:#4f46e5;">ESP32</span>
-            </div>
-            <div style="display:flex; gap:10px;">
-              <button class="btn-blynk-primary" onclick="openNewDatastreamModal()">+ New Datastream</button>
-            </div>
-          </div>
-
-          <!-- Subtabs Bar -->
-          <div class="subtabs-bar">
-            <div class="subtab-item active" onclick="switchTemplateSubTab('home', this)">Home</div>
-            <div class="subtab-item" onclick="switchTemplateSubTab('datastreams', this)">Datastreams</div>
-            <div class="subtab-item" onclick="switchTemplateSubTab('web-dashboard', this)">Web Dashboard</div>
-            <div class="subtab-item" onclick="switchTemplateSubTab('metadata', this)">Metadata</div>
-          </div>
-
-          <!-- Subtab 1: Home -->
-          <div id="tmpl-subpane-home" class="tmpl-subpane">
-            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
-              <div class="table-card" style="padding:24px;">
-                <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Template Configuration</h3>
-                <div style="display:flex; flex-direction:column; gap:14px; font-size:13.5px;">
-                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
-                    <span style="color:var(--text-muted);">Hardware MCU</span>
-                    <span style="font-weight:600;">ESP32 (Wi-Fi)</span>
+                <div class="template-grid">
+                  <div class="template-card" onclick="openTemplateDetail(1)">
+                    <div class="template-card-header">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect><line x1="9" y1="1" x2="9" y2="4"></line><line x1="15" y1="1" x2="15" y2="4"></line></svg>
+                    </div>
+                    <div class="template-card-body">
+                      <div>
+                        <div style="font-weight:700;font-size:15px;">BLINKING LED</div>
+                        <div class="template-card-sub">1 Device • ESP32 (Wi-Fi)</div>
+                      </div>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
                   </div>
-                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
-                    <span style="color:var(--text-muted);">Connection Type</span>
-                    <span style="font-weight:600;">Wi-Fi</span>
-                  </div>
-                  <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
-                    <span style="color:var(--text-muted);">Firmware Auth</span>
-                    <span style="font-weight:600;">Device Auth Token</span>
-                  </div>
-                  <div style="display:flex; justify-content:space-between;">
-                    <span style="color:var(--text-muted);">Data Retention</span>
-                    <span style="font-weight:600;">3 Months (High-Res 1s)</span>
+
+                  <div class="template-card" onclick="openTemplateDetail(2)">
+                    <div class="template-card-header">
+                      <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#8b98a5" stroke-width="1.5"><rect x="4" y="4" width="16" height="16" rx="2" ry="2"></rect><rect x="9" y="9" width="6" height="6"></rect></svg>
+                    </div>
+                    <div class="template-card-body">
+                      <div>
+                        <div style="font-weight:700;font-size:15px;">test</div>
+                        <div class="template-card-sub">No devices • ESP8266</div>
+                      </div>
+                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div class="table-card" style="padding:24px;">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
-                  <h3 style="font-size:16px; font-weight:700; margin:0;">Firmware Configuration</h3>
-                  <button class="filter-btn" style="padding:4px 10px; font-size:11.5px;" onclick="navigator.clipboard.writeText(document.getElementById('firmware-snippet').innerText); alert('Copied to clipboard!');">Copy Code</button>
+              <!-- Template Detail View with ALL 11 SUBTABS -->
+              <div id="template-detail-view" style="display: none;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                  <div style="display:flex; align-items:center; gap:12px;">
+                    <button class="filter-btn" onclick="closeTemplateDetail()">← Back to Templates</button>
+                    <h2 id="tmpl-detail-name" style="font-size:20px; font-weight:700; margin:0;">BLINKING LED</h2>
+                    <span id="tmpl-detail-id" style="font-family:monospace; font-size:12px; background:#f0f2f5; padding:3px 8px; border-radius:4px;">TMPL2yjltoB57</span>
+                    <span style="font-size:12px; font-weight:600; padding:3px 8px; border-radius:4px; background:#eef2ff; color:#4f46e5;">ESP32</span>
+                  </div>
+                  <div style="display:flex; gap:10px;">
+                    <button class="btn-blynk-primary" onclick="openNewDatastreamModal()">+ New Datastream</button>
+                  </div>
                 </div>
-                <pre id="firmware-snippet" class="code-box"><code>#define BLYNK_TEMPLATE_ID "TMPL2yjltoB57"
+
+                <!-- Complete 11 Subtabs Bar -->
+                <div class="subtabs-bar" style="overflow-x:auto; white-space:nowrap; gap:20px;">
+                  <div class="subtab-item active" onclick="switchTemplateSubTab('home', this)">Home</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('datastreams', this)">Datastreams</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('web-dashboard', this)">Dashboard</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('events', this)">Events & Notifications</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('connection', this)">Connection Lifecycle</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('converters', this)">Data Converters</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('metadata', this)">Metadata</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('app-dashboard', this)">App Dashboard</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('user-guides', this)">User Guides</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('auto-templates', this)">Automation Templates</div>
+                  <div class="subtab-item" onclick="switchTemplateSubTab('voice-assistants', this)">Voice Assistants</div>
+                </div>
+
+                <!-- Subtab 1: Home -->
+                <div id="tmpl-subpane-home" class="tmpl-subpane">
+                  <div style="display:grid; grid-template-columns: 1fr 1fr; gap:20px;">
+                    <div class="table-card" style="padding:24px;">
+                      <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Template Configuration</h3>
+                      <div style="display:flex; flex-direction:column; gap:14px; font-size:13.5px;">
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                          <span style="color:var(--text-muted);">Hardware MCU</span>
+                          <span style="font-weight:600;">ESP32 (Wi-Fi)</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                          <span style="color:var(--text-muted);">Connection Type</span>
+                          <span style="font-weight:600;">Wi-Fi</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between; border-bottom:1px solid var(--border-light); padding-bottom:8px;">
+                          <span style="color:var(--text-muted);">Firmware Auth</span>
+                          <span style="font-weight:600;">Device Auth Token</span>
+                        </div>
+                        <div style="display:flex; justify-content:space-between;">
+                          <span style="color:var(--text-muted);">Data Retention</span>
+                          <span style="font-weight:600;">3 Months (High-Res 1s)</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div class="table-card" style="padding:24px;">
+                      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+                        <h3 style="font-size:16px; font-weight:700; margin:0;">Firmware Configuration</h3>
+                        <button class="filter-btn" style="padding:4px 10px; font-size:11.5px;" onclick="navigator.clipboard.writeText(document.getElementById('firmware-snippet').innerText); alert('Copied to clipboard!');">Copy Code</button>
+                      </div>
+                      <div class="code-box" id="firmware-snippet">// Copy this configuration into your firmware sketch
+#define BLYNK_TEMPLATE_ID "TMPL2yjltoB57"
 #define BLYNK_TEMPLATE_NAME "BLINKING LED"
 #define BLYNK_AUTH_TOKEN "yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk"
 
-#define BLYNK_PRINT Serial
 #include &lt;WiFi.h&gt;
+#include &lt;WiFiClient.h&gt;
 #include &lt;BlynkSimpleEsp32.h&gt;
 
 char auth[] = BLYNK_AUTH_TOKEN;
@@ -323,118 +506,318 @@ char pass[] = "YourPassword";
 
 void setup() {
   Serial.begin(115200);
-  Blynk.begin(auth, ssid, pass);
+  Blynk.begin(auth, ssid, pass, "127.0.0.1", 8080);
 }
 
 void loop() {
   Blynk.run();
-}</code></pre>
-              </div>
-            </div>
-          </div>
-
-          <!-- Subtab 2: Datastreams -->
-          <div id="tmpl-subpane-datastreams" class="tmpl-subpane" style="display:none;">
-            <div class="table-card">
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>PIN</th>
-                    <th>NAME</th>
-                    <th>DATA TYPE</th>
-                    <th>MIN</th>
-                    <th>MAX</th>
-                    <th>STEP</th>
-                    <th>UNITS</th>
-                    <th>COLOR</th>
-                  </tr>
-                </thead>
-                <tbody id="datastreams-table-body">
-                  <!-- Populated dynamically -->
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          <!-- Subtab 3: Web Dashboard -->
-          <div id="tmpl-subpane-web-dashboard" class="tmpl-subpane" style="display:none;">
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
-              <div>
-                <span style="font-size:15px; font-weight:700; color:var(--text-main);">Web Layout Canvas (12-Column Responsive Grid)</span>
-                <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">Click any widget from the Widget Box to place on canvas</span>
-              </div>
-              <div style="display:flex; gap:10px;">
-                <button id="btn-edit-dashboard" class="filter-btn" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
-              </div>
-            </div>
-
-            <div style="display:flex; gap:20px;">
-              <!-- Widget Box Palette -->
-              <div class="widget-box-palette">
-                <div style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Widget Box (28 Types)</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('BUTTON')">🔘 Styled Button</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SLIDER')">🎚️ Level Slider</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SWITCH')">🔌 Relay Switch</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('GAUGE')">⏲️ Dial Gauge</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('RADIAL_GAUGE')">⭕ Radial Gauge</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('NUMBER_INPUT')">🔢 Stepper Input</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('LED')">🚨 Alarm LED</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('SUPERGRAPH')">📈 Live SuperGraph</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('TERMINAL')">💻 IDE Terminal</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('LCD')">📟 LCD 16x2 Matrix</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('RGB_LIGHT')">🎨 NeoPixel RGB</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('MAP')">📍 GPS Map Tracker</div>
-                <div class="widget-box-item" onclick="addNewWidgetFromPalette('VALUE_DISPLAY')">📊 Value KPI Tile</div>
-              </div>
-
-              <!-- Dashboard Canvas -->
-              <div style="flex:1;">
-                <div style="background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:20px; min-height:480px;">
-                  <div class="widget-grid" id="template-widget-preview-grid">
-                    <!-- Cloned from active widgets -->
+}</div>
+                    </div>
                   </div>
                 </div>
+
+                <!-- Subtab 2: Datastreams -->
+                <div id="tmpl-subpane-datastreams" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card">
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>PIN</th>
+                          <th>NAME</th>
+                          <th>DATA TYPE</th>
+                          <th>MIN</th>
+                          <th>MAX</th>
+                          <th>STEP</th>
+                          <th>UNITS</th>
+                          <th>COLOR</th>
+                        </tr>
+                      </thead>
+                      <tbody id="datastreams-table-body">
+                        <!-- Populated dynamically -->
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Subtab 3: Web Dashboard -->
+                <div id="tmpl-subpane-web-dashboard" class="tmpl-subpane" style="display:none;">
+                  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:16px;">
+                    <div>
+                      <span style="font-size:15px; font-weight:700; color:var(--text-main);">Web Layout Canvas (12-Column Responsive Grid)</span>
+                      <span style="font-size:12px; color:var(--text-muted); margin-left:8px;">Click any widget from the Widget Box to place on canvas</span>
+                    </div>
+                    <div style="display:flex; gap:10px;">
+                      <button id="btn-edit-dashboard" class="filter-btn" onclick="toggleEditDashboardMode()">✏️ Edit Dashboard</button>
+                    </div>
+                  </div>
+
+                  <div style="display:flex; gap:20px;">
+                    <!-- Widget Box Palette -->
+                    <div class="widget-box-palette">
+                      <div style="font-size:12px; font-weight:700; color:var(--text-secondary); text-transform:uppercase; letter-spacing:0.5px;">Widget Box (28 Types)</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('BUTTON')">🔘 Styled Button</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('SLIDER')">🎚️ Level Slider</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('SWITCH')">🔌 Relay Switch</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('GAUGE')">⏲️ Dial Gauge</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('RADIAL_GAUGE')">⭕ Radial Gauge</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('NUMBER_INPUT')">🔢 Stepper Input</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('LED')">🚨 Alarm LED</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('SUPERGRAPH')">📈 Live SuperGraph</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('TERMINAL')">💻 IDE Terminal</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('LCD')">📟 LCD 16x2 Matrix</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('RGB_LIGHT')">🎨 NeoPixel RGB</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('MAP')">📍 GPS Map Tracker</div>
+                      <div class="widget-box-item" onclick="addNewWidgetFromPalette('VALUE_DISPLAY')">📊 Value KPI Tile</div>
+                    </div>
+
+                    <!-- Dashboard Canvas -->
+                    <div style="flex:1;">
+                      <div style="background:#fff; border:1px dashed var(--border-color); border-radius:8px; padding:20px; min-height:480px;">
+                        <div class="widget-grid" id="template-widget-preview-grid">
+                          <!-- Cloned from active widgets -->
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subtab 4: Events & Notifications -->
+                <div id="tmpl-subpane-events" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:12px;">Events & Notification Rules</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Define system alerts, warnings, and error triggers logged from hardware.</p>
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>EVENT CODE</th>
+                          <th>NAME</th>
+                          <th>TYPE</th>
+                          <th>CHANNELS</th>
+                          <th>LIMIT</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td><code>device_connected</code></td>
+                          <td style="font-weight:600;">Device Connected</td>
+                          <td><span class="status-badge online"><span class="status-dot-sm"></span> Info</span></td>
+                          <td>Push, In-App</td>
+                          <td>None</td>
+                        </tr>
+                        <tr>
+                          <td><code>device_offline</code></td>
+                          <td style="font-weight:600;">Device Offline</td>
+                          <td><span class="status-badge"><span class="status-dot-sm"></span> Warning</span></td>
+                          <td>Push, Email</td>
+                          <td>1 per 5 min</td>
+                        </tr>
+                        <tr>
+                          <td><code>high_temp_alert</code></td>
+                          <td style="font-weight:600;">High Temperature Exceeded</td>
+                          <td><span class="status-badge" style="background:#fee2e2;color:#dc2626;"><span class="status-dot-sm" style="background:#dc2626;"></span> Critical</span></td>
+                          <td>Push, Email, Webhook</td>
+                          <td>1 per 1 min</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Subtab 5: Connection Lifecycle -->
+                <div id="tmpl-subpane-connection" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Connection Lifecycle & Heartbeat Settings</h3>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px; font-size:13.5px;">
+                      <div class="form-group">
+                        <label class="form-label">Heartbeat Interval (Seconds)</label>
+                        <input type="number" class="form-input" value="40" />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Device Disconnect Timeout (Seconds)</label>
+                        <input type="number" class="form-input" value="60" />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">TCP Keep-Alive Interval</label>
+                        <input type="number" class="form-input" value="15" />
+                      </div>
+                      <div class="form-group">
+                        <label class="form-label">Auto-Reconnect Retry Limit</label>
+                        <input type="number" class="form-input" value="10" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subtab 6: Data Converters -->
+                <div id="tmpl-subpane-converters" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Data Converters (Payload Decoders)</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Decode raw binary, JSON, or Modbus payloads into Blynk virtual pins.</p>
+                    <div class="code-box">// JavaScript Uplink Data Converter Function
+function decodeUplink(bytes) {
+  var temp = (bytes[0] &lt;&lt; 8 | bytes[1]) / 10.0;
+  var humidity = bytes[2];
+  return {
+    "V2": temp,
+    "V5": humidity
+  };
+}</div>
+                  </div>
+                </div>
+
+                <!-- Subtab 7: Metadata -->
+                <div id="tmpl-subpane-metadata" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Device Metadata Fields</h3>
+                    <table class="data-table">
+                      <thead>
+                        <tr>
+                          <th>FIELD NAME</th>
+                          <th>TYPE</th>
+                          <th>DEFAULT VALUE</th>
+                          <th>EDITABLE BY USER</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td style="font-weight:600;">Device Location</td>
+                          <td>STRING</td>
+                          <td>Factory Floor Unit 1</td>
+                          <td>Yes</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:600;">Firmware Version</td>
+                          <td>STRING</td>
+                          <td>v1.0.4-prod</td>
+                          <td>No</td>
+                        </tr>
+                        <tr>
+                          <td style="font-weight:600;">Hardware Serial</td>
+                          <td>STRING</td>
+                          <td>AXN-ESP32-88219</td>
+                          <td>No</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                <!-- Subtab 8: App Dashboard -->
+                <div id="tmpl-subpane-app-dashboard" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Mobile App Dashboard Layout</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Visual layout rendered on iOS and Android Blynk mobile applications.</p>
+                    <div style="width:280px; height:460px; border:8px solid #14171a; border-radius:28px; padding:16px; background:#f5f6f8; margin:0 auto; box-shadow:0 8px 24px rgba(0,0,0,0.12);">
+                      <div style="font-weight:700; font-size:13px; text-align:center; margin-bottom:12px;">Mobile Screen Preview</div>
+                      <div style="background:#fff; border-radius:8px; padding:12px; margin-bottom:10px; display:flex; justify-content:space-between; align-items:center;">
+                        <span style="font-size:12px; font-weight:600;">Relay Button (V0)</span>
+                        <span style="padding:2px 8px; border-radius:4px; background:#0375de; color:#fff; font-size:10px; font-weight:700;">ON</span>
+                      </div>
+                      <div style="background:#fff; border-radius:8px; padding:12px; margin-bottom:10px; text-align:center;">
+                        <div style="font-size:11px; color:var(--text-muted);">Temperature Gauge (V2)</div>
+                        <div style="font-size:24px; font-weight:800; color:#0375de; margin:4px 0;">29.8 °C</div>
+                      </div>
+                      <div style="background:#fff; border-radius:8px; padding:12px; text-align:center;">
+                        <div style="font-size:11px; color:var(--text-muted);">Humidity Radial (V5)</div>
+                        <div style="font-size:20px; font-weight:800; color:#10f17f; margin:4px 0;">64.2 %</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subtab 9: User Guides -->
+                <div id="tmpl-subpane-user-guides" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">End-User Onboarding Guide</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Instructions presented to operators when scanning QR code to claim this device.</p>
+                    <div style="background:#f8fafc; border:1px solid var(--border-light); border-radius:8px; padding:16px; line-height:1.6; font-size:13px;">
+                      <strong>Step 1: Power the Hardware</strong><br/>
+                      Connect your ESP32 controller to 5V DC micro-USB.<br/><br/>
+                      <strong>Step 2: Connect to Access Point</strong><br/>
+                      Join the Wi-Fi network named <code>Blynk-ESP32-Setup</code> from your mobile device.<br/><br/>
+                      <strong>Step 3: Enter Wi-Fi Credentials</strong><br/>
+                      Provide your local 2.4GHz network SSID and password to establish connection with Axon IoT Core.
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subtab 10: Automation Templates -->
+                <div id="tmpl-subpane-auto-templates" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Pre-configured Automation Recipes</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Users can enable these automations with a single toggle switch.</p>
+                    <div style="display:flex; flex-direction:column; gap:12px;">
+                      <div style="border:1px solid var(--border-color); border-radius:6px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                          <div style="font-weight:700; font-size:13.5px;">Auto Fan Cooling (Temp &gt; 30°C)</div>
+                          <div style="font-size:12px; color:var(--text-muted);">Automatically activates Relay V3 when temperature crosses high threshold.</div>
+                        </div>
+                        <input type="checkbox" checked style="accent-color:#0375de;" />
+                      </div>
+                      <div style="border:1px solid var(--border-color); border-radius:6px; padding:14px; display:flex; justify-content:space-between; align-items:center;">
+                        <div>
+                          <div style="font-weight:700; font-size:13.5px;">Overnight Energy Saver</div>
+                          <div style="font-size:12px; color:var(--text-muted);">Turns off lighting (V0) and dims display (V1) from 10:00 PM to 06:00 AM.</div>
+                        </div>
+                        <input type="checkbox" style="accent-color:#0375de;" />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Subtab 11: Voice Assistants -->
+                <div id="tmpl-subpane-voice-assistants" class="tmpl-subpane" style="display:none;">
+                  <div class="table-card" style="padding:24px;">
+                    <h3 style="font-size:16px; font-weight:700; margin-bottom:8px;">Voice Assistant Integrations</h3>
+                    <p style="font-size:13px; color:var(--text-muted); margin-bottom:16px;">Map Blynk virtual pins to Amazon Alexa and Google Assistant smart home devices.</p>
+                    <div style="display:grid; grid-template-columns:1fr 1fr; gap:16px;">
+                      <div style="border:1px solid var(--border-color); border-radius:8px; padding:16px; text-align:center;">
+                        <div style="font-size:28px; margin-bottom:8px;">🎙️ Amazon Alexa</div>
+                        <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">"Alexa, turn on the fan" mapped to Virtual Pin V3.</div>
+                        <span class="status-badge online"><span class="status-dot-sm"></span> Connected</span>
+                      </div>
+                      <div style="border:1px solid var(--border-color); border-radius:8px; padding:16px; text-align:center;">
+                        <div style="font-size:28px; margin-bottom:8px;">🔊 Google Assistant</div>
+                        <div style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">"Hey Google, what is the greenhouse temperature?" mapped to V2.</div>
+                        <span class="status-badge online"><span class="status-dot-sm"></span> Connected</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
               </div>
             </div>
-          </div>
 
-          <!-- Subtab 4: Metadata -->
-          <div id="tmpl-subpane-metadata" class="tmpl-subpane" style="display:none;">
-            <div class="table-card" style="padding:24px;">
-              <h3 style="font-size:16px; font-weight:700; margin-bottom:16px;">Device Metadata Fields</h3>
-              <table class="data-table">
-                <thead>
-                  <tr>
-                    <th>FIELD NAME</th>
-                    <th>TYPE</th>
-                    <th>DEFAULT VALUE</th>
-                    <th>EDITABLE BY USER</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td style="font-weight:600;">Device Location</td>
-                    <td>STRING</td>
-                    <td>Factory Floor Unit 1</td>
-                    <td>Yes</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">Firmware Version</td>
-                    <td>STRING</td>
-                    <td>v1.0.4-prod</td>
-                    <td>No</td>
-                  </tr>
-                  <tr>
-                    <td style="font-weight:600;">Hardware Serial</td>
-                    <td>STRING</td>
-                    <td>AXN-ESP32-88219</td>
-                    <td>No</td>
-                  </tr>
-                </tbody>
-              </table>
+            <!-- Other Dev Subviews (Blueprints, Assets, etc.) -->
+            <div id="dev-subview-blueprints" class="dev-subview" style="display:none;">
+              <div class="view-header"><h1 class="view-title">Blueprints</h1></div>
+              <div class="table-card" style="padding:24px;">
+                <p style="color:var(--text-muted); font-size:13.5px;">Ready-to-use production blueprints for Weather Stations, Smart Agriculture, and Smart Energy Monitoring.</p>
+              </div>
             </div>
-          </div>
 
+            <div id="dev-subview-blynk-air" class="dev-subview" style="display:none;">
+              <div class="view-header"><h1 class="view-title">Blynk.Air (OTA Updates)</h1><button class="btn-blynk-primary" onclick="openOtaModal()">New Ship Firmware</button></div>
+              <div class="table-card" style="padding:24px;">
+                <p style="color:var(--text-muted); font-size:13.5px;">Manage Over-The-Air firmware deployments across device groups and architectures.</p>
+              </div>
+            </div>
+
+            <div id="dev-subview-webhooks" class="dev-subview" style="display:none;">
+              <div class="view-header"><h1 class="view-title">Webhooks</h1><button class="btn-blynk-primary">+ Create Webhook</button></div>
+              <div class="table-card" style="padding:24px;">
+                <p style="color:var(--text-muted); font-size:13.5px;">Forward streaming sensor data to external HTTP endpoints in real time.</p>
+              </div>
+            </div>
+
+            <div id="dev-subview-errors" class="dev-subview" style="display:none;">
+              <div class="view-header"><h1 class="view-title">System Error Logs</h1></div>
+              <div class="table-card" style="padding:24px;">
+                <p style="color:var(--text-muted); font-size:13.5px;">Zero critical errors logged. All TCP and WebSocket connections are operating normally.</p>
+              </div>
+            </div>
+
+          </div>
         </div>
       </section>
 
@@ -476,17 +859,29 @@ void loop() {
         </div>
 
         <div style="background:#fff;border:1px solid var(--border-color);border-radius:8px;padding:24px;">
-          <h3 style="font-size:16px;margin-bottom:6px;font-weight:700;">Automation Triggers Palette</h3>
-          <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">Automations execute actions on physical hardware or send alerts when event conditions are satisfied.</p>
+          <h3 style="font-size:16px;margin-bottom:6px;font-weight:700;">Choose Condition (5 Trigger Types)</h3>
+          <p style="color:var(--text-muted);font-size:13px;margin-bottom:16px;">Automations let you set up actions that start when a certain trigger happens.</p>
           
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:14px;cursor:pointer;" onclick="openNewAutomationModal()">
-              <h4 style="font-size:13.5px;margin-bottom:4px;">⏱️ Schedule Trigger</h4>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));gap:14px;">
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.2s;" onclick="openNewAutomationModal()" onmouseover="this.style.borderColor='#0375de'" onmouseout="this.style.borderColor='var(--border-color)'">
+              <h4 style="font-size:14px;margin-bottom:4px;">⏱️ Schedule</h4>
               <p style="font-size:12px;color:var(--text-muted);">Automation will start at a specific time of day or recurring cron pattern.</p>
             </div>
-            <div style="border:1px solid var(--border-color);border-radius:8px;padding:14px;cursor:pointer;" onclick="openNewAutomationModal()">
-              <h4 style="font-size:13.5px;margin-bottom:4px;">⚡ Device State Condition</h4>
-              <p style="font-size:12px;color:var(--text-muted);">Trigger automation when datastream crosses threshold (e.g. Temp &gt; 30°C).</p>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.2s;" onclick="openNewAutomationModal()" onmouseover="this.style.borderColor='#0375de'" onmouseout="this.style.borderColor='var(--border-color)'">
+              <h4 style="font-size:14px;margin-bottom:4px;">⚡ Device State</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger automation by a certain state of the device (e.g. Temp &gt; 30°C).</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.2s;" onclick="openNewAutomationModal()" onmouseover="this.style.borderColor='#0375de'" onmouseout="this.style.borderColor='var(--border-color)'">
+              <h4 style="font-size:14px;margin-bottom:4px;">🌅 Sunset/Sunrise</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Automation will start based on the sun position and solar twilight.</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.2s;" onclick="openNewAutomationModal()" onmouseover="this.style.borderColor='#0375de'" onmouseout="this.style.borderColor='var(--border-color)'">
+              <h4 style="font-size:14px;margin-bottom:4px;">🔔 Event</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger automation when a specific system event or alarm is logged.</p>
+            </div>
+            <div style="border:1px solid var(--border-color);border-radius:8px;padding:16px;cursor:pointer;transition:border-color 0.2s;" onclick="openNewAutomationModal()" onmouseover="this.style.borderColor='#0375de'" onmouseout="this.style.borderColor='var(--border-color)'">
+              <h4 style="font-size:14px;margin-bottom:4px;">🎬 Scene</h4>
+              <p style="font-size:12px;color:var(--text-muted);">Trigger multi-device batch automation manually with a single click.</p>
             </div>
           </div>
         </div>
@@ -528,35 +923,64 @@ void loop() {
       </section>
 
     
-      <!-- TAB: GET STARTED -->
+      <!-- TAB: GET STARTED (EXACT METRICS BANNER & BLUEPRINT CARDS) -->
       <section id="pane-get-started" class="tab-pane">
         <div class="view-header">
-          <h1 class="view-title">Get Started with Blynk</h1>
+          <h1 class="view-title">Get Started With Blynk 🚀</h1>
         </div>
-        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px; margin-bottom:24px;">
-          <div class="table-card" style="padding:24px; border-left:4px solid #10f17f;">
-            <div style="font-size:24px; margin-bottom:8px;">1️⃣</div>
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Create a Template</h3>
-            <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Define datastreams and widgets once for thousands of devices.</p>
-            <span style="font-size:12px; font-weight:700; color:#10f17f;">✓ Completed</span>
+
+        <!-- Plan Details Banner matching live Blynk -->
+        <div style="background:#fff; border:1px solid var(--border-color); border-radius:8px; padding:20px 24px; margin-bottom:24px; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px;">
+          <div>
+            <div style="font-size:12px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Your Plan Details</div>
+            <div style="font-size:16px; font-weight:800; color:var(--text-main); margin-top:2px;">Free Maker Plan (NY3 Region)</div>
           </div>
-          <div class="table-card" style="padding:24px; border-left:4px solid #10f17f;">
-            <div style="font-size:24px; margin-bottom:8px;">2️⃣</div>
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Connect Hardware</h3>
-            <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Flash firmware onto ESP32/ESP8266 and connect via TCP port 8080.</p>
-            <span style="font-size:12px; font-weight:700; color:#10f17f;">✓ Online via Gateway</span>
+          <div style="display:flex; gap:28px;">
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#0375de;">1 / 5</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Devices</div>
+            </div>
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#10f17f;">0 / 100.0k</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Device Messages</div>
+            </div>
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#4f46e5;">2 / 10</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Templates Created</div>
+            </div>
+            <div>
+              <div style="font-size:18px; font-weight:800; color:#f59e0b;">1 / 1</div>
+              <div style="font-size:11.5px; color:var(--text-muted);">Team Members</div>
+            </div>
           </div>
-          <div class="table-card" style="padding:24px; border-left:4px solid #10f17f;">
-            <div style="font-size:24px; margin-bottom:8px;">3️⃣</div>
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Build Dashboards</h3>
-            <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Customize telemetry charts, switches, sliders, and gauges.</p>
-            <span style="font-size:12px; font-weight:700; color:#10f17f;">✓ 13 Active Widgets</span>
+        </div>
+
+        <!-- Suggested For You Grid matching live Blynk -->
+        <div style="font-size:14px; font-weight:700; color:var(--text-main); margin-bottom:14px;">Suggested for you</div>
+        <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(280px, 1fr)); gap:20px;">
+          <div class="table-card" style="padding:22px;">
+            <div style="font-size:26px; margin-bottom:10px;">📐</div>
+            <h4 style="font-size:15px; font-weight:700; margin-bottom:6px;">Create your app in minutes with Blueprints</h4>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom:16px;">Use a pre-built template with all essentials to get your hardware running instantly.</p>
+            <button class="filter-btn" onclick="switchTab('developer-zone')">View Blueprints</button>
           </div>
-          <div class="table-card" style="padding:24px; border-left:4px solid #10f17f;">
-            <div style="font-size:24px; margin-bottom:8px;">4️⃣</div>
-            <h3 style="font-size:16px; font-weight:700; margin-bottom:6px;">Automations & Alerts</h3>
-            <p style="font-size:13px; color:var(--text-muted); line-height:1.5;">Configure automatic relay actuation and push notifications.</p>
-            <span style="font-size:12px; font-weight:700; color:#10f17f;">✓ Rules Engine Active</span>
+          <div class="table-card" style="padding:22px;">
+            <div style="font-size:26px; margin-bottom:10px;">🎨</div>
+            <h4 style="font-size:15px; font-weight:700; margin-bottom:6px;">Customize your app's look and feel</h4>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom:16px;">Skip the app store review process and customize telemetry styling with no coding required.</p>
+            <button class="filter-btn" onclick="switchTab('dashboards')">Customize Now</button>
+          </div>
+          <div class="table-card" style="padding:22px;">
+            <div style="font-size:26px; margin-bottom:10px;">⚡</div>
+            <h4 style="font-size:15px; font-weight:700; margin-bottom:6px;">No-code Automations</h4>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom:16px;">Automate device actions, thresholds, and condition triggers without writing extra firmware code.</p>
+            <button class="filter-btn" onclick="switchTab('automations')">Try Now</button>
+          </div>
+          <div class="table-card" style="padding:22px;">
+            <div style="font-size:26px; margin-bottom:10px;">🚀</div>
+            <h4 style="font-size:15px; font-weight:700; margin-bottom:6px;">Over-The-Air updates with Blynk.Air</h4>
+            <p style="font-size:12.5px; color:var(--text-muted); line-height:1.5; margin-bottom:16px;">Track update progress, manage rollouts, and ensure your fleet stays up to date seamlessly.</p>
+            <button class="filter-btn" onclick="openOtaModal()">Deploy Firmware</button>
           </div>
         </div>
       </section>
@@ -868,11 +1292,36 @@ void loop() {
       if (typeof activeDeviceId !== 'undefined') {
         activeDeviceId = id;
       }
-      const title = document.querySelector('#pane-dashboards .view-title');
-      if (title && name) {
-        title.innerText = `${name} Dashboard`;
+      document.getElementById('device-table-view').style.display = 'none';
+      document.getElementById('device-subtabs-view').style.display = 'block';
+      const title = document.getElementById('device-subtab-title');
+      if (title && name) title.innerText = name;
+      
+      // Clone widgets into device inner widget canvas
+      const mainCanvas = document.getElementById('widget-canvas');
+      const innerCanvas = document.getElementById('device-inner-widget-canvas');
+      if (mainCanvas && innerCanvas) {
+        innerCanvas.innerHTML = mainCanvas.innerHTML;
       }
-      switchTab('dashboards');
+    }
+
+    function closeDeviceSubtabs() {
+      document.getElementById('device-subtabs-view').style.display = 'none';
+      document.getElementById('device-table-view').style.display = 'block';
+    }
+
+    function switchDeviceSubTab(tabName, el) {
+      document.querySelectorAll('#device-subtabs-view .subtab-item').forEach(item => item.classList.remove('active'));
+      document.querySelectorAll('.dev-pane').forEach(p => p.style.display = 'none');
+      if (el) el.classList.add('active');
+      const pane = document.getElementById(`dev-pane-${tabName}`);
+      if (pane) pane.style.display = 'block';
+    }
+
+    function copyActiveDeviceToken() {
+      const tok = document.getElementById('dev-info-token').innerText;
+      navigator.clipboard.writeText(tok);
+      alert('Auth Token copied to clipboard!');
     }
 
     document.addEventListener('DOMContentLoaded', () => {
