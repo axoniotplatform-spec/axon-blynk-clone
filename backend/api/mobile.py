@@ -5,25 +5,43 @@ from backend.database import get_db
 from backend.models.entities import Device, Datastream, DashboardWidget, TelemetryTimeSeries
 from backend.websocket_hub import hub
 from backend.rules_engine import evaluate_rules_for_device
+from backend.hardware_gateway import hardware_gateway
 
 router = APIRouter(prefix="/api/v1/app", tags=["mobile-app"])
 
+def compute_device_status(d: Device) -> str:
+    """Compute real connection status without mock defaults: checks active TCP 8080 and heartbeat"""
+    if d.auth_token and d.auth_token in hardware_gateway.connected_devices:
+        return "ONLINE"
+    if d.status == "ONLINE" and d.last_reported_at:
+        delta = (datetime.utcnow() - d.last_reported_at).total_seconds()
+        if delta < 120:
+            return "ONLINE"
+    return "OFFLINE"
+
 @router.get("/devices")
 def get_mobile_devices(db: Session = Depends(get_db)):
-    """Mobile App endpoint returning device list with live summary pins"""
+    """Mobile App endpoint returning device list with live summary pins and real status"""
     devices = db.query(Device).all()
     results = []
     for d in devices:
+        real_status = compute_device_status(d)
+        if d.status != real_status:
+            d.status = real_status
+            db.commit()
+
         datastreams = db.query(Datastream).filter(Datastream.template_id == d.template_id).all()
         ds_map = {ds.pin: ds.current_value for ds in datastreams}
         results.append({
             "id": d.id,
             "name": d.name,
-            "status": d.status,
+            "status": real_status,
             "hardware": d.template.hardware_mcu if d.template else "ESP32",
             "connectionType": d.template.connection_type if d.template else "WI_FI",
             "authToken": d.auth_token,
             "firmwareVersion": d.firmware_version,
+            "lastReportedAt": d.last_reported_at.isoformat() if d.last_reported_at else None,
+            "lastConnectedAt": d.last_connected_at.isoformat() if d.last_connected_at else None,
             "summaryValues": {
                 "button": ds_map.get("V0", "0"),
                 "slider": ds_map.get("V1", "128"),
@@ -36,10 +54,15 @@ def get_mobile_devices(db: Session = Depends(get_db)):
 
 @router.get("/devices/{device_id}/dashboard")
 def get_mobile_dashboard(device_id: int, db: Session = Depends(get_db)):
-    """Mobile App dashboard layout and live values"""
+    """Mobile App dashboard layout and live values directly from SQLite"""
     d = db.query(Device).filter(Device.id == device_id).first()
     if not d:
         raise HTTPException(status_code=404, detail="Device not found")
+
+    real_status = compute_device_status(d)
+    if d.status != real_status:
+        d.status = real_status
+        db.commit()
 
     datastreams = db.query(Datastream).filter(Datastream.template_id == d.template_id).all()
     widgets = db.query(DashboardWidget).filter(DashboardWidget.template_id == d.template_id).all()
@@ -65,7 +88,7 @@ def get_mobile_dashboard(device_id: int, db: Session = Depends(get_db)):
             "label": w.label,
             "pin": w.pin,
             "color": w.on_color or "#10f17f",
-            "settings": w.settings,
+            "settings": w.settings or {},
             "currentValue": val
         })
 
@@ -73,9 +96,11 @@ def get_mobile_dashboard(device_id: int, db: Session = Depends(get_db)):
         "device": {
             "id": d.id,
             "name": d.name,
-            "status": d.status,
+            "status": real_status,
             "hardware": d.template.hardware_mcu if d.template else "ESP32",
-            "authToken": d.auth_token
+            "authToken": d.auth_token,
+            "lastReportedAt": d.last_reported_at.isoformat() if d.last_reported_at else None,
+            "lastConnectedAt": d.last_connected_at.isoformat() if d.last_connected_at else None
         },
         "datastreams": ds_dict,
         "widgets": widget_list

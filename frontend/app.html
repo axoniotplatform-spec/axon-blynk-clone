@@ -1127,7 +1127,7 @@
           </button>
           <div style="text-align:center;">
             <div id="active-device-name" style="font-size:15px;font-weight:800;color:#fff;">BLINKING LED</div>
-            <div id="active-device-status" style="font-size:11px;color:var(--blynk-green);font-weight:600;">● Online • ESP32</div>
+            <div id="active-device-status" style="font-size:11px;font-weight:600;"></div>
           </div>
           <div style="display:flex;gap:6px;">
             <div class="btn-icon-soft" id="btn-edit-mode" onclick="toggleEditMode()" title="Edit Dashboard Mode">
@@ -1499,6 +1499,33 @@
     }
 
     // ── Dedicated Dashboard Screen ──────────────────
+        async function loadUserProfile() {
+      try {
+        const [uRes, oRes] = await Promise.all([
+          fetch('/api/v1/users'),
+          fetch('/api/v1/organizations')
+        ]);
+        const users = await uRes.json();
+        const orgs = await oRes.json();
+        if (users && users.length) {
+          const u = users[0];
+          const nameEl = document.getElementById('acc-name');
+          const emailEl = document.getElementById('acc-email');
+          const avEl = document.getElementById('acc-avatar');
+          if (nameEl) nameEl.innerText = u.name;
+          if (emailEl) emailEl.innerText = u.email;
+          if (avEl) avEl.innerText = (u.name || 'U').charAt(0).toUpperCase();
+        }
+        if (orgs && orgs.length) {
+          const orgEl = document.getElementById('acc-org');
+          if (orgEl) orgEl.innerText = orgs[0].name;
+        }
+      } catch (e) {
+        console.warn('Failed to load profile from SQLite:', e);
+      }
+    }
+
+    // ── Dedicated Dashboard Screen ──────────────────
     async function openDeviceDetail(deviceId) {
       activeDevId = deviceId;
       switchScreen('device-dashboard');
@@ -1511,7 +1538,12 @@
 
         document.getElementById('active-device-name').innerText = data.device.name;
         const isOnline = data.device.status === 'ONLINE';
-        document.getElementById('active-device-status').innerHTML = `<span style="color:${isOnline ? 'var(--blynk-green)' : 'var(--blynk-red)'};font-weight:700;">● ${isOnline ? 'Online' : 'Offline'} • ${data.device.hardware || 'ESP32'}</span>`;
+        const statusEl = document.getElementById('active-device-status');
+        if (statusEl) {
+          statusEl.innerHTML = isOnline
+            ? `<span style="color:var(--blynk-green);font-weight:700;">● Online • ${data.device.hardware || 'ESP32'}</span>`
+            : `<span style="color:var(--text-muted);font-weight:600;">○ Offline • ${data.device.hardware || 'ESP32'}</span>`;
+        }
         document.getElementById('sheet-token-val').innerText = data.device.authToken || '—';
 
         renderDashboardWidgets(data);
@@ -1520,7 +1552,7 @@
       }
     }
 
-        let currentSubtab = 'all';
+    let currentSubtab = 'all';
 
     function switchSubtab(tab, el) {
       currentSubtab = tab;
@@ -1539,129 +1571,108 @@
       toast(`Viewing: ${tab.toUpperCase()} Tab`);
     }
 
-    function renderDashboardWidgets(data) {
-      const grid = document.getElementById('device-widgets-grid');
-      const ds = data.datastreams || {};
+    function renderWidgetHtml(w, ds) {
+      const pin = (w.pin || 'V0').toUpperCase();
+      const dsInfo = ds[pin] || {};
+      const val = dsInfo.value !== undefined ? String(dsInfo.value) : (w.currentValue || '0');
+      const type = (w.widgetType || 'BUTTON').toUpperCase();
+      const label = w.label || type;
+      const widgetId = w.id;
 
-      const v0Val = ds['V0']?.value || '0';
-      const v1Val = ds['V1']?.value || '128';
-      const v2Val = ds['V2']?.value || '28.5';
-      const v3Val = ds['V3']?.value || '0';
-      const v4Val = ds['V4']?.value || '0';
-      const v5Val = ds['V5']?.value || '55';
-      const v6Val = ds['V6']?.value || '0';
-      const v8Val = ds['V8']?.value || '0';
-      const v9Val = ds['V9']?.value || '0';
-      const isV0On = String(v0Val) === '1';
-      const isV3On = String(v3Val) === '1';
+      let category = 'controls';
+      let isWide = false;
+      let bodyHtml = '';
 
-      // SVG progress offset calculation for radial gauges
-      const tempNum = Math.min(Math.max(parseFloat(v2Val) || 0, 0), 50);
-      const strokeOffset = 251.2 - (tempNum / 50) * 200;
-
-      grid.innerHTML = `
-        <!-- WIDGET 1: ENHANCED GAUGE (APK: EnhancedGaugeView) -->
-        <div class="widget-tile" data-category="gauges">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">Ambient Temp</span>
-            <span class="tile-pin-tag">V2</span>
+      if (type === 'BUTTON' || type === 'WEB_STYLED_BUTTON') {
+        category = 'controls';
+        const isOn = val === '1';
+        bodyHtml = `
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;">
+            <button onclick="writePin('${pin}', '${isOn ? '0' : '1'}')" style="width:70px;height:70px;border-radius:50%;background:${isOn ? 'var(--blynk-green)' : 'var(--bg-surface)'};border:2px solid ${isOn ? 'var(--blynk-green)' : 'var(--border-subtle)'};color:${isOn ? '#000' : '#fff'};font-size:24px;font-weight:900;cursor:pointer;box-shadow:${isOn ? '0 0 20px rgba(16,241,127,0.4)' : 'none'};transition:all 0.2s ease;">
+              ${isOn ? 'ON' : 'OFF'}
+            </button>
+            <span style="font-size:11px;font-weight:700;color:${isOn ? 'var(--blynk-green)' : 'var(--text-muted)'};">
+              ${isOn ? '● ACTIVATED' : '○ RELEASED'}
+            </span>
           </div>
-          <div class="enhanced-gauge-wrap">
-            <svg class="enhanced-gauge-svg" viewBox="0 0 120 120">
-              <!-- Safe Zone (Green) -->
-              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(16,241,127,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="0" stroke-linecap="round" />
-              <!-- Warning Zone (Amber) -->
-              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,170,0,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-75" stroke-linecap="round" />
-              <!-- Alarm Zone (Red) -->
-              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,59,48,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-150" stroke-linecap="round" />
-              <!-- Dynamic Active Indicator -->
-              <circle id="enhanced-gauge-active" cx="60" cy="60" r="46" fill="none" stroke="var(--blynk-lime)" stroke-width="9" stroke-dasharray="217 217" stroke-dashoffset="${217 - (tempNum / 50) * 217}" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease;" />
-            </svg>
-            <div class="radial-text-stack" style="margin-top:-20px;">
-              <span class="gauge-num" id="gauge-val-v2">${v2Val}</span>
-              <span class="gauge-unit">°C Celsius • Enhanced</span>
+        `;
+      } else if (type === 'SWITCH') {
+        category = 'controls';
+        const isOn = val === '1';
+        bodyHtml = `
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:12px;">
+            <label class="ios-switch" style="transform:scale(1.25);">
+              <input type="checkbox" ${isOn ? 'checked' : ''} onchange="writePin('${pin}', this.checked ? '1' : '0')">
+              <span class="switch-track"></span>
+            </label>
+            <span style="font-size:12px;font-weight:800;color:${isOn ? 'var(--blynk-green)' : 'var(--text-muted)'};">
+              ${isOn ? '● ACTIVATED' : '○ DISABLED'}
+            </span>
+          </div>
+        `;
+      } else if (type === 'SLIDER') {
+        category = 'controls';
+        isWide = true;
+        const num = parseInt(val) || 0;
+        const pct = Math.round((num / 255) * 100);
+        bodyHtml = `
+          <div class="glow-slider-container">
+            <div class="slider-header-num">
+              <span class="big-slider-val"><span id="slider-readout-${pin.toLowerCase()}">${val}</span> <span style="font-size:12px;color:var(--text-muted);">PWM / 255</span></span>
+              <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-${pin.toLowerCase()}">${pct}%</span>
             </div>
+            <input type="range" min="0" max="255" value="${val}" class="blynk-range" oninput="onSliderMove('${pin}', this.value)" />
           </div>
-        </div>
-
-        <!-- WIDGET 2: RADIAL GAUGE (APK: RadialGaugeView) -->
-        <div class="widget-tile" data-category="gauges">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">Humidity</span>
-            <span class="tile-pin-tag">V5</span>
-          </div>
-          <div class="radial-gauge-wrap">
-            <svg class="radial-gauge-svg" viewBox="0 0 100 100">
-              <circle class="gauge-bg-circle" cx="50" cy="50" r="40" />
-              <circle id="gauge-circle-v5" class="gauge-progress-circle" cx="50" cy="50" r="40" style="stroke-dashoffset:${251.2 - (parseFloat(v5Val)/100)*200}; stroke:var(--blynk-cyan);" />
-            </svg>
-            <div class="radial-text-stack">
-              <span class="gauge-num" id="gauge-val-v5">${v5Val}</span>
-              <span class="gauge-unit">% Relative RH</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- WIDGET 3: LEVEL SLIDER WITH SWITCH (APK: LevelSliderWithSwitchView) -->
-        <div class="widget-tile col-span-2" data-category="controls">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">PWM Output + Power Switch</span>
-            <span class="tile-pin-tag">V1 / V0</span>
-          </div>
+        `;
+      } else if (type === 'LEVEL_SLIDER_SWITCH') {
+        category = 'controls';
+        isWide = true;
+        const num = parseInt(val) || 0;
+        const isV0On = String(ds['V0']?.value || '0') === '1';
+        bodyHtml = `
           <div class="level-slider-switch-card">
             <div class="slider-switch-row">
               <label class="ios-switch">
-                <input id="dash-level-switch-v0" type="checkbox" ${isV0On ? 'checked' : ''} onchange="writePin('V0', this.checked ? '1' : '0')">
+                <input type="checkbox" ${isV0On ? 'checked' : ''} onchange="writePin('V0', this.checked ? '1' : '0')">
                 <span class="switch-track"></span>
               </label>
               <div style="flex:1;">
                 <div class="slider-header-num" style="margin-bottom:6px;">
-                  <span class="big-slider-val"><span id="slider-readout-v1">${v1Val}</span> <span style="font-size:12px;color:var(--text-muted);">/ 255</span></span>
-                  <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-v1">${Math.round((v1Val/255)*100)}%</span>
+                  <span class="big-slider-val"><span id="slider-readout-${pin.toLowerCase()}">${val}</span> <span style="font-size:12px;color:var(--text-muted);">/ 255</span></span>
+                  <span style="font-size:12px;color:var(--blynk-lime);font-weight:800;" id="slider-pct-${pin.toLowerCase()}">${Math.round((num/255)*100)}%</span>
                 </div>
-                <input type="range" min="0" max="255" value="${v1Val}" class="blynk-range" oninput="onSliderMove('V1', this.value)" />
+                <input type="range" min="0" max="255" value="${val}" class="blynk-range" oninput="onSliderMove('${pin}', this.value)" />
               </div>
             </div>
           </div>
-        </div>
-
-        <!-- WIDGET 4: ICON SEGMENTED CONTROL (APK: BlynkToggleLayout) -->
-        <div class="widget-tile col-span-2" data-category="controls">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">Operating Mode</span>
-            <span class="tile-pin-tag">V4</span>
-          </div>
-          <div class="segmented-control-bar" id="seg-control-v4">
-            <div class="segment-option ${v4Val === '0' || !v4Val ? 'active' : ''}" onclick="selectSegment('V4', '0', this)">
+        `;
+      } else if (type === 'ICON_SEGMENTED') {
+        category = 'controls';
+        isWide = true;
+        bodyHtml = `
+          <div class="segmented-control-bar" id="seg-control-${pin.toLowerCase()}">
+            <div class="segment-option ${val === '0' || !val ? 'active' : ''}" onclick="selectSegment('${pin}', '0', this)">
               <span style="font-size:16px;">⚡</span>
               <span>AUTO</span>
             </div>
-            <div class="segment-option ${v4Val === '1' ? 'active' : ''}" onclick="selectSegment('V4', '1', this)">
+            <div class="segment-option ${val === '1' ? 'active' : ''}" onclick="selectSegment('${pin}', '1', this)">
               <span style="font-size:16px;">🍃</span>
               <span>ECO</span>
             </div>
-            <div class="segment-option ${v4Val === '2' ? 'active' : ''}" onclick="selectSegment('V4', '2', this)">
+            <div class="segment-option ${val === '2' ? 'active' : ''}" onclick="selectSegment('${pin}', '2', this)">
               <span style="font-size:16px;">🖐️</span>
               <span>MANUAL</span>
             </div>
-            <div class="segment-option ${v4Val === '3' ? 'active' : ''}" onclick="selectSegment('V4', '3', this)">
+            <div class="segment-option ${val === '3' ? 'active' : ''}" onclick="selectSegment('${pin}', '3', this)">
               <span style="font-size:16px;">🚀</span>
               <span>BOOST</span>
             </div>
           </div>
-        </div>
-
-        <!-- WIDGET 5: 2-AXIS JOYSTICK (APK: JoystickView) -->
-        <div class="widget-tile col-span-2" data-category="controls">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">2-Axis Analog Thumbstick</span>
-            <span class="tile-pin-tag">V8 (X) • V9 (Y)</span>
-          </div>
+        `;
+      } else if (type === 'JOYSTICK') {
+        category = 'controls';
+        isWide = true;
+        bodyHtml = `
           <div class="joystick-container">
             <div class="joystick-base" id="joystick-pad">
               <div class="joystick-thumb" id="joystick-knob"></div>
@@ -1669,28 +1680,85 @@
             <div class="joystick-readout">
               <span>X: <strong id="joy-x-val" style="color:#fff;">0</strong></span>
               <span>Y: <strong id="joy-y-val" style="color:#fff;">0</strong></span>
-              <span style="color:var(--blynk-lime);">● Live TCP Gateway</span>
+              <span style="color:var(--blynk-lime);">● SQLite Gateway</span>
             </div>
           </div>
-        </div>
-
-        <!-- WIDGET 6: SUPERCHART (APK: SuperChart & LegendsLayout) -->
-        <div class="widget-tile col-span-2" data-category="chart">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <div style="display:flex;align-items:center;gap:6px;">
-              <span class="tile-label">SuperChart Telemetry</span>
-              <span style="font-size:10px;padding:2px 6px;border-radius:4px;background:rgba(4,192,248,0.2);color:var(--blynk-cyan);font-weight:700;">Live SQLite</span>
-            </div>
-            <div class="chart-period-bar">
-              <button class="chart-period-btn active" onclick="setChartPeriod('1h', this)">1h</button>
-              <button class="chart-period-btn" onclick="setChartPeriod('6h', this)">6h</button>
-              <button class="chart-period-btn" onclick="setChartPeriod('1d', this)">1d</button>
-              <button class="chart-period-btn" onclick="setChartPeriod('1w', this)">1w</button>
+        `;
+      } else if (type === 'ENHANCED_GAUGE') {
+        category = 'gauges';
+        const num = Math.min(Math.max(parseFloat(val) || 0, 0), 100);
+        const strokeOffset = 217 - (num / 100) * 217;
+        bodyHtml = `
+          <div class="enhanced-gauge-wrap">
+            <svg class="enhanced-gauge-svg" viewBox="0 0 120 120">
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(16,241,127,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="0" stroke-linecap="round" />
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,170,0,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-75" stroke-linecap="round" />
+              <circle cx="60" cy="60" r="46" fill="none" stroke="rgba(255,59,48,0.25)" stroke-width="8" stroke-dasharray="72 217" stroke-dashoffset="-150" stroke-linecap="round" />
+              <circle id="enhanced-gauge-active" cx="60" cy="60" r="46" fill="none" stroke="var(--blynk-lime)" stroke-width="9" stroke-dasharray="217 217" stroke-dashoffset="${strokeOffset}" stroke-linecap="round" style="transition: stroke-dashoffset 0.5s ease;" />
+            </svg>
+            <div class="radial-text-stack" style="margin-top:-20px;">
+              <span class="gauge-num" id="gauge-val-${pin.toLowerCase()}">${val}</span>
+              <span class="gauge-unit">${dsInfo.units || '°C'} • Enhanced</span>
             </div>
           </div>
+        `;
+      } else if (type === 'GAUGE' || type === 'RADIAL_GAUGE') {
+        category = 'gauges';
+        const num = Math.min(Math.max(parseFloat(val) || 0, 0), 100);
+        const strokeOffset = 251.2 - (num / 100) * 200;
+        bodyHtml = `
+          <div class="radial-gauge-wrap">
+            <svg class="radial-gauge-svg" viewBox="0 0 100 100">
+              <circle class="gauge-bg-circle" cx="50" cy="50" r="40" />
+              <circle id="gauge-circle-${pin.toLowerCase()}" class="gauge-progress-circle" cx="50" cy="50" r="40" style="stroke-dashoffset:${strokeOffset}; stroke:${w.color || 'var(--blynk-green)'};" />
+            </svg>
+            <div class="radial-text-stack">
+              <span class="gauge-num" id="gauge-val-${pin.toLowerCase()}">${val}</span>
+              <span class="gauge-unit">${dsInfo.units || 'Units'}</span>
+            </div>
+          </div>
+        `;
+      } else if (type === 'VALUE' || type === 'VALUE_DISPLAY' || type === 'NUMBER_INPUT') {
+        category = 'gauges';
+        bodyHtml = `
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:14px 0;">
+            <div style="font-size:28px;font-weight:900;color:var(--blynk-lime);font-family:'JetBrains Mono',monospace;" id="val-display-${pin.toLowerCase()}">
+              ${val} <span style="font-size:14px;color:var(--text-muted);font-weight:600;">${dsInfo.units || ''}</span>
+            </div>
+            <div style="font-size:11px;color:var(--text-muted);margin-top:4px;">Stream ${pin}</div>
+          </div>
+        `;
+      } else if (type === 'LCD') {
+        category = 'gauges';
+        isWide = true;
+        bodyHtml = `
+          <div class="lcd-retro-screen" id="dash-lcd-matrix">
+            <div>AXON IoT : RUNNING</div>
+            <div>PIN ${pin} : ${val} ${dsInfo.units || ''}</div>
+          </div>
+        `;
+      } else if (type === 'LED') {
+        category = 'gauges';
+        const isOn = val === '1';
+        bodyHtml = `
+          <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;gap:10px;">
+            <div style="width:36px;height:36px;border-radius:50%;background:${isOn ? 'var(--blynk-red)' : '#222'};box-shadow:${isOn ? '0 0 18px rgba(255,59,48,0.7)' : 'none'};border:2px solid ${isOn ? '#ff6961' : '#444'};transition:all 0.3s ease;"></div>
+            <span style="font-size:11.5px;font-weight:700;color:${isOn ? 'var(--blynk-red)' : 'var(--text-muted)'};">${isOn ? 'ALARM ACTIVE' : 'NORMAL'}</span>
+          </div>
+        `;
+      } else if (type === 'SUPERGRAPH' || type === 'SUPERCHART') {
+        category = 'chart';
+        isWide = true;
+        bodyHtml = `
           <div class="superchart-card">
-            <div class="chart-canvas-box" id="superchart-canvas-container">
+            <div style="display:flex;justify-content:flex-end;margin-bottom:6px;">
+              <div class="chart-period-bar">
+                <button class="chart-period-btn active" onclick="setChartPeriod('1h', this)">1h</button>
+                <button class="chart-period-btn" onclick="setChartPeriod('6h', this)">6h</button>
+                <button class="chart-period-btn" onclick="setChartPeriod('1d', this)">1d</button>
+              </div>
+            </div>
+            <div class="chart-canvas-box">
               <svg id="superchart-svg" width="100%" height="100%" viewBox="0 0 320 110" preserveAspectRatio="none">
                 <defs>
                   <linearGradient id="chart-grad" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -1702,67 +1770,105 @@
                 <path id="superchart-line" d="" fill="none" stroke="#04C0F8" stroke-width="2.5" stroke-linecap="round" />
               </svg>
             </div>
-            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-muted);">
-              <span>Stream: <strong style="color:var(--blynk-cyan);">V2 (Temp)</strong></span>
-              <span id="superchart-latest-pt">Latest: ${v2Val}°C</span>
+            <div style="display:flex;justify-content:space-between;align-items:center;font-size:11px;color:var(--text-muted);margin-top:4px;">
+              <span>Stream: <strong style="color:var(--blynk-cyan);">${pin}</strong></span>
+              <span id="superchart-latest-pt">Latest: ${val}</span>
             </div>
           </div>
-        </div>
-
-        <!-- WIDGET 7: 16x2 LCD MATRIX (APK: LCDView) -->
-        <div class="widget-tile col-span-2" data-category="gauges">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">16x2 Character LCD</span>
-            <span class="tile-pin-tag">V6</span>
-          </div>
-          <div class="lcd-retro-screen" id="dash-lcd-matrix">
-            <div>AXON CORE : ONLINE</div>
-            <div>TEMP: ${v2Val}C  PWM:${v1Val}</div>
-          </div>
-        </div>
-
-        <!-- WIDGET 8: ZERGBA NEOPIXEL COLOR PALETTE -->
-        <div class="widget-tile col-span-2" data-category="controls">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">ZeRGBa NeoPixel Palette</span>
-            <span class="tile-pin-tag">V10</span>
-          </div>
-          <div class="color-swatch-row">
-            <div class="swatch-dot" style="background:#ff0044;" onclick="writeColor('V10', '#ff0044')"></div>
-            <div class="swatch-dot" style="background:#ffaa00;" onclick="writeColor('V10', '#ffaa00')"></div>
-            <div class="swatch-dot" style="background:#10f17f;" onclick="writeColor('V10', '#10f17f')"></div>
-            <div class="swatch-dot" style="background:#00e5ff;" onclick="writeColor('V10', '#00e5ff')"></div>
-            <div class="swatch-dot" style="background:#0375de;" onclick="writeColor('V10', '#0375de')"></div>
-            <div class="swatch-dot" style="background:#b026ff;" onclick="writeColor('V10', '#b026ff')"></div>
-            <div class="swatch-dot" style="background:#ffffff;" onclick="writeColor('V10', '#ffffff')"></div>
-          </div>
-        </div>
-
-        <!-- WIDGET 9: INTERACTIVE TERMINAL CLI (APK: TerminalTextView & TerminalEditText) -->
-        <div class="widget-tile col-span-2" data-category="terminal">
-          <div class="tile-remove-badge" onclick="removeTile(this)">✕</div>
-          <div class="tile-top">
-            <span class="tile-label">Interactive Terminal CLI</span>
-            <span class="tile-pin-tag">V7</span>
-          </div>
+        `;
+      } else if (type === 'TERMINAL') {
+        category = 'terminal';
+        isWide = true;
+        bodyHtml = `
           <div class="dark-console" id="mobile-terminal">
-            [SYS] ESP32 Core Online (TCP:8080)<br/>
-            [NET] WebSocket Hub Connected to SQLite<br/>
-            [APP] Ready for bidirectional actuation<br/>
+            [SYS] Axon Core Initialized (SQLite)<br/>
+            [NET] Hardware Gateway Active (Port 8080)<br/>
+            [STREAM] Pin ${pin} current value: ${val}<br/>
             [CLI] Type 'help' for available commands
           </div>
           <div class="terminal-command-row">
             <input type="text" id="terminal-input" class="terminal-input-field" placeholder="set V0 1, read V2, ping..." onkeydown="if(event.key==='Enter') sendTerminalCmd()" />
             <button class="terminal-send-btn" onclick="sendTerminalCmd()">Send</button>
           </div>
+        `;
+      } else if (type === 'RGB' || type === 'RGB_LIGHT') {
+        category = 'controls';
+        isWide = true;
+        bodyHtml = `
+          <div class="color-swatch-row">
+            <div class="swatch-dot" style="background:#ff0044;" onclick="writeColor('${pin}', '#ff0044')"></div>
+            <div class="swatch-dot" style="background:#ffaa00;" onclick="writeColor('${pin}', '#ffaa00')"></div>
+            <div class="swatch-dot" style="background:#10f17f;" onclick="writeColor('${pin}', '#10f17f')"></div>
+            <div class="swatch-dot" style="background:#00e5ff;" onclick="writeColor('${pin}', '#00e5ff')"></div>
+            <div class="swatch-dot" style="background:#0375de;" onclick="writeColor('${pin}', '#0375de')"></div>
+            <div class="swatch-dot" style="background:#b026ff;" onclick="writeColor('${pin}', '#b026ff')"></div>
+            <div class="swatch-dot" style="background:#ffffff;" onclick="writeColor('${pin}', '#ffffff')"></div>
+          </div>
+        `;
+      } else if (type === 'MAP') {
+        category = 'gauges';
+        isWide = true;
+        bodyHtml = `
+          <div style="background:#0b111e;border-radius:12px;padding:16px;text-align:center;">
+            <div style="font-size:24px;margin-bottom:6px;">📍</div>
+            <div style="font-size:12px;font-weight:700;color:#fff;">GPS Fleet Tracker</div>
+            <div style="font-size:11px;color:var(--text-muted);font-family:'JetBrains Mono',monospace;margin-top:4px;">Lat: 40.7128 • Lon: -74.0060</div>
+          </div>
+        `;
+      } else {
+        bodyHtml = `
+          <div style="text-align:center;padding:16px 0;color:var(--blynk-lime);font-size:13px;font-weight:700;">
+            ${type}: ${val}
+          </div>
+        `;
+      }
+
+      return `
+        <div class="widget-tile ${isWide ? 'col-span-2' : ''}" data-category="${category}" id="widget-tile-${widgetId}">
+          <div class="tile-remove-badge" onclick="removeTile(${widgetId}, this)">✕</div>
+          <div class="tile-top">
+            <span class="tile-label">${label}</span>
+            <span class="tile-pin-tag">${pin}</span>
+          </div>
+          ${bodyHtml}
         </div>
       `;
+    }
 
-      // Initialize dynamic interactive components
-      setupJoystick();
-      fetchAndDrawSuperChart();
+    function renderDashboardWidgets(data) {
+      const grid = document.getElementById('device-widgets-grid');
+      const ds = data.datastreams || {};
+      const widgets = data.widgets || [];
+
+      // No mock auto-created widgets: strictly render widgets present in SQLite database
+      if (!widgets.length) {
+        grid.innerHTML = `
+          <div style="grid-column:span 2;text-align:center;padding:50px 20px;background:var(--bg-card);border:1px dashed var(--border-subtle);border-radius:20px;">
+            <div style="font-size:40px;margin-bottom:12px;">📱</div>
+            <div style="font-size:16px;font-weight:800;color:#fff;">Dashboard is Empty</div>
+            <div style="font-size:12px;color:var(--text-muted);max-width:260px;margin:8px auto 20px;line-height:1.5;">
+              No widgets have been added to this device yet. Tap the ✏️ wrench or '+' button to open the Widget Box and design your dashboard.
+            </div>
+            <button onclick="toggleEditMode(); document.getElementById('dock-fab').click();" style="padding:10px 20px;background:var(--blynk-lime);border:none;border-radius:12px;color:#000;font-weight:800;font-size:12px;cursor:pointer;">
+              + Add Widget from Widget Box
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      grid.innerHTML = widgets.map(w => renderWidgetHtml(w, ds)).join('');
+
+      // Initialize dynamic interactive components if they exist on the canvas
+      if (widgets.some(w => (w.widgetType || '').toUpperCase() === 'JOYSTICK')) {
+        setupJoystick();
+      }
+      if (widgets.some(w => ['SUPERCHART', 'SUPERGRAPH'].includes((w.widgetType || '').toUpperCase()))) {
+        fetchAndDrawSuperChart();
+      }
+
+      // Re-apply active subtab filter
+      switchSubtab(currentSubtab);
     }
 
     function selectSegment(pin, val, el) {
@@ -1976,7 +2082,7 @@
       }
     }
 
-    async function removeTile(el, widgetId) {
+    async function removeTile(widgetId, el) {
       if (widgetId && activeDevId) {
         try {
           await fetch(`/api/v1/app/devices/${activeDevId}/widgets/${widgetId}`, { method: 'DELETE' });
@@ -2231,6 +2337,7 @@
     }
 
     document.addEventListener('DOMContentLoaded', () => {
+      loadUserProfile();
       startMobileWS();
       loadDevices();
     });
