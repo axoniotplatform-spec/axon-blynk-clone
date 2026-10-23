@@ -1,8 +1,10 @@
 import os
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from pathlib import Path
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, JSONResponse
+from starlette.middleware.base import BaseHTTPMiddleware
 from backend.database import engine, Base, SessionLocal
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
 from backend.api import devices, templates, automations, external, auth, mobile, platform_ops
@@ -22,11 +24,44 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[origin.strip() for origin in os.getenv("AXON_CORS_ORIGINS", "http://127.0.0.1:8000,http://localhost:8000").split(",") if origin.strip()],
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class ProductionAuthMiddleware(BaseHTTPMiddleware):
+    """Protect API routes when AXON_REQUIRE_AUTH=true.
+
+    External device-token routes and the auth endpoints remain public because
+    they are the protocol/API authentication boundaries themselves. The web
+    UI can run in local development mode, while production deployments must
+    explicitly enable this middleware and send bearer sessions.
+    """
+
+    async def dispatch(self, request: Request, call_next):
+        if os.getenv("AXON_REQUIRE_AUTH", "false").lower() not in {"1", "true", "yes"}:
+            return await call_next(request)
+        path = request.url.path
+        public = (
+            path.startswith("/api/v1/auth/")
+            or path.startswith("/external/api/")
+            or path.startswith("/static/")
+            or path in {"/", "/app", "/app.html", "/docs", "/openapi.json"}
+        )
+        if public or request.method == "OPTIONS":
+            return await call_next(request)
+        authorization = request.headers.get("authorization", "")
+        if not authorization.startswith("Bearer "):
+            return JSONResponse({"detail": "Authentication required"}, status_code=401)
+        token = authorization.removeprefix("Bearer ").strip()
+        if not token or token not in auth.SESSION_TOKENS:
+            return JSONResponse({"detail": "Invalid or expired session"}, status_code=401)
+        return await call_next(request)
+
+
+app.add_middleware(ProductionAuthMiddleware)
 
 # Include API routers
 app.include_router(devices.router)
@@ -41,7 +76,8 @@ app.include_router(platform_ops.router)
 @app.on_event("startup")
 async def on_startup():
     hardware_gateway.hub = hub
-    asyncio.create_task(hardware_gateway.start())
+    if hardware_gateway.server is None:
+        asyncio.create_task(hardware_gateway.start())
     print("[Axon Core] Blynk Hardware Protocol Gateway started on TCP port 8080.")
 
 
@@ -76,7 +112,7 @@ def seed_database():
             user = User(
                 org_id=org.id,
                 email="samblynkk@gmail.com",
-                password_hash="argon2_hash_placeholder",
+                password_hash=auth.hash_password(os.getenv("AXON_SEED_PASSWORD", "change-me")),
                 name="Sam",
                 role="Admin"
             )
@@ -100,7 +136,7 @@ def seed_database():
                 template_id=tmpl.id,
                 name="BLINKING LED",
                 auth_token="yhdHK6Vuj2F6X7CUnX-QQIpuEl9Yy_dk",
-                status="ONLINE",
+                status="OFFLINE",
                 firmware_version="1.0.0",
                 blynk_library_version="1.3.5",
                 heartbeat_interval=40
@@ -234,6 +270,29 @@ def seed_database():
             )
             db.add(w_term)
 
+            # Reverse-engineered mobile controls.  These are persisted fixture
+            # definitions, not browser-created widgets, so the mobile canvas
+            # remains a strict projection of SQLite.
+            db.add(DashboardWidget(
+                template_id=tmpl.id, widget_type="ICON_SEGMENTED", label="Operating Mode", pin="V3",
+                grid_x=0, grid_y=8, width=6, height=2,
+                settings={"options": ["AUTO", "ECO", "MANUAL", "BOOST"]}
+            ))
+            db.add(DashboardWidget(
+                template_id=tmpl.id, widget_type="LEVEL_SLIDER_SWITCH", label="Level Control", pin="V1",
+                grid_x=6, grid_y=8, width=6, height=2,
+                settings={"min": 0, "max": 255, "step": 5}
+            ))
+            db.add(DashboardWidget(
+                template_id=tmpl.id, widget_type="JOYSTICK", label="Directional Control", pin="V1",
+                grid_x=0, grid_y=10, width=6, height=4
+            ))
+            db.add(DashboardWidget(
+                template_id=tmpl.id, widget_type="ENHANCED_GAUGE", label="Enhanced Temperature", pin="V2",
+                grid_x=6, grid_y=10, width=6, height=4,
+                settings={"min": -20, "max": 100, "units": "C"}
+            ))
+
             db.commit()
             print("Axon IoT database seeded with full Blynk widget suite.")
 
@@ -269,14 +328,16 @@ def seed_database():
 # Re-seed if needed
 seed_database()
 
-# Serve static frontend files
-frontend_dir = r"C:\RE\axon_iot\frontend"
-if os.path.exists(frontend_dir):
-    app.mount("/static", StaticFiles(directory=frontend_dir), name="static")
+# Serve static frontend files from the repository by default.  A deployment may
+# override this with AXON_FRONTEND_DIR, but the checkout must work on Linux,
+# macOS, and Windows without a machine-specific absolute path.
+frontend_dir = Path(os.getenv("AXON_FRONTEND_DIR", Path(__file__).resolve().parent.parent / "frontend")).resolve()
+if frontend_dir.is_dir():
+    app.mount("/static", StaticFiles(directory=str(frontend_dir), html=False), name="static")
 
 @app.get("/")
 def serve_index():
-    index_file = os.path.join(frontend_dir, "index.html")
+    index_file = frontend_dir / "index.html"
     if os.path.exists(index_file):
         return FileResponse(index_file)
     return {"message": "Axon IoT Core API is running."}
@@ -284,7 +345,7 @@ def serve_index():
 @app.get("/app")
 @app.get("/app.html")
 def serve_mobile_app():
-    app_file = os.path.join(frontend_dir, "app.html")
+    app_file = frontend_dir / "app.html"
     if os.path.exists(app_file):
         return FileResponse(app_file)
     return {"message": "Mobile App UI is running."}

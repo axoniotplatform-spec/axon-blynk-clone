@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 from playwright.async_api import async_playwright
 
 async def run_full_suite():
@@ -61,7 +62,7 @@ async def run_full_suite():
         await page.wait_for_timeout(800)
 
         # Capture drawer screenshot
-        await page.screenshot(path=r'C:\Users\USER\.gemini\antigravity\brain\c0451ab2-5751-4d25-b592-1b96ca419043\blynk_apk_widget_drawer.png')
+        await page.screenshot(path=str(Path(__file__).resolve().parent / "test-artifacts" / "blynk_apk_widget_drawer.png"))
         print("   - Captured Widget Box Drawer screenshot")
 
         # Close drawer and capture full canvas
@@ -70,7 +71,7 @@ async def run_full_suite():
         await wrench.click()
         await page.wait_for_timeout(500)
         
-        await page.screenshot(path=r'C:\Users\USER\.gemini\antigravity\brain\c0451ab2-5751-4d25-b592-1b96ca419043\blynk_apk_dashboard_canvas.png')
+        await page.screenshot(path=str(Path(__file__).resolve().parent / "test-artifacts" / "blynk_apk_dashboard_canvas.png"))
         print("   - Captured Full Dashboard Canvas screenshot")
 
         print("Total Errors Recorded:", len(errors))

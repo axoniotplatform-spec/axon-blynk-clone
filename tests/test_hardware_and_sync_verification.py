@@ -5,9 +5,10 @@ import json
 import urllib.request
 import sys
 import os
+from pathlib import Path
 
 # Ensure axon_iot root is on sys.path
-sys.path.insert(0, r"C:\RE\axon_iot")
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from backend.database import SessionLocal
 from backend.models.entities import Device, Datastream
 
@@ -31,7 +32,7 @@ def test_http_routes():
     with urllib.request.urlopen(req_app) as resp:
         assert resp.status == 200
         app_html = resp.read().decode('utf-8')
-        assert "Blynk IoT Mobile App" in app_html
+        assert "device-widgets-grid" in app_html and "Blynk" in app_html
         print("[PASS] Mobile App HTTP 200 OK (/app loaded)")
 
     # 3. Users API

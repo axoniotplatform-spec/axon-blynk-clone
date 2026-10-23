@@ -1,4 +1,5 @@
 import asyncio
+from pathlib import Path
 from playwright.async_api import async_playwright
 from backend.database import SessionLocal
 from backend.models.entities import DashboardWidget, Device
@@ -89,7 +90,7 @@ async def run_verification():
         assert after_add_count == after_delete_count + 1, "Widget was not added to SQLite!"
 
         # Take screenshot of real database dashboard
-        screenshot_path = r'C:\Users\USER\.gemini\antigravity\brain\c0451ab2-5751-4d25-b592-1b96ca419043\real_db_no_mock_dashboard.png'
+        screenshot_path = str(Path(__file__).resolve().parent / "test-artifacts" / "real_db_no_mock_dashboard.png")
         await page.screenshot(path=screenshot_path)
         print(f"8. Verification screenshot saved to {screenshot_path}")
 

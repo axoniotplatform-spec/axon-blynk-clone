@@ -63,8 +63,10 @@ class BlynkHardwareGateway:
                     try:
                         device = db.query(Device).filter(Device.auth_token == token).first()
                         if device:
+                            now = datetime.utcnow()
                             device.status = "ONLINE"
-                            device.last_heartbeat = datetime.utcnow()
+                            device.last_connected_at = now
+                            device.last_reported_at = now
                             db.commit()
 
                             device_token = token
@@ -98,12 +100,26 @@ class BlynkHardwareGateway:
                         db.close()
 
                 elif cmd == BLYNK_CMD_PING:
+                    if not device_token or self.connected_devices.get(device_token) is not writer:
+                        resp = struct.pack(">BHH", BLYNK_CMD_RESPONSE, msg_id, BLYNK_STATUS_INVALID_TOKEN)
+                        writer.write(resp)
+                        await writer.drain()
+                        continue
+                    db = SessionLocal()
+                    try:
+                        device = db.query(Device).filter(Device.auth_token == device_token).first()
+                        if device:
+                            device.last_reported_at = datetime.utcnow()
+                            device.status = "ONLINE"
+                            db.commit()
+                    finally:
+                        db.close()
                     resp = struct.pack(">BHH", BLYNK_CMD_RESPONSE, msg_id, BLYNK_STATUS_SUCCESS)
                     writer.write(resp)
                     await writer.drain()
 
                 elif cmd == BLYNK_CMD_HARDWARE:
-                    if not device_token or device_token not in self.device_info:
+                    if not device_token or device_token not in self.device_info or self.connected_devices.get(device_token) is not writer:
                         continue
 
                     d_info = self.device_info[device_token]
@@ -122,19 +138,21 @@ class BlynkHardwareGateway:
                             ).first()
                             if ds:
                                 ds.current_value = val_str
-                                db.commit()
-
-                                # Record time series
                                 try:
                                     t_val = float(val_str)
-                                    db.add(TelemetryTimeSeries(
-                                        device_id=d_info["id"],
-                                        pin=pin_name,
-                                        value=t_val
-                                    ))
-                                    db.commit()
-                                except Exception:
-                                    pass
+                                except ValueError:
+                                    t_val = None
+                                db.add(TelemetryTimeSeries(
+                                    device_id=d_info["id"],
+                                    pin=pin_name,
+                                    value=val_str,
+                                    numeric_value=t_val,
+                                    timestamp=datetime.utcnow()
+                                ))
+                                device = db.query(Device).filter(Device.id == d_info["id"]).first()
+                                if device:
+                                    device.last_reported_at = datetime.utcnow()
+                                db.commit()
 
                                 # Broadcast to Web Console UI in real time
                                 if self.hub:
@@ -148,6 +166,22 @@ class BlynkHardwareGateway:
                                 evaluate_rules_for_device(db, d_info["id"], pin_name, val_str, hub=self.hub)
                         finally:
                             db.close()
+                    elif len(parts) >= 2 and parts[0] == b'vr':
+                        pin_num = parts[1].decode('ascii', errors='ignore')
+                        pin_name = f"V{pin_num}"
+                        db = SessionLocal()
+                        try:
+                            ds = db.query(Datastream).filter(
+                                Datastream.template_id == d_info["template_id"],
+                                Datastream.pin == pin_name
+                            ).first()
+                            value = ds.current_value if ds else ""
+                        finally:
+                            db.close()
+                        body = f"vr\0{pin_num}\0{value}".encode("utf-8")
+                        resp = struct.pack(">BHH", BLYNK_CMD_HARDWARE, msg_id, len(body)) + body
+                        writer.write(resp)
+                        await writer.drain()
 
                 elif cmd == BLYNK_CMD_INTERNAL:
                     # Sync RTC / epoch time
@@ -162,8 +196,9 @@ class BlynkHardwareGateway:
         except Exception as e:
             logger.error(f"[HardwareGateway] Protocol error: {e}")
         finally:
-            if device_token and device_token in self.connected_devices:
+            if device_token and self.connected_devices.get(device_token) is writer:
                 del self.connected_devices[device_token]
+                self.device_info.pop(device_token, None)
                 db = SessionLocal()
                 try:
                     dev = db.query(Device).filter(Device.auth_token == device_token).first()

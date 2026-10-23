@@ -7,6 +7,7 @@ from pydantic import BaseModel
 from backend.database import get_db
 from backend.models.entities import Device, Datastream, DashboardWidget, DeviceTemplate, TelemetryTimeSeries
 from backend.websocket_hub import hub
+from backend.security import expose_device_token
 
 class DeviceCreate(BaseModel):
     name: str
@@ -31,11 +32,11 @@ def create_device(payload: DeviceCreate, db: Session = Depends(get_db)):
         template_id=tmpl.id,
         name=payload.name,
         auth_token=token,
-        status="ONLINE",
+        status="OFFLINE",
         firmware_version="1.0.0",
         blynk_library_version="1.3.5",
-        last_reported_at=datetime.utcnow(),
-        last_connected_at=datetime.utcnow()
+        last_reported_at=None,
+        last_connected_at=None
     )
     db.add(dev)
     db.commit()
@@ -43,7 +44,7 @@ def create_device(payload: DeviceCreate, db: Session = Depends(get_db)):
     return {
         "id": dev.id,
         "name": dev.name,
-        "authToken": dev.auth_token,
+        "authToken": expose_device_token(dev.auth_token),
         "status": dev.status,
         "templateId": tmpl.template_id,
         "templateName": tmpl.name,
@@ -59,7 +60,7 @@ def list_devices(db: Session = Depends(get_db)):
         {
             "id": d.id,
             "name": d.name,
-            "authToken": d.auth_token,
+            "authToken": expose_device_token(d.auth_token),
             "status": d.status,
             "templateId": d.template.template_id if d.template else None,
             "templateName": d.template.name if d.template else None,
@@ -79,7 +80,7 @@ def get_device(device_id: int, db: Session = Depends(get_db)):
     return {
         "id": d.id,
         "name": d.name,
-        "authToken": d.auth_token,
+        "authToken": expose_device_token(d.auth_token),
         "status": d.status,
         "templateId": d.template.template_id if d.template else None,
         "templateName": d.template.name if d.template else None,

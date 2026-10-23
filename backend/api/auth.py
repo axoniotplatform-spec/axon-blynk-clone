@@ -4,6 +4,8 @@ from typing import List, Optional
 from pydantic import BaseModel, EmailStr
 from datetime import datetime
 import hashlib
+import hmac
+import base64
 import secrets
 from backend.database import get_db
 from backend.models.entities import User, Organization
@@ -13,7 +15,25 @@ router = APIRouter(prefix="/api/v1/auth", tags=["auth"])
 users_router = APIRouter(prefix="/api/v1/users", tags=["users"])
 
 def hash_password(password: str) -> str:
-    return hashlib.sha256(password.encode("utf-8")).hexdigest()
+    salt = secrets.token_bytes(16)
+    digest = hashlib.scrypt(password.encode("utf-8"), salt=salt, n=2**14, r=8, p=1)
+    return "scrypt$1$%s$%s" % (
+        base64.urlsafe_b64encode(salt).decode("ascii"),
+        base64.urlsafe_b64encode(digest).decode("ascii"),
+    )
+
+
+def verify_password(password: str, encoded: str) -> bool:
+    try:
+        algorithm, version, salt_b64, digest_b64 = encoded.split("$", 3)
+        if algorithm != "scrypt" or version != "1":
+            return False
+        salt = base64.urlsafe_b64decode(salt_b64.encode("ascii"))
+        expected = base64.urlsafe_b64decode(digest_b64.encode("ascii"))
+        actual = hashlib.scrypt(password.encode("utf-8"), salt=salt, n=2**14, r=8, p=1)
+        return hmac.compare_digest(actual, expected)
+    except (ValueError, TypeError):
+        return False
 
 class RegisterRequest(BaseModel):
     name: str
@@ -102,11 +122,9 @@ async def register(payload: RegisterRequest, db: Session = Depends(get_db)):
 @router.post("/login")
 def login(payload: LoginRequest, db: Session = Depends(get_db)):
     email_clean = payload.email.strip().lower()
-    pw_hash = hash_password(payload.password)
     user = db.query(User).filter(User.email == email_clean).first()
 
-    # Simple verify or fallback for test users
-    if not user or (user.password_hash != pw_hash and user.password_hash != "argon2_hash_placeholder"):
+    if not user or not verify_password(payload.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid email or password")
 
     token = f"axon_tok_{secrets.token_urlsafe(32)}"
@@ -142,16 +160,7 @@ def get_current_user(authorization: Optional[str] = Header(None), db: Session = 
                     "orgName": user.organization.name if user.organization else "My Organization"
                 }
 
-    # Default fallback to primary admin user
-    user = db.query(User).first()
-    return {
-        "id": user.id if user else 1,
-        "name": user.name if user else "Sam",
-        "email": user.email if user else "samblynkk@gmail.com",
-        "role": user.role if user else "Admin",
-        "orgId": user.org_id if user else 1,
-        "orgName": user.organization.name if user and user.organization else "My organization - 2257TU"
-    }
+    raise HTTPException(status_code=401, detail="Authentication required")
 
 # Team members / Users list endpoint (shared across Web and App)
 @users_router.get("")

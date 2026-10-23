@@ -1,9 +1,10 @@
 import asyncio
 import os
 import sys
+from pathlib import Path
 from playwright.async_api import async_playwright
 
-ARTIFACTS_DIR = r"C:\Users\USER\.gemini\antigravity\brain\c0451ab2-5751-4d25-b592-1b96ca419043"
+ARTIFACTS_DIR = str(Path(__file__).resolve().parents[1] / "test-artifacts")
 
 async def run_verification():
     print("Starting Playwright verification of all 13 tabs with real SQLite data...")

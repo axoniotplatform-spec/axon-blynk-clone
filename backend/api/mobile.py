@@ -6,6 +6,7 @@ from backend.models.entities import Device, Datastream, DashboardWidget, Telemet
 from backend.websocket_hub import hub
 from backend.rules_engine import evaluate_rules_for_device
 from backend.hardware_gateway import hardware_gateway
+from backend.security import expose_device_token
 
 router = APIRouter(prefix="/api/v1/app", tags=["mobile-app"])
 
@@ -38,7 +39,7 @@ def get_mobile_devices(db: Session = Depends(get_db)):
             "status": real_status,
             "hardware": d.template.hardware_mcu if d.template else "ESP32",
             "connectionType": d.template.connection_type if d.template else "WI_FI",
-            "authToken": d.auth_token,
+            "authToken": expose_device_token(d.auth_token),
             "firmwareVersion": d.firmware_version,
             "lastReportedAt": d.last_reported_at.isoformat() if d.last_reported_at else None,
             "lastConnectedAt": d.last_connected_at.isoformat() if d.last_connected_at else None,
@@ -98,7 +99,7 @@ def get_mobile_dashboard(device_id: int, db: Session = Depends(get_db)):
             "name": d.name,
             "status": real_status,
             "hardware": d.template.hardware_mcu if d.template else "ESP32",
-            "authToken": d.auth_token,
+            "authToken": expose_device_token(d.auth_token),
             "lastReportedAt": d.last_reported_at.isoformat() if d.last_reported_at else None,
             "lastConnectedAt": d.last_connected_at.isoformat() if d.last_connected_at else None
         },
@@ -115,6 +116,8 @@ async def write_mobile_pin(device_id: int, payload: dict = Body(...), db: Sessio
 
     stream = payload.get("stream", "").upper()
     val = str(payload.get("value", ""))
+    if not stream:
+        raise HTTPException(status_code=400, detail="stream is required")
 
     ds = db.query(Datastream).filter(
         Datastream.template_id == d.template_id,
@@ -139,6 +142,7 @@ async def write_mobile_pin(device_id: int, payload: dict = Body(...), db: Sessio
         db.add(point)
         d.last_reported_at = datetime.utcnow()
         db.commit()
+        hardware_forwarded = await hardware_gateway.send_pin_write(d.auth_token, stream, val)
 
         # 1. Trigger automations engine
         try:
@@ -155,7 +159,10 @@ async def write_mobile_pin(device_id: int, payload: dict = Body(...), db: Sessio
             "timestamp": datetime.utcnow().isoformat()
         })
 
-    return {"status": "ok", "pin": stream, "value": val}
+    else:
+        raise HTTPException(status_code=404, detail=f"Pin {stream} not found on device")
+
+    return {"status": "ok", "pin": stream, "value": val, "hardwareForwarded": hardware_forwarded}
 
 @router.get("/devices/{device_id}/telemetry")
 def get_device_telemetry(device_id: int, pin: str = "V2", limit: int = 50, db: Session = Depends(get_db)):
@@ -188,6 +195,7 @@ async def batch_write_pins(device_id: int, payload: list = Body(...), db: Sessio
         raise HTTPException(status_code=404, detail="Device not found")
 
     updated = []
+    hardware_forwarded = []
     for item in payload:
         stream = str(item.get("stream", "")).upper()
         val = str(item.get("value", ""))
@@ -213,6 +221,8 @@ async def batch_write_pins(device_id: int, payload: list = Body(...), db: Sessio
             )
             db.add(point)
             updated.append({"stream": stream, "value": val})
+            if await hardware_gateway.send_pin_write(d.auth_token, stream, val):
+                hardware_forwarded.append(stream)
 
             await hub.broadcast_event("onValueUpdated", {
                 "deviceId": device_id,
@@ -224,7 +234,7 @@ async def batch_write_pins(device_id: int, payload: list = Body(...), db: Sessio
 
     d.last_reported_at = datetime.utcnow()
     db.commit()
-    return {"status": "ok", "updated": updated}
+    return {"status": "ok", "updated": updated, "hardwareForwarded": hardware_forwarded}
 
 @router.post("/devices/{device_id}/widgets")
 def add_dashboard_widget(device_id: int, payload: dict = Body(...), db: Session = Depends(get_db)):
@@ -268,10 +278,15 @@ def add_dashboard_widget(device_id: int, payload: dict = Body(...), db: Session 
 @router.delete("/devices/{device_id}/widgets/{widget_id}")
 def delete_dashboard_widget(device_id: int, widget_id: int, db: Session = Depends(get_db)):
     """Delete a widget from the template layout"""
-    w = db.query(DashboardWidget).filter(DashboardWidget.id == widget_id).first()
+    d = db.query(Device).filter(Device.id == device_id).first()
+    if not d or not d.template_id:
+        raise HTTPException(status_code=404, detail="Device not found")
+    w = db.query(DashboardWidget).filter(
+        DashboardWidget.id == widget_id,
+        DashboardWidget.template_id == d.template_id,
+    ).first()
     if not w:
         raise HTTPException(status_code=404, detail="Widget not found")
     db.delete(w)
     db.commit()
     return {"status": "ok", "deletedWidgetId": widget_id}
-

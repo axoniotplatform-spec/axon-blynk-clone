@@ -12,6 +12,7 @@ from backend.models.entities import (
     Device, Datastream, DeviceTemplate, Organization, TelemetryTimeSeries
 )
 from backend.websocket_hub import hub
+from backend.security import expose_device_token
 
 router = APIRouter(prefix="/api/v1", tags=["platform-operations"])
 
@@ -111,7 +112,7 @@ async def take_snapshot(payload: dict = Body(default={}), db: Session = Depends(
     
     state_dump = {
         "timestamp": datetime.utcnow().isoformat(),
-        "devices": [{"id": d.id, "name": d.name, "token": d.auth_token, "status": d.status} for d in devices],
+        "devices": [{"id": d.id, "name": d.name, "status": d.status} for d in devices],
         "datastreams": [{"pin": ds.pin, "val": ds.current_value} for ds in datastreams]
     }
     
@@ -288,7 +289,7 @@ def get_static_tokens(db: Session = Depends(get_db)):
         db.add(t1)
         db.commit()
         toks = [t1]
-    return [{"id": t.id, "tokenId": t.token_id, "tokenValue": t.token_value, "expiration": t.expiration, "isActive": t.is_active} for t in toks]
+    return [{"id": t.id, "tokenId": t.token_id, "tokenValue": expose_device_token(t.token_value), "expiration": t.expiration, "isActive": t.is_active} for t in toks]
 
 @router.post("/devzone/static-tokens")
 def create_static_token(payload: dict = Body(...), db: Session = Depends(get_db)):

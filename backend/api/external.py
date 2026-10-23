@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
 from sqlalchemy.orm import Session
 from typing import Optional
+from datetime import datetime
 from backend.database import get_db
 from backend.models.entities import Device, Datastream, TelemetryTimeSeries
 from backend.rules_engine import evaluate_rules_for_device
@@ -35,16 +36,18 @@ async def blynk_external_update(request: Request, token: str, db: Session = Depe
 
         if ds:
             ds.current_value = str(v)
-            db.commit()
-
-            # Record time series point
             try:
                 num_val = float(v)
-                t_pt = TelemetryTimeSeries(device_id=device.id, pin=pin_name, value=num_val)
-                db.add(t_pt)
-                db.commit()
-            except Exception:
-                pass
+            except ValueError:
+                num_val = None
+            db.add(TelemetryTimeSeries(
+                device_id=device.id,
+                pin=pin_name,
+                value=str(v),
+                numeric_value=num_val,
+                timestamp=datetime.utcnow(),
+            ))
+            device.last_reported_at = datetime.utcnow()
 
             updated_streams[pin_name] = v
 
@@ -57,7 +60,10 @@ async def blynk_external_update(request: Request, token: str, db: Session = Depe
 
             # Evaluate automation rules
             evaluate_rules_for_device(db, device.id, pin_name, v, hub=hub)
+        elif k.lower() != "token":
+            raise HTTPException(status_code=400, detail=f"Pin {pin_name} not found")
 
+    db.commit()
     return Response(content="OK", media_type="text/plain")
 
 @router.get("/get")
@@ -116,7 +122,7 @@ async def blynk_is_hardware_connected(token: str, db: Session = Depends(get_db))
     if not device:
         return Response(content="false", media_type="text/plain")
 
-    is_online = (device.auth_token in hardware_gateway.connected_devices) or (device.status == "ONLINE")
+    is_online = device.auth_token in hardware_gateway.connected_devices
     return Response(content="true" if is_online else "false", media_type="text/plain")
 
 @router.get("/batch/update")
