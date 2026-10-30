@@ -1563,6 +1563,10 @@ function decodeUplink(bytes) {
 
     document.addEventListener('DOMContentLoaded', () => {
       loadDevices();
+      if (window.location.hash) {
+        const h = window.location.hash.replace('#', '');
+        setTimeout(() => switchTab(h), 300);
+      }
     });
 
     function filterDeviceTable() {
