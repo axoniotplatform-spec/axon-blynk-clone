@@ -3,9 +3,13 @@
 
 import os
 import sys
+import json
+import time
 import shutil
 import socket
+import datetime
 import subprocess
+import urllib.request
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent
@@ -30,10 +34,35 @@ env["PYTHONPATH"] = str(REPO)
 env["PYTHONIOENCODING"] = "utf-8"
 env["PYTHONUTF8"] = "1"
 
-def check_port(host, port, timeout=2.0):
+def check_tcp(host, port, timeout=2.0):
     try:
         with socket.create_connection((host, port), timeout=timeout):
             return True
+    except Exception:
+        return False
+
+def check_http(url, timeout=3.0):
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as resp:
+            return resp.status == 200
+    except Exception:
+        return False
+
+def check_ws_upgrade(host, port, timeout=3.0):
+    try:
+        s = socket.create_connection((host, port), timeout=timeout)
+        req = (
+            f"GET / HTTP/1.1\r\n"
+            f"Host: {host}:{port}\r\n"
+            f"Upgrade: websocket\r\n"
+            f"Connection: Upgrade\r\n"
+            f"Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==\r\n"
+            f"Sec-WebSocket-Version: 13\r\n\r\n"
+        )
+        s.sendall(req.encode("ascii"))
+        res = s.recv(1024).decode("latin1", errors="ignore")
+        s.close()
+        return "101 Switching Protocols" in res
     except Exception:
         return False
 
@@ -52,21 +81,23 @@ def run_step(title, cmd):
 def main():
     print("=" * 80)
     print("AXON IOT / BLYNK CLONE — FULL AUTOMATED VERIFICATION SUITE")
-    print(f"Target Repo: {REPO}")
+    print(f"Target Repo : {REPO}")
+    print(f"Python Path : {PYTHON}")
+    print(f"Database    : {env['DATABASE_URL']}")
     print("=" * 80)
 
     results = {}
 
-    # 1. Port Reachability
-    print("\n[STEP 1/5] Checking Required Services & Daemon Ports...")
-    p8000 = check_port("127.0.0.1", 8000)
-    p8080 = check_port("127.0.0.1", 8080)
-    p9011 = check_port("127.0.0.1", 9011)
+    # 1. Port & Protocol Reachability (HTTP, TCP)
+    print("\n[STEP 1/5] Verifying Services, HTTP Endpoints & Protocol Sockets...")
+    p8000 = check_http("http://127.0.0.1:8000/docs")
+    p8080 = check_tcp("127.0.0.1", 8080)
+    p9011 = check_tcp("127.0.0.1", 9011)
 
-    print(f" - Port 8000 (Axon Core HTTP API)   : {'PASS' if p8000 else 'FAIL'}")
-    print(f" - Port 8080 (Blynk TCP Gateway)    : {'PASS' if p8080 else 'FAIL'}")
-    print(f" - Port 9011 (Wokwi Private Gateway): {'PASS' if p9011 else 'FAIL'}")
-    results["Port Reachability (8000, 8080, 9011)"] = p8000 and p8080 and p9011
+    print(f" - Port 8000 (Axon Core HTTP API /docs) : {'PASS (200 OK)' if p8000 else 'FAIL'}")
+    print(f" - Port 8080 (Blynk TCP Hardware Socket): {'PASS (Connected)' if p8080 else 'FAIL'}")
+    print(f" - Port 9011 (Wokwi Gateway TCP Socket) : {'PASS (Connected)' if p9011 else 'FAIL'}")
+    results["Port & Protocol Reachability (8000 HTTP, 8080 TCP, 9011 TCP)"] = p8000 and p8080 and p9011
 
     # 2. Hardware TCP Protocol & Sync Test
     script_sync = REPO / "tests" / "test_hardware_and_sync_verification.py"
@@ -120,6 +151,19 @@ def main():
                 print(res.stdout[-1000:])
             results["ESP32 Official Blynk Firmware Build (.bin)"] = False
 
+    # Save artifact receipt
+    artifact_dir = REPO / "tests" / "artifacts"
+    artifact_dir.mkdir(parents=True, exist_ok=True)
+    receipt = {
+        "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+        "target_repo": str(REPO),
+        "results": results,
+        "overall_pass": all(results.values())
+    }
+    receipt_file = artifact_dir / "verification_receipt.json"
+    receipt_file.write_text(json.dumps(receipt, indent=2), encoding="utf-8")
+    print(f"\n[INFO] Verification artifact receipt written to: {receipt_file}")
+
     # Final Summary Matrix
     print("\n" + "=" * 80)
     print("FINAL VERIFICATION SUMMARY MATRIX")
@@ -127,7 +171,7 @@ def main():
     all_passed = True
     for test_name, passed in results.items():
         status_str = "PASS [100%]" if passed else "FAIL"
-        print(f" {test_name:<50} : {status_str}")
+        print(f" {test_name:<55} : {status_str}")
         if not passed:
             all_passed = False
 

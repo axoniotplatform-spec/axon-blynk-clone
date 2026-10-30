@@ -77,18 +77,25 @@ def main():
         print("V2_TELEMETRY=PASS value=" + v2)
         print("V3_AUTOMATION=PASS value=" + v3)
         print("SOCKET_STATE_TRACKING=PASS (isHardwareConnected=true)")
+
+        # Verify disconnect cleanup explicitly before exiting
+        sock.close()
+        sock = None
+        time.sleep(0.5)
+        with urllib.request.urlopen("http://127.0.0.1:8000/external/api/isHardwareConnected?" + urllib.parse.urlencode({"token": token}), timeout=5) as resp:
+            cleanup_state = resp.read().decode("utf-8").strip().lower()
+            if cleanup_state != "false":
+                raise RuntimeError(f"disconnect_cleanup_failed_state_{cleanup_state}")
+            print("SOCKET_STATE_DISCONNECT_CLEANUP=PASS (isHardwareConnected=false)")
+
         return 0
     except Exception as exc:
         print("LOCAL_PROTOCOL_FAILURE=" + stage + ":" + type(exc).__name__)
         return 1
     finally:
         if sock is not None:
-            sock.close()
-            time.sleep(0.5)
             try:
-                with urllib.request.urlopen("http://127.0.0.1:8000/external/api/isHardwareConnected?" + urllib.parse.urlencode({"token": token}), timeout=5) as resp:
-                    if resp.read().decode("utf-8").strip().lower() == "false":
-                        print("SOCKET_STATE_DISCONNECT_CLEANUP=PASS (isHardwareConnected=false)")
+                sock.close()
             except Exception:
                 pass
 
