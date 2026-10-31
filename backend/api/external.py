@@ -5,6 +5,7 @@ from datetime import datetime
 from backend.database import get_db
 from backend.models.entities import Device, Datastream, TelemetryTimeSeries
 from backend.rules_engine import evaluate_rules_for_device
+from backend.anomaly_engine import run_anomaly_checks
 from backend.websocket_hub import hub
 
 from backend.hardware_gateway import hardware_gateway
@@ -60,6 +61,10 @@ async def blynk_external_update(request: Request, token: str, db: Session = Depe
 
             # Evaluate automation rules
             evaluate_rules_for_device(db, device.id, pin_name, v, hub=hub)
+            try:
+                run_anomaly_checks(db, device, int(pin_name.replace('V', '').replace('v', '')), str(v), hub=hub)
+            except Exception:
+                pass
         elif k.lower() != "token":
             raise HTTPException(status_code=400, detail=f"Pin {pin_name} not found")
 
@@ -172,6 +177,10 @@ async def blynk_batch_update(request: Request, token: str, db: Session = Depends
                 "value": str(val)
             })
             evaluate_rules_for_device(db, device.id, pin_upper, str(val), hub=hub)
+            try:
+                run_anomaly_checks(db, device, int(pin_upper.replace('V', '').replace('v', '')), str(val), hub=hub)
+            except Exception:
+                pass
 
     db.commit()
     return Response(content="OK", media_type="text/plain")

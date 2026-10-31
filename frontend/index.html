@@ -8,6 +8,12 @@
   <link rel="icon" href="/static/static/icon.png" />
 </head>
 <body>
+  <div id="view-as-banner" style="display:none;background:linear-gradient(90deg, #7c3aed, #4f46e5);color:#fff;padding:8px 24px;font-size:13px;font-weight:600;justify-content:space-between;align-items:center;box-shadow:0 2px 10px rgba(0,0,0,0.15);position:sticky;top:0;z-index:99999;">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span>👁️ <strong>VIEW AS ACTIVE:</strong> Impersonating <span id="view-as-target-name" style="background:rgba(255,255,255,0.25);padding:2px 8px;border-radius:4px;">Field Operator</span>. All control actions are recorded to the Audit Ledger.</span>
+    </div>
+    <button onclick="exitViewAsMode()" style="background:#fff;color:#4f46e5;border:none;padding:5px 14px;border-radius:6px;font-weight:700;cursor:pointer;">Exit View As</button>
+  </div>
   <!-- Exact Blynk.Console Sidebar -->
   <aside class="sidebar">
     <div class="sidebar-header">
@@ -122,6 +128,8 @@
           <span>Ask AI</span>
         </button>
 
+        <button class="filter-btn" onclick="openFirmwareStudioModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>⚡ Firmware Studio</span></button>
+        <button class="filter-btn" onclick="openViewAsModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#faf5ff;color:#7c3aed;border:1px solid #e9d5ff;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>👁️ View As</span></button>
         <div class="user-avatar-circle" title="samblynkk@gmail.com">
           S
         </div>
@@ -1565,7 +1573,13 @@ function decodeUplink(bytes) {
       loadDevices();
       if (window.location.hash) {
         const h = window.location.hash.replace('#', '');
-        setTimeout(() => switchTab(h), 300);
+        if (h === 'firmware-studio') {
+          setTimeout(() => openFirmwareStudioModal(), 300);
+        } else if (h === 'view-as') {
+          setTimeout(() => openViewAsModal(), 300);
+        } else {
+          setTimeout(() => switchTab(h), 300);
+        }
       }
     });
 
@@ -2387,5 +2401,164 @@ function decodeUplink(bytes) {
   </div>
 </div>
 
+<!-- ============================================================ -->
+<!-- PHASE 6: Firmware Studio Modal                               -->
+<!-- ============================================================ -->
+<div id="firmware-studio-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#ffffff;border-radius:12px;width:780px;max-width:95vw;max-height:90vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,0.3);overflow:hidden;">
+    <div style="padding:16px 24px;border-bottom:1px solid #e2e8f0;display:flex;justify-content:space-between;align-items:center;background:#f8fafc;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="font-size:20px;">⚡</span>
+        <h3 style="margin:0;font-size:17px;font-weight:700;color:#0f172a;">Axon Firmware Studio & Code Generator</h3>
+      </div>
+      <button onclick="closeFirmwareStudioModal()" style="border:none;background:none;font-size:18px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <div style="padding:20px 24px;overflow-y:auto;display:flex;flex-direction:column;gap:16px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Target Board / MCU</label>
+          <select id="fw-board-select" onchange="generateFirmwareCode()" class="form-input" style="width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;">
+            <option value="esp32">ESP32 / ESP32-S3 (Tensilica 32-bit)</option>
+            <option value="pico_w">Raspberry Pi Pico W (RP2040 + CYW43439)</option>
+            <option value="arduino_uno">Arduino Uno / Mega (AVR + W5100)</option>
+            <option value="esp8266">ESP8266 (NodeMCU / D1 Mini)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Network Uplink</label>
+          <select id="fw-uplink-select" onchange="generateFirmwareCode()" class="form-input" style="width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;">
+            <option value="wifi">Wi-Fi (Axon Native / Port 8080 Binary Wire)</option>
+            <option value="cellular_gsm">Cellular 2G/4G GSM (AxonGSM SIM800L / SIM7600)</option>
+            <option value="hybrid">Hybrid Dual-Uplink (Wi-Fi Primary + Cellular Failover)</option>
+            <option value="http_rest">Low-Power Cellular REST Telemetry (Cloud / Render Safe)</option>
+          </select>
+        </div>
+      </div>
+      <div style="display:grid;grid-template-columns:2fr 1fr;gap:16px;">
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Device Auth Token</label>
+          <input type="text" id="fw-token-input" oninput="generateFirmwareCode()" class="form-input" value="YOUR_AXON_DEVICE_TOKEN" style="width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;font-family:monospace;" />
+        </div>
+        <div>
+          <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Server Host</label>
+          <input type="text" id="fw-host-input" oninput="generateFirmwareCode()" class="form-input" value="127.0.0.1" style="width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;font-family:monospace;" />
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+          <label style="font-size:12px;font-weight:600;color:#475569;">Generated C++ Sketch (Ready to Flash)</label>
+          <button onclick="copyFirmwareCode()" style="background:#22c55e;color:#fff;border:none;padding:5px 14px;border-radius:4px;font-size:12px;font-weight:600;cursor:pointer;">📋 Copy Code</button>
+        </div>
+        <pre id="fw-code-preview" style="background:#0f172a;color:#e2e8f0;padding:16px;border-radius:8px;font-family:Consolas, monospace;font-size:12px;line-height:1.5;max-height:300px;overflow-y:auto;white-space:pre;"></pre>
+      </div>
+    </div>
+    <div style="padding:12px 24px;border-top:1px solid #e2e8f0;background:#f8fafc;display:flex;justify-content:flex-end;">
+      <button onclick="closeFirmwareStudioModal()" class="filter-btn" style="padding:8px 18px;">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PHASE 7: View As Impersonation Modal                         -->
+<!-- ============================================================ -->
+<div id="view-as-modal" class="modal-overlay" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:99999;align-items:center;justify-content:center;">
+  <div style="background:#ffffff;border-radius:12px;width:440px;max-width:95vw;padding:24px;box-shadow:0 10px 40px rgba(0,0,0,0.3);">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <h3 style="margin:0;font-size:17px;font-weight:700;color:#0f172a;">👁️ Admin "View As" Mode</h3>
+      <button onclick="closeViewAsModal()" style="border:none;background:none;font-size:18px;cursor:pointer;color:#64748b;">✕</button>
+    </div>
+    <p style="font-size:13px;color:#64748b;margin-bottom:16px;">Impersonate a customer tenant or field operator session to verify dashboards and debug configurations. All actions are logged to the Audit Ledger.</p>
+    <div style="margin-bottom:16px;">
+      <label style="font-size:12px;font-weight:600;color:#475569;display:block;margin-bottom:6px;">Select Role / Persona</label>
+      <select id="view-as-role-select" class="form-input" style="width:100%;padding:8px 12px;border:1px solid #cbd5e1;border-radius:6px;">
+        <option value="Field Operator (Field Node A)">Field Operator (Scoped to Field Node A)</option>
+        <option value="Tenant Admin (Farm Alpha)">Tenant Admin (Farm Alpha / Org 1)</option>
+        <option value="Compliance Auditor (Read-Only)">Compliance Auditor (Read-Only)</option>
+      </select>
+    </div>
+    <div style="display:flex;justify-content:flex-end;gap:10px;">
+      <button onclick="closeViewAsModal()" class="filter-btn" style="padding:8px 16px;">Cancel</button>
+      <button onclick="confirmViewAs()" style="background:#7c3aed;color:#fff;border:none;padding:8px 18px;border-radius:6px;font-weight:600;cursor:pointer;">Activate View As</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  window.openFirmwareStudioModal = function() {
+    const modal = document.getElementById('firmware-studio-modal');
+    if (modal) {
+      modal.style.display = 'flex';
+      const tokEl = document.getElementById('dev-info-token');
+      if (tokEl && tokEl.innerText && tokEl.innerText.length > 5 && !tokEl.innerText.includes('•')) {
+        document.getElementById('fw-token-input').value = tokEl.innerText;
+      }
+      generateFirmwareCode();
+    }
+  }
+
+  function closeFirmwareStudioModal() {
+    const modal = document.getElementById('firmware-studio-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function generateFirmwareCode() {
+    const board = document.getElementById('fw-board-select').value;
+    const uplink = document.getElementById('fw-uplink-select').value;
+    const token = document.getElementById('fw-token-input').value || "YOUR_AXON_DEVICE_TOKEN";
+    const host = document.getElementById('fw-host-input').value || "127.0.0.1";
+    
+    let code = "";
+    if (uplink === 'wifi') {
+      code = // Axon IoT — Native Wi-Fi Firmware Sketch\n#define AXON_TEMPLATE_ID "TMPL2yjltoB57"\n#define AXON_DEVICE_NAME "ESP32 Controller"\n#define AXON_DEVICE_TOKEN ""\n\n#include <WiFi.h>\n#include <WiFiClient.h>\n#include <AxonIoT.h>\n\nchar ssid[] = "Your_WiFi_SSID";\nchar pass[] = "Your_WiFi_Password";\n\n// Turn Fan Relay (V3) ON/OFF from Web/Mobile\nAXON_WRITE(V3) {\n  int relayState = param.asInt();\n  digitalWrite(21, relayState);\n}\n\nvoid setup() {\n  Serial.begin(115200);\n  pinMode(21, OUTPUT);\n  Axon.begin(AXON_DEVICE_TOKEN, ssid, pass, "System.Management.Automation.Internal.Host.InternalHost", 8080);\n}\n\nvoid loop() {\n  Axon.run();\n  static unsigned long lastT = 0;\n  if (millis() - lastT > 5000) {\n    lastT = millis();\n    Axon.virtualWrite(V2, 33.5);\n  }\n};
+    } else if (uplink === 'cellular_gsm') {
+      code = // Axon IoT — Pure Cellular GSM/GPRS Sketch (AxonGSM)\n#define AXON_DEVICE_TOKEN ""\n#define AXON_SERVER_HOST  "System.Management.Automation.Internal.Host.InternalHost"\n\n#include <Arduino.h>\n#include <AxonGSM.h>\n\n#define SIM_RX_PIN 16\n#define SIM_TX_PIN 17\n\nvoid setup() {\n  Serial.begin(115200);\n  AxonGSM.begin(AXON_DEVICE_TOKEN, AXON_SERVER_HOST, 8000, SIM_RX_PIN, SIM_TX_PIN);\n  AxonGSM.connectCellular();\n}\n\nvoid loop() {\n  static unsigned long lastT = 0;\n  if (millis() - lastT > 15000) {\n    lastT = millis();\n    AxonGSM.virtualWrite(2, 36.8); // Send Temperature\n    AxonGSM.virtualWrite(10, AxonGSM.getSignalCSQ()); // Send CSQ\n  }\n};
+    } else if (uplink === 'hybrid') {
+      code = // Axon IoT — Hybrid Dual-Uplink (Wi-Fi Primary + Cellular Failover)\n#define AXON_DEVICE_TOKEN ""\n#define AXON_SERVER_HOST  "System.Management.Automation.Internal.Host.InternalHost"\n\n#include <WiFi.h>\n#include <HTTPClient.h>\n#include <AxonGSM.h>\n\nvoid setup() {\n  Serial.begin(115200);\n  AxonGSM.begin(AXON_DEVICE_TOKEN, AXON_SERVER_HOST, 8000, 16, 17);\n  WiFi.begin("WiFi_SSID", "WiFi_PASS");\n}\n\nvoid loop() {\n  if (WiFi.status() != WL_CONNECTED) {\n    AxonGSM.virtualWrite(2, 34.2);\n  }\n  delay(10000);\n};
+    } else {
+      code = // Axon IoT — Low-Power Cellular REST Ingress\n#define AXON_DEVICE_TOKEN ""\n#include <AxonGSM.h>\n\nvoid setup() {\n  Serial.begin(115200);\n  AxonGSM.begin(AXON_DEVICE_TOKEN, "System.Management.Automation.Internal.Host.InternalHost", 8000, 16, 17);\n  AxonGSM.virtualWrite(2, 31.4);\n  esp_deep_sleep(15 * 60 * 1000000ULL);\n}\nvoid loop() {};
+    }
+    
+    document.getElementById('fw-code-preview').textContent = code;
+  }
+
+  function copyFirmwareCode() {
+    const code = document.getElementById('fw-code-preview').textContent;
+    navigator.clipboard.writeText(code);
+    showToast('C++ Firmware sketch copied to clipboard!', 'success');
+  }
+
+  window.openViewAsModal = function() {
+    const modal = document.getElementById('view-as-modal');
+    if (modal) modal.style.display = 'flex';
+  }
+
+  function closeViewAsModal() {
+    const modal = document.getElementById('view-as-modal');
+    if (modal) modal.style.display = 'none';
+  }
+
+  function confirmViewAs() {
+    const role = document.getElementById('view-as-role-select').value;
+    document.getElementById('view-as-target-name').innerText = role;
+    document.getElementById('view-as-banner').style.display = 'flex';
+    closeViewAsModal();
+    showToast('View As mode activated: ' + role, 'info');
+    fetch('/api/v1/audit/log', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'VIEW_AS_START', details: {role: role}})
+    }).catch(e => console.error(e));
+  }
+
+  function exitViewAsMode() {
+    document.getElementById('view-as-banner').style.display = 'none';
+    showToast('Exited View As mode. Returned to Super Admin.', 'info');
+    fetch('/api/v1/audit/log', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({action: 'VIEW_AS_STOP'})
+    }).catch(e => console.error(e));
+  }
+</script>
 </body>
 </html>

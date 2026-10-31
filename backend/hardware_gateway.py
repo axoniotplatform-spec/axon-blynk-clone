@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from backend.database import SessionLocal
 from backend.models.entities import Device, Datastream, TelemetryTimeSeries
 from backend.rules_engine import evaluate_rules_for_device
+from backend.anomaly_engine import run_anomaly_checks
 
 logger = logging.getLogger("axon.hardware_gateway")
 
@@ -164,6 +165,11 @@ class BlynkHardwareGateway:
 
                                 # Evaluate Automations Rules Engine
                                 evaluate_rules_for_device(db, d_info["id"], pin_name, val_str, hub=self.hub)
+                                if device:
+                                    try:
+                                        run_anomaly_checks(db, device, int(pin_num), val_str, hub=self.hub)
+                                    except Exception:
+                                        pass
                         finally:
                             db.close()
                     elif len(parts) >= 2 and parts[0] == b'vr':

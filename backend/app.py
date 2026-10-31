@@ -7,7 +7,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from backend.database import engine, Base, SessionLocal
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
-from backend.api import devices, templates, automations, external, auth, mobile, platform_ops
+from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies
 from backend.websocket_hub import hub
 from backend.hardware_gateway import hardware_gateway
 import asyncio
@@ -72,6 +72,7 @@ app.include_router(auth.router)
 app.include_router(auth.users_router)
 app.include_router(mobile.router)
 app.include_router(platform_ops.router)
+app.include_router(anomalies.router)
 
 @app.on_event("startup")
 async def on_startup():
