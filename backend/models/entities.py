@@ -238,3 +238,30 @@ class CustomDashboard(Base):
     title = Column(String(255), nullable=False)
     description = Column(String(255), default="")
     created_at = Column(DateTime, default=datetime.utcnow)
+
+class AnomalyAlert(Base):
+    __tablename__ = "anomaly_alerts"
+
+    id = Column(Integer, primary_key=True, index=True)
+    device_id = Column(Integer, ForeignKey("devices.id"), nullable=False)
+    anomaly_type = Column(String(100), nullable=False)
+    severity = Column(String(50), default="WARNING")
+    message = Column(String(500), nullable=False)
+    pin = Column(Integer, nullable=True)
+    value = Column(Float, nullable=True)
+    is_resolved = Column(Boolean, default=False)
+    created_at = Column(DateTime, default=datetime.utcnow)
+
+class AuditEvent(Base):
+    __tablename__ = "audit_events"
+
+    id = Column(Integer, primary_key=True, index=True)
+    org_id = Column(Integer, ForeignKey("organizations.id"), default=1)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=True)
+    actor_email = Column(String(255), nullable=False)
+    action = Column(String(100), nullable=False)
+    resource_type = Column(String(100), nullable=True)
+    resource_id = Column(String(100), nullable=True)
+    details = Column(JSON, default=dict)
+    ip_address = Column(String(100), default="127.0.0.1")
+    created_at = Column(DateTime, default=datetime.utcnow)
