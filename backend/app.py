@@ -3,7 +3,7 @@ from pathlib import Path
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, RedirectResponse
 from starlette.middleware.base import BaseHTTPMiddleware
 from backend.database import engine, Base, SessionLocal, init_timescaledb_if_available
 from backend.telemetry_batcher import telemetry_batcher
@@ -50,6 +50,8 @@ class ProductionAuthMiddleware(BaseHTTPMiddleware):
             or path.startswith("/api/v1/health")
             or path.startswith("/external/api/")
             or path.startswith("/static/")
+            or path.startswith("/flutter")
+            or path.startswith("/downloads/")
             or path in {"/", "/app", "/app.html", "/docs", "/openapi.json"}
         )
         if public or request.method == "OPTIONS":
@@ -341,6 +343,10 @@ frontend_dir = Path(os.getenv("AXON_FRONTEND_DIR", Path(__file__).resolve().pare
 if frontend_dir.is_dir():
     app.mount("/static", StaticFiles(directory=str(frontend_dir), html=False), name="static")
 
+flutter_dir = Path(__file__).resolve().parent.parent / "mobile_flutter" / "build" / "web"
+if flutter_dir.is_dir():
+    app.mount("/flutter", StaticFiles(directory=str(flutter_dir), html=True), name="flutter")
+
 @app.get("/")
 def serve_index():
     index_file = frontend_dir / "index.html"
@@ -355,3 +361,18 @@ def serve_mobile_app():
     if os.path.exists(app_file):
         return FileResponse(app_file)
     return {"message": "Mobile App UI is running."}
+
+
+@app.get("/downloads/axon-iot.apk")
+def download_android_apk():
+    apk_dir = Path(__file__).resolve().parent.parent / "mobile_flutter" / "build" / "app" / "outputs" / "flutter-apk"
+    for candidate in ("app-arm64-v8a-release.apk", "app-release.apk", "app-armeabi-v7a-release.apk"):
+        apk_path = apk_dir / candidate
+        if apk_path.is_file():
+            return FileResponse(
+                apk_path,
+                media_type="application/vnd.android.package-archive",
+                filename="Axon-IoT-Mobile.apk",
+            )
+    release_url = os.getenv("AXON_APK_RELEASE_URL", "https://github.com/axoniotplatform-spec/axon-blynk-clone/releases/download/latest-apk/Axon-IoT-Mobile-arm64-v8a.apk")
+    return RedirectResponse(url=release_url, status_code=302)

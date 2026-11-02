@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="description" content="Axon IoT — Enterprise Industrial Cloud & Fleet Control">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Axon IoT">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="icon" type="image/png" href="favicon.png"/>
+  <title>Axon IoT</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    html, body {
+      background-color: #070A12;
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+    #axon-boot-splash {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: radial-gradient(circle at 50% 42%, rgba(0,229,255,0.14), #070A12 62%);
+      z-index: 999999;
+      transition: opacity 0.35s ease;
+    }
+    .axon-boot-badge {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #00E5FF, #0375DE);
+      box-shadow: 0 0 32px rgba(0,229,255,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    .axon-boot-title {
+      color: #F8FAFC;
+      font-size: 20px;
+      font-weight: 900;
+      letter-spacing: 2.2px;
+    }
+    .axon-boot-sub {
+      color: #00E5FF;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: 1.4px;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+  <div id="axon-boot-splash">
+    <div class="axon-boot-badge">
+      <svg width="32" height="32" viewBox="0 0 24 24" fill="#070A12"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+    </div>
+    <div class="axon-boot-title">AXON IOT</div>
+    <div class="axon-boot-sub">INITIALIZING SECURE GATEWAY</div>
+  </div>
+  <script>
+    window.addEventListener('flutter-first-frame', function() {
+      var el = document.getElementById('axon-boot-splash');
+      if (el) {
+        el.style.opacity = '0';
+        setTimeout(function() { el.remove(); }, 360);
+      }
+    });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

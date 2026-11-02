@@ -130,8 +130,36 @@
 
         <button class="filter-btn" onclick="openFirmwareStudioModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>⚡ Firmware Studio</span></button>
         <button class="filter-btn" onclick="openViewAsModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#faf5ff;color:#7c3aed;border:1px solid #e9d5ff;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>👁️ View As</span></button>
-        <div class="user-avatar-circle" title="samblynkk@gmail.com">
-          S
+        <!-- Interactive Axon Auth User Widget -->
+        <div class="user-menu-wrapper" style="position:relative;display:inline-block;">
+          <div class="user-avatar-circle" id="topbar-user-avatar" onclick="toggleUserDropdown()" title="Account & Session" style="cursor:pointer;user-select:none;font-weight:700;transition:transform 0.2s, box-shadow 0.2s;" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 0 12px rgba(0,229,255,0.4)';" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none';">
+            S
+          </div>
+          <!-- Glassmorphic Dropdown Menu -->
+          <div id="user-profile-dropdown" style="display:none;position:absolute;top:46px;right:0;width:260px;background:rgba(19,29,49,0.95);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border:1px solid rgba(0,229,255,0.3);border-radius:14px;box-shadow:0 12px 35px rgba(0,0,0,0.65), 0 0 20px rgba(0,229,255,0.15);padding:16px;z-index:999999;color:#f8fafc;box-sizing:border-box;">
+            <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.08);">
+              <div id="dropdown-avatar-circle" style="width:40px;height:40px;border-radius:50%;background:linear-gradient(135deg, #00e5ff, #0375de);color:#000;font-weight:900;display:flex;align-items:center;justify-content:center;font-size:16px;box-shadow:0 0 10px rgba(0,229,255,0.4);">S</div>
+              <div style="overflow:hidden;flex:1;">
+                <div id="dropdown-user-name" style="font-size:13px;font-weight:700;color:#f8fafc;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">Admin User</div>
+                <div id="dropdown-user-email" style="font-size:11px;color:#7e8b9f;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">samblynkk@gmail.com</div>
+                <div id="dropdown-user-role" style="display:inline-block;margin-top:3px;font-size:9px;font-weight:800;letter-spacing:0.5px;color:#00e5ff;background:rgba(0,229,255,0.12);padding:2px 6px;border-radius:4px;text-transform:uppercase;">Admin</div>
+              </div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+              <a href="/flutter/" target="_blank" style="color:#00e5ff;text-decoration:none;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;background:rgba(0,229,255,0.08);transition:background 0.2s;">
+                <span>📱 Open Flutter Mobile App</span>
+              </a>
+              <a href="/downloads/axon-iot.apk" style="color:#00e676;text-decoration:none;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;background:rgba(0,230,118,0.08);transition:background 0.2s;">
+                <span>📥 Download Android APK</span>
+              </a>
+              <button onclick="openAxonAuthModal(false)" style="background:none;border:none;color:#cbd5e1;text-align:left;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:600;display:flex;align-items:center;gap:8px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.06)'" onmouseout="this.style.background='none'">
+                <span>🔄 Switch Account</span>
+              </button>
+              <button onclick="axonSignOut()" style="background:rgba(255,51,75,0.1);border:1px solid rgba(255,51,75,0.25);color:#ff6b7d;text-align:left;padding:8px 10px;border-radius:8px;cursor:pointer;font-size:12px;font-weight:700;display:flex;align-items:center;gap:8px;transition:background 0.2s;" onmouseover="this.style.background='rgba(255,51,75,0.2)'" onmouseout="this.style.background='rgba(255,51,75,0.1)'">
+                <span>🚪 Sign Out</span>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </header>
@@ -2560,5 +2588,291 @@ function decodeUplink(bytes) {
     }).catch(e => console.error(e));
   }
 </script>
+
+<!-- ============================================================ -->
+<!-- AXON IOT: Glassmorphic Web Console Authentication Modal     -->
+<!-- ============================================================ -->
+<div id="axon-auth-modal" style="display:none;position:fixed;inset:0;background:rgba(7,10,18,0.85);backdrop-filter:blur(22px);-webkit-backdrop-filter:blur(22px);z-index:9999999;align-items:center;justify-content:center;">
+  <div style="background:rgba(19,29,49,0.88);backdrop-filter:blur(28px);-webkit-backdrop-filter:blur(28px);border:1px solid rgba(0,229,255,0.35);border-radius:24px;padding:36px;width:430px;max-width:92vw;box-shadow:0 24px 60px rgba(0,0,0,0.7), 0 0 50px rgba(0,229,255,0.18);box-sizing:border-box;color:#f8fafc;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;position:relative;">
+    
+    <!-- Optional close if user is already authenticated -->
+    <button id="auth-modal-close-btn" onclick="closeAxonAuthModal(false)" style="display:none;position:absolute;top:16px;right:18px;background:none;border:none;color:#7e8b9f;font-size:20px;cursor:pointer;line-height:1;">✕</button>
+
+    <!-- Brand Header -->
+    <div style="text-align:center;margin-bottom:24px;">
+      <div style="width:62px;height:62px;border-radius:50%;background:linear-gradient(135deg, #00e5ff, #0375de);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 0 30px rgba(0,229,255,0.55);margin-bottom:12px;">
+        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#000" stroke-width="2.6"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+      </div>
+      <h2 style="margin:0 0 4px;font-size:23px;font-weight:900;letter-spacing:2px;color:#f8fafc;">AXON IOT</h2>
+      <div id="auth-subtitle" style="font-size:11px;font-weight:800;letter-spacing:1px;color:#00e5ff;text-transform:uppercase;">Industrial Cloud Access</div>
+    </div>
+
+    <!-- Tab Switcher (Sign In / Register) -->
+    <div style="display:flex;background:rgba(0,0,0,0.45);border-radius:12px;padding:4px;margin-bottom:20px;border:1px solid rgba(255,255,255,0.08);">
+      <button id="auth-tab-login" type="button" onclick="switchAuthTab('login')" style="flex:1;padding:9px;border:none;border-radius:9px;font-size:12px;font-weight:800;letter-spacing:0.5px;cursor:pointer;background:linear-gradient(135deg, #0375de, #00e5ff);color:#000;box-shadow:0 0 12px rgba(0,229,255,0.3);transition:all 0.2s;">Sign In</button>
+      <button id="auth-tab-register" type="button" onclick="switchAuthTab('register')" style="flex:1;padding:9px;border:none;border-radius:9px;font-size:12px;font-weight:800;letter-spacing:0.5px;cursor:pointer;background:transparent;color:#7e8b9f;transition:all 0.2s;">Create Account</button>
+    </div>
+
+    <!-- Error Banner -->
+    <div id="auth-error-banner" style="display:none;background:rgba(255,51,75,0.15);border:1px solid #ff334b;border-radius:10px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:#ff6b7d;font-weight:600;"></div>
+
+    <!-- Login Form -->
+    <form id="auth-login-form" onsubmit="handleAxonAuthSubmit(event, 'login')">
+      <div style="margin-bottom:14px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Email Address</label>
+        <input type="email" id="auth-login-email" required value="samblynkk@gmail.com" placeholder="name@company.com" style="width:100%;box-sizing:border-box;padding:12px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Password</label>
+        <input type="password" id="auth-login-password" required value="change-me" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:12px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <button type="submit" id="auth-login-btn" style="width:100%;padding:14px;background:linear-gradient(135deg, #0375de, #00e5ff);border:none;border-radius:12px;color:#000;font-size:13px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 0 24px rgba(0,229,255,0.4);transition:transform 0.15s, box-shadow 0.15s;">SIGN IN TO PLATFORM</button>
+    </form>
+
+    <!-- Register Form -->
+    <form id="auth-register-form" style="display:none;" onsubmit="handleAxonAuthSubmit(event, 'register')">
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Full Name</label>
+        <input type="text" id="auth-reg-name" placeholder="John Doe" style="width:100%;box-sizing:border-box;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Organization / Tenant Name</label>
+        <input type="text" id="auth-reg-org" value="Acme Industrial IoT" placeholder="Acme Industries" style="width:100%;box-sizing:border-box;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Email Address</label>
+        <input type="email" id="auth-reg-email" placeholder="name@company.com" style="width:100%;box-sizing:border-box;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <div style="margin-bottom:18px;">
+        <label style="display:block;font-size:10px;font-weight:800;letter-spacing:0.8px;color:#cbd5e1;margin-bottom:6px;text-transform:uppercase;">Password</label>
+        <input type="password" id="auth-reg-password" placeholder="••••••••" style="width:100%;box-sizing:border-box;padding:11px 14px;background:rgba(0,0,0,0.5);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#f8fafc;font-size:13px;outline:none;" />
+      </div>
+      <button type="submit" id="auth-reg-btn" style="width:100%;padding:14px;background:linear-gradient(135deg, #0375de, #00e5ff);border:none;border-radius:12px;color:#000;font-size:13px;font-weight:900;letter-spacing:1px;cursor:pointer;box-shadow:0 0 24px rgba(0,229,255,0.4);transition:transform 0.15s, box-shadow 0.15s;">CREATE ENTERPRISE TENANT</button>
+    </form>
+
+    <!-- Footer Helpers -->
+    <div style="text-align:center;margin-top:18px;display:flex;flex-direction:column;gap:10px;">
+      <a href="javascript:void(0)" onclick="fillSeedDemoCredentials()" style="color:#00e5ff;font-size:11.5px;font-weight:700;text-decoration:none;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Fill Seed Admin Credentials (Demo)</a>
+      <a href="javascript:void(0)" onclick="closeAxonAuthModal(true)" style="color:#7e8b9f;font-size:11.5px;text-decoration:none;transition:color 0.2s;" onmouseover="this.style.color='#cbd5e1'" onmouseout="this.style.color='#7e8b9f'">Skip Login • Continue in Offline Gateway Mode</a>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // Axon IoT Web Console Authentication & Session Controller
+  (function() {
+    function initAxonAuth() {
+      const savedToken = localStorage.getItem('axon_token');
+      const savedUser = localStorage.getItem('axon_user');
+
+      if (savedToken && savedUser) {
+        try {
+          const user = JSON.parse(savedUser);
+          updateUserUI(user);
+        } catch(e) {
+          openAxonAuthModal(false);
+        }
+      } else {
+        // First visit or logged out -> show auth modal
+        openAxonAuthModal(false);
+      }
+
+      // Close user dropdown when clicking outside
+      document.addEventListener('click', function(e) {
+        const wrapper = document.querySelector('.user-menu-wrapper');
+        const dropdown = document.getElementById('user-profile-dropdown');
+        if (wrapper && dropdown && !wrapper.contains(e.target)) {
+          dropdown.style.display = 'none';
+        }
+      });
+    }
+
+    window.openAxonAuthModal = function(isRegister) {
+      const modal = document.getElementById('axon-auth-modal');
+      if (!modal) return;
+      modal.style.display = 'flex';
+      switchAuthTab(isRegister ? 'register' : 'login');
+      // If user is already authenticated, allow closing
+      const closeBtn = document.getElementById('auth-modal-close-btn');
+      if (closeBtn) {
+        closeBtn.style.display = localStorage.getItem('axon_token') ? 'block' : 'none';
+      }
+    };
+
+    window.closeAxonAuthModal = function(guestBypass) {
+      const modal = document.getElementById('axon-auth-modal');
+      if (modal) modal.style.display = 'none';
+      if (guestBypass && !localStorage.getItem('axon_token')) {
+        const guestUser = { name: 'Guest Engineer', email: 'guest@axoniot.local', role: 'Operator' };
+        updateUserUI(guestUser);
+        if (typeof showToast === 'function') {
+          showToast('Running in Offline Gateway Mode (Guest)', 'info');
+        }
+      }
+    };
+
+    window.switchAuthTab = function(tab) {
+      const loginForm = document.getElementById('auth-login-form');
+      const regForm = document.getElementById('auth-register-form');
+      const tabLogin = document.getElementById('auth-tab-login');
+      const tabReg = document.getElementById('auth-tab-register');
+      const subtitle = document.getElementById('auth-subtitle');
+      const errBanner = document.getElementById('auth-error-banner');
+      if (errBanner) errBanner.style.display = 'none';
+
+      if (tab === 'login') {
+        if (loginForm) loginForm.style.display = 'block';
+        if (regForm) regForm.style.display = 'none';
+        if (tabLogin) {
+          tabLogin.style.background = 'linear-gradient(135deg, #0375de, #00e5ff)';
+          tabLogin.style.color = '#000';
+          tabLogin.style.boxShadow = '0 0 12px rgba(0,229,255,0.3)';
+        }
+        if (tabReg) {
+          tabReg.style.background = 'transparent';
+          tabReg.style.color = '#7e8b9f';
+          tabReg.style.boxShadow = 'none';
+        }
+        if (subtitle) subtitle.innerText = 'Industrial Cloud Access';
+      } else {
+        if (loginForm) loginForm.style.display = 'none';
+        if (regForm) regForm.style.display = 'block';
+        if (tabReg) {
+          tabReg.style.background = 'linear-gradient(135deg, #0375de, #00e5ff)';
+          tabReg.style.color = '#000';
+          tabReg.style.boxShadow = '0 0 12px rgba(0,229,255,0.3)';
+        }
+        if (tabLogin) {
+          tabLogin.style.background = 'transparent';
+          tabLogin.style.color = '#7e8b9f';
+          tabLogin.style.boxShadow = 'none';
+        }
+        if (subtitle) subtitle.innerText = 'Create Enterprise Tenant';
+      }
+    };
+
+    window.fillSeedDemoCredentials = function() {
+      const emailInput = document.getElementById('auth-login-email');
+      const passInput = document.getElementById('auth-login-password');
+      if (emailInput) emailInput.value = 'samblynkk@gmail.com';
+      if (passInput) passInput.value = 'change-me';
+      switchAuthTab('login');
+      if (typeof showToast === 'function') {
+        showToast('Seed admin credentials filled', 'info');
+      }
+    };
+
+    window.handleAxonAuthSubmit = async function(event, mode) {
+      event.preventDefault();
+      const errBanner = document.getElementById('auth-error-banner');
+      if (errBanner) errBanner.style.display = 'none';
+
+      const btn = mode === 'login' ? document.getElementById('auth-login-btn') : document.getElementById('auth-reg-btn');
+      const originalText = btn ? btn.innerText : 'SUBMIT';
+      if (btn) {
+        btn.innerText = 'AUTHENTICATING...';
+        btn.disabled = true;
+      }
+
+      try {
+        let endpoint = '/api/v1/auth/login';
+        let bodyData = {};
+
+        if (mode === 'login') {
+          endpoint = '/api/v1/auth/login';
+          bodyData = {
+            email: document.getElementById('auth-login-email').value.trim(),
+            password: document.getElementById('auth-login-password').value
+          };
+        } else {
+          endpoint = '/api/v1/auth/register';
+          bodyData = {
+            name: document.getElementById('auth-reg-name').value.trim() || 'New Admin',
+            organization_name: document.getElementById('auth-reg-org').value.trim() || 'Default Organization',
+            email: document.getElementById('auth-reg-email').value.trim().toLowerCase(),
+            password: document.getElementById('auth-reg-password').value,
+            role: 'Admin'
+          };
+        }
+
+        const res = await fetch(endpoint, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify(bodyData)
+        });
+
+        const data = await res.json();
+        if (res.ok && data.token) {
+          localStorage.setItem('axon_token', data.token);
+          localStorage.setItem('axon_user', JSON.stringify(data.user || {}));
+          closeAxonAuthModal(false);
+          updateUserUI(data.user);
+          if (typeof showToast === 'function') {
+            showToast(`Welcome ${data.user?.name || 'Admin'}! Session active.`, 'success');
+          }
+        } else {
+          if (errBanner) {
+            errBanner.innerText = data.detail || 'Authentication failed. Please verify credentials.';
+            errBanner.style.display = 'block';
+          }
+        }
+      } catch (err) {
+        if (errBanner) {
+          errBanner.innerText = 'Connection error: ' + err.message;
+          errBanner.style.display = 'block';
+        }
+      } finally {
+        if (btn) {
+          btn.innerText = originalText;
+          btn.disabled = false;
+        }
+      }
+    };
+
+    window.toggleUserDropdown = function() {
+      const dropdown = document.getElementById('user-profile-dropdown');
+      if (dropdown) {
+        dropdown.style.display = (dropdown.style.display === 'none' || !dropdown.style.display) ? 'block' : 'none';
+      }
+    };
+
+    window.axonSignOut = function() {
+      localStorage.removeItem('axon_token');
+      localStorage.removeItem('axon_user');
+      const dropdown = document.getElementById('user-profile-dropdown');
+      if (dropdown) dropdown.style.display = 'none';
+      const avatar = document.getElementById('topbar-user-avatar');
+      if (avatar) avatar.innerText = '?';
+      openAxonAuthModal(false);
+      if (typeof showToast === 'function') {
+        showToast('Signed out of Axon IoT Platform', 'info');
+      }
+    };
+
+    function updateUserUI(user) {
+      if (!user) return;
+      const initial = (user.name || user.email || 'A').trim().charAt(0).toUpperCase();
+      const topbarAvatar = document.getElementById('topbar-user-avatar');
+      const dropAvatar = document.getElementById('dropdown-avatar-circle');
+      const dropName = document.getElementById('dropdown-user-name');
+      const dropEmail = document.getElementById('dropdown-user-email');
+      const dropRole = document.getElementById('dropdown-user-role');
+
+      if (topbarAvatar) topbarAvatar.innerText = initial;
+      if (dropAvatar) dropAvatar.innerText = initial;
+      if (dropName) dropName.innerText = user.name || 'Admin User';
+      if (dropEmail) dropEmail.innerText = user.email || 'admin@axoniot.local';
+      if (dropRole) dropRole.innerText = user.role || 'Admin';
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initAxonAuth);
+    } else {
+      initAxonAuth();
+    }
+  })();
+</script>
+
 </body>
 </html>

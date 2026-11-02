@@ -1,0 +1,108 @@
+name: Build Axon IoT Mobile APK & Web (Zero-Branding)
+
+on:
+  push:
+    branches:
+      - main
+      - fix/full-clone-remediation
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-axon-mobile:
+    name: Compile Zero-Branding Axon IoT APK & Web
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Enforce Zero Dart/Flutter Logo & Watermark Gate
+        working-directory: mobile_flutter
+        run: |
+          echo "=== Auditing source & resources for zero Dart/Flutter branding ==="
+          grep -q "debugShowCheckedModeBanner: false" lib/main.dart || (echo "ERROR: Debug banner not disabled!" && exit 1)
+          if grep -rn "FlutterLogo" lib/; then
+            echo "ERROR: FlutterLogo widget detected in lib/!"
+            exit 1
+          fi
+          grep -q 'android:label="Axon IoT"' android/app/src/main/AndroidManifest.xml || (echo "ERROR: App label mismatch!" && exit 1)
+          grep -q "onEntrypointLoaded" web/flutter_bootstrap.js || (echo "ERROR: Custom bootstrap missing (default loader would show)!" && exit 1)
+          if grep -rn "A new Flutter project" web/ pubspec.yaml README.md; then
+            echo "ERROR: Default Flutter template text found!"
+            exit 1
+          fi
+          if [ -d "android/app/src/main/res/mipmap-anydpi-v26" ]; then
+            echo "ERROR: Default adaptive Flutter vector icon folder found!"
+            exit 1
+          fi
+          echo "PASS: Zero Dart/Flutter watermark or logo verified."
+
+      - name: Setup Java 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Setup Flutter SDK
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
+      - name: Install Dependencies, Analyze & Run Tests
+        working-directory: mobile_flutter
+        run: |
+          flutter pub get
+          flutter analyze
+          flutter test
+
+      - name: Build Split-ABI & Universal Release APKs
+        working-directory: mobile_flutter
+        run: |
+          flutter build apk --release --split-per-abi --no-pub
+          flutter build apk --release --no-pub
+          mkdir -p dist-apk
+          cp build/app/outputs/flutter-apk/app-arm64-v8a-release.apk dist-apk/Axon-IoT-Mobile-arm64-v8a.apk
+          cp build/app/outputs/flutter-apk/app-armeabi-v7a-release.apk dist-apk/Axon-IoT-Mobile-armeabi-v7a.apk
+          cp build/app/outputs/flutter-apk/app-release.apk dist-apk/Axon-IoT-Mobile-Universal.apk
+          ls -lh dist-apk/
+
+      - name: Build Production Web Bundle
+        working-directory: mobile_flutter
+        run: |
+          flutter build web --release --base-href /flutter/ --no-pub
+
+      - name: Upload Axon IoT APK Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: Axon-IoT-Android-APKs
+          path: mobile_flutter/dist-apk/*.apk
+          retention-days: 90
+
+      - name: Upload Axon IoT Web Bundle Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: Axon-IoT-Web-Bundle
+          path: mobile_flutter/build/web/
+          retention-days: 30
+
+      - name: Publish Latest Release APKs on GitHub
+        if: github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest-apk
+          name: "Axon IoT Mobile App (Zero-Branding Release APK)"
+          body: |
+            Automated zero-branding glassmorphic Android APK build for **Axon IoT**.
+            - **Zero Dart/Flutter logos, watermarks, banners, or default splash screens**
+            - Custom **Axon IoT** cyber-bolt launcher icon & native `#070A12` dark cold-boot splash
+            - Glassmorphic **Sign In / Create Enterprise Tenant**, configurable **Gateway Server Endpoint**, **Fleet Overview**, **5-Subtab Controls**, **SuperChart**, **Terminal CLI**, and **Anomaly Alert Center**
+          files: |
+            mobile_flutter/dist-apk/Axon-IoT-Mobile-arm64-v8a.apk
+            mobile_flutter/dist-apk/Axon-IoT-Mobile-armeabi-v7a.apk
+            mobile_flutter/dist-apk/Axon-IoT-Mobile-Universal.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
