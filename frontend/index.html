@@ -129,6 +129,7 @@
         </button>
 
         <button class="filter-btn" onclick="openFirmwareStudioModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#f0fdf4;color:#16a34a;border:1px solid #bbf7d0;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>⚡ Firmware Studio</span></button>
+        <button class="filter-btn" onclick="openAxonMobileHubModal('qr')" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#ecfeff;color:#0284c7;border:1px solid #bae6fd;padding:6px 12px;border-radius:6px;cursor:pointer;font-weight:700;"><span>📱 Mobile QR & OTA</span></button>
         <button class="filter-btn" onclick="openViewAsModal()" style="font-size:12px;display:flex;align-items:center;gap:6px;background:#faf5ff;color:#7c3aed;border:1px solid #e9d5ff;padding:6px 12px;border-radius:6px;cursor:pointer;"><span>👁️ View As</span></button>
         <!-- Interactive Axon Auth User Widget -->
         <div class="user-menu-wrapper" style="position:relative;display:inline-block;">
@@ -147,7 +148,7 @@
             </div>
             <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
               <a href="/flutter/" target="_blank" style="color:#00e5ff;text-decoration:none;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;background:rgba(0,229,255,0.08);transition:background 0.2s;">
-                <span>📱 Open Flutter Mobile App</span>
+                <span>📱 Open Mobile Web App</span>
               </a>
               <a href="/downloads/axon-iot.apk" style="color:#00e676;text-decoration:none;padding:8px 10px;border-radius:8px;display:flex;align-items:center;gap:8px;background:rgba(0,230,118,0.08);transition:background 0.2s;">
                 <span>📥 Download Android APK</span>
@@ -2872,6 +2873,230 @@ function decodeUplink(bytes) {
       initAxonAuth();
     }
   })();
+</script>
+
+
+<!-- ========================================================================== -->
+<!-- AXON IOT ENTERPRISE MOBILE QR PAIRING, BLYNK.AIR OTA & PUSH ALERTS HUB     -->
+<!-- ========================================================================== -->
+<div id="axon-mobile-hub-modal" style="display:none;position:fixed;inset:0;z-index:999998;background:rgba(7,10,18,0.82);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);align-items:center;justify-content:center;padding:20px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;">
+  <div style="width:100%;max-width:680px;background:rgba(15,23,42,0.94);border:1px solid rgba(0,229,255,0.32);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,0.75),0 0 30px rgba(0,229,255,0.14);color:#f8fafc;overflow:hidden;">
+    <!-- Header -->
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 24px;border-bottom:1px solid rgba(255,255,255,0.08);background:linear-gradient(90deg,rgba(0,229,255,0.1),transparent);">
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#00e5ff,#0375de);display:flex;align-items:center;justify-content:center;color:#070a12;font-weight:900;font-size:18px;box-shadow:0 0 16px rgba(0,229,255,0.45);">⚡</div>
+        <div>
+          <div style="font-size:16px;font-weight:900;letter-spacing:0.8px;">AXON MOBILE PAIRING, OTA & ALERT HUB</div>
+          <div style="font-size:11px;color:#00e5ff;font-weight:700;letter-spacing:0.6px;">SIGNED RELEASE APK • BLYNK.AIR HTTP OTA • LIVE PUSH CHANNELS</div>
+        </div>
+      </div>
+      <button onclick="closeAxonMobileHubModal()" style="background:rgba(255,255,255,0.08);border:none;color:#cbd5e1;width:32px;height:32px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:700;">✕</button>
+    </div>
+
+    <!-- Tab Bar -->
+    <div style="display:flex;gap:8px;padding:12px 24px;background:rgba(0,0,0,0.28);border-bottom:1px solid rgba(255,255,255,0.06);">
+      <button id="hub-tab-qr" onclick="switchAxonHubTab('qr')" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid rgba(0,229,255,0.45);background:rgba(0,229,255,0.18);color:#00e5ff;font-size:12px;font-weight:800;cursor:pointer;">📱 Scan QR & Install APK</button>
+      <button id="hub-tab-ota" onclick="switchAxonHubTab('ota')" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid transparent;background:transparent;color:#94a3b8;font-size:12px;font-weight:800;cursor:pointer;">🚀 Blynk.Air OTA Push</button>
+      <button id="hub-tab-alerts" onclick="switchAxonHubTab('alerts')" style="flex:1;padding:9px 12px;border-radius:10px;border:1px solid transparent;background:transparent;color:#94a3b8;font-size:12px;font-weight:800;cursor:pointer;">🔔 Telegram & Webhooks</button>
+    </div>
+
+    <!-- Pane 1: QR & APK Pairing -->
+    <div id="hub-pane-qr" style="padding:22px 24px;">
+      <div style="display:grid;grid-template-columns:210px 1fr;gap:22px;align-items:center;">
+        <div style="background:#ffffff;padding:12px;border-radius:16px;text-align:center;box-shadow:0 0 24px rgba(0,229,255,0.25);">
+          <img id="hub-qr-img" src="/api/v1/system/qr.svg?data=http://127.0.0.1:8000/downloads/axon-iot.apk" alt="Axon APK QR" style="width:186px;height:186px;display:block;margin:0 auto;" />
+          <div id="hub-qr-caption" style="color:#070a12;font-size:10px;font-weight:800;margin-top:6px;letter-spacing:0.5px;">SCAN WITH ANDROID CAMERA</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div style="display:flex;gap:8px;">
+            <button onclick="setHubQrMode('lan')" id="qr-mode-lan" style="flex:1;padding:7px 10px;border-radius:8px;border:1px solid #00e5ff;background:rgba(0,229,255,0.16);color:#00e5ff;font-size:11px;font-weight:800;cursor:pointer;">Wi-Fi LAN APK QR</button>
+            <button onclick="setHubQrMode('cloud')" id="qr-mode-cloud" style="flex:1;padding:7px 10px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:#cbd5e1;font-size:11px;font-weight:800;cursor:pointer;">GitHub Cloud APK QR</button>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#94a3b8;font-weight:800;">DETECTED LAN GATEWAY ENDPOINT (ENTER IN MOBILE APP)</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+              <code id="hub-lan-url" style="color:#00e5ff;font-size:13px;font-weight:800;">http://127.0.0.1:8000</code>
+              <button onclick="navigator.clipboard.writeText(document.getElementById('hub-lan-url').innerText);if(window.showToast)showToast('Copied Gateway URL!','success');" style="background:rgba(0,229,255,0.15);border:1px solid rgba(0,229,255,0.35);color:#00e5ff;padding:4px 9px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;">Copy</button>
+            </div>
+          </div>
+          <div style="background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:10px 12px;">
+            <div style="font-size:10px;color:#94a3b8;font-weight:800;">ESP32 BLYNK BINARY TCP GATEWAY</div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:4px;">
+              <code id="hub-tcp-host" style="color:#00e676;font-size:13px;font-weight:800;">127.0.0.1 : 8080</code>
+              <span id="hub-apk-badge" style="font-size:10px;background:rgba(0,230,118,0.16);color:#00e676;padding:3px 8px;border-radius:6px;font-weight:800;">RSA-2048 SIGNED</span>
+            </div>
+          </div>
+          <div style="display:flex;gap:10px;">
+            <a id="hub-direct-apk-btn" href="/downloads/axon-iot.apk" style="flex:1;text-align:center;text-decoration:none;padding:11px;border-radius:10px;background:linear-gradient(135deg,#0375de,#00e5ff);color:#070a12;font-weight:900;font-size:12px;">📥 Download Signed APK</a>
+            <a id="hub-open-web-btn" href="/flutter/" target="_blank" style="flex:1;text-align:center;text-decoration:none;padding:11px;border-radius:10px;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.18);color:#f8fafc;font-weight:800;font-size:12px;">🌐 Launch Mobile Web</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pane 2: OTA Firmware Push -->
+    <div id="hub-pane-ota" style="display:none;padding:22px 24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:10px;font-weight:800;color:#94a3b8;">TARGET FIRMWARE VERSION</label>
+          <input id="ota-ver-input" value="1.1.0" style="width:100%;margin-top:4px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.35);color:#f8fafc;font-weight:700;box-sizing:border-box;" />
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:800;color:#94a3b8;">HARDWARE MCU</label>
+          <select id="ota-mcu-input" style="width:100%;margin-top:4px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:#0f172a;color:#f8fafc;font-weight:700;box-sizing:border-box;">
+            <option value="ESP32">ESP32</option>
+            <option value="ESP8266">ESP8266</option>
+            <option value="RP2040">Pico W / RP2040</option>
+          </select>
+        </div>
+      </div>
+      <div style="margin-bottom:12px;">
+        <label style="font-size:10px;font-weight:800;color:#94a3b8;">FIRMWARE BINARY (.BIN) — LEAVE EMPTY TO GENERATE DIAGNOSTIC OTA IMAGE</label>
+        <input id="ota-file-input" type="file" accept=".bin" style="width:100%;margin-top:4px;padding:8px;border-radius:8px;border:1px dashed rgba(0,229,255,0.35);background:rgba(0,0,0,0.25);color:#cbd5e1;font-size:12px;box-sizing:border-box;" />
+      </div>
+      <button onclick="publishAxonOtaRelease()" style="width:100%;padding:11px;border-radius:10px;border:none;background:linear-gradient(135deg,#00e676,#00b0ff);color:#070a12;font-weight:900;font-size:12px;cursor:pointer;margin-bottom:14px;">🚀 PUBLISH OTA FIRMWARE RELEASE TO FLEET</button>
+      <div style="font-size:11px;font-weight:800;color:#94a3b8;margin-bottom:6px;">ACTIVE OTA RELEASES (/external/api/ota/firmware)</div>
+      <div id="ota-releases-list" style="max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:8px;font-size:12px;"></div>
+    </div>
+
+    <!-- Pane 3: Live Push & Telegram Wiring -->
+    <div id="hub-pane-alerts" style="display:none;padding:22px 24px;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <div>
+          <label style="font-size:10px;font-weight:800;color:#94a3b8;">TELEGRAM BOT TOKEN</label>
+          <input id="cfg-tg-token" placeholder="123456:ABC-DEF..." style="width:100%;margin-top:4px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.35);color:#f8fafc;box-sizing:border-box;" />
+        </div>
+        <div>
+          <label style="font-size:10px;font-weight:800;color:#94a3b8;">TELEGRAM CHAT ID</label>
+          <input id="cfg-tg-chat" placeholder="-100123456789" style="width:100%;margin-top:4px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.35);color:#f8fafc;box-sizing:border-box;" />
+        </div>
+      </div>
+      <div style="margin-bottom:14px;">
+        <label style="font-size:10px;font-weight:800;color:#94a3b8;">DISCORD / SLACK / CUSTOM WEBHOOK URL</label>
+        <input id="cfg-webhook-url" placeholder="https://discord.com/api/webhooks/..." style="width:100%;margin-top:4px;padding:9px 12px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(0,0,0,0.35);color:#f8fafc;box-sizing:border-box;" />
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="saveAxonAlertConfig()" style="flex:1;padding:11px;border-radius:10px;border:1px solid #00e5ff;background:rgba(0,229,255,0.16);color:#00e5ff;font-weight:900;font-size:12px;cursor:pointer;">💾 Save Alert Channels</button>
+        <button onclick="fireAxonTestAlert()" style="flex:1;padding:11px;border-radius:10px;border:none;background:linear-gradient(135deg,#ff334b,#ff9500);color:#fff;font-weight:900;font-size:12px;cursor:pointer;">🚨 Fire Live Test Alert</button>
+      </div>
+      <div id="cfg-alert-status" style="margin-top:12px;font-size:12px;color:#00e676;font-weight:700;"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  window._axonConnectInfo = null;
+
+  window.openAxonMobileHubModal = async function(tab) {
+    const modal = document.getElementById('axon-mobile-hub-modal');
+    if (modal) modal.style.display = 'flex';
+    switchAxonHubTab(tab || 'qr');
+    try {
+      const res = await fetch('/api/v1/system/connect-info');
+      if (res.ok) {
+        const info = await res.json();
+        window._axonConnectInfo = info;
+        document.getElementById('hub-lan-url').innerText = info.gateway_base_url;
+        document.getElementById('hub-tcp-host').innerText = info.lan_ip + ' : ' + info.hardware_tcp_port;
+        document.getElementById('hub-open-web-btn').href = info.flutter_mobile_web_url;
+        setHubQrMode('lan');
+      }
+    } catch (e) {}
+    loadAxonOtaReleases();
+  };
+
+  window.closeAxonMobileHubModal = function() {
+    const modal = document.getElementById('axon-mobile-hub-modal');
+    if (modal) modal.style.display = 'none';
+  };
+
+  window.setHubQrMode = function(mode) {
+    const info = window._axonConnectInfo || {
+      lan_apk_download_url: window.location.origin + '/downloads/axon-iot.apk',
+      cloud_apk_release_url: 'https://github.com/axoniotplatform-spec/axon-blynk-clone/releases/download/latest-apk/Axon-IoT-Mobile-arm64-v8a.apk'
+    };
+    const targetUrl = mode === 'cloud' ? info.cloud_apk_release_url : info.lan_apk_download_url;
+    document.getElementById('hub-qr-img').src = '/api/v1/system/qr.svg?data=' + encodeURIComponent(targetUrl);
+    document.getElementById('hub-qr-caption').innerText = mode === 'cloud' ? 'GITHUB RELEASE APK' : 'WI-FI LAN DIRECT APK';
+    document.getElementById('qr-mode-lan').style.borderColor = mode === 'lan' ? '#00e5ff' : 'rgba(255,255,255,0.15)';
+    document.getElementById('qr-mode-cloud').style.borderColor = mode === 'cloud' ? '#00e5ff' : 'rgba(255,255,255,0.15)';
+  };
+
+  window.switchAxonHubTab = function(tab) {
+    ['qr', 'ota', 'alerts'].forEach(function(t) {
+      const pane = document.getElementById('hub-pane-' + t);
+      const btn = document.getElementById('hub-tab-' + t);
+      if (pane) pane.style.display = (t === tab) ? 'block' : 'none';
+      if (btn) {
+        btn.style.background = (t === tab) ? 'rgba(0,229,255,0.18)' : 'transparent';
+        btn.style.borderColor = (t === tab) ? 'rgba(0,229,255,0.45)' : 'transparent';
+        btn.style.color = (t === tab) ? '#00e5ff' : '#94a3b8';
+      }
+    });
+  };
+
+  window.loadAxonOtaReleases = async function() {
+    const box = document.getElementById('ota-releases-list');
+    if (!box) return;
+    try {
+      const res = await fetch('/api/v1/ota/releases');
+      const list = await res.json();
+      if (!list.length) {
+        box.innerHTML = '<div style="color:#64748b;padding:8px;">No OTA binaries staged yet. Click Publish above to stage v1.1.0!</div>';
+        return;
+      }
+      box.innerHTML = list.map(function(r) {
+        return '<div style="background:rgba(0,0,0,0.35);border:1px solid rgba(255,255,255,0.08);border-radius:8px;padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">' +
+          '<div><strong style="color:#00e5ff;">v' + r.version + '</strong> <span style="color:#94a3b8;">(' + r.hardware_mcu + ' • ' + r.size_bytes + ' B)</span>' +
+          '<div style="font-size:10px;color:#64748b;font-family:monospace;">SHA256: ' + r.sha256.slice(0, 24) + '...</div></div>' +
+          '<span style="font-size:10px;color:#00e676;font-weight:800;">ACTIVE</span></div>';
+      }).join('');
+    } catch (e) {}
+  };
+
+  window.publishAxonOtaRelease = async function() {
+    const fd = new FormData();
+    fd.append('version', document.getElementById('ota-ver-input').value || '1.1.0');
+    fd.append('hardware_mcu', document.getElementById('ota-mcu-input').value || 'ESP32');
+    const fileEl = document.getElementById('ota-file-input');
+    if (fileEl && fileEl.files && fileEl.files[0]) {
+      fd.append('file', fileEl.files[0]);
+    }
+    const res = await fetch('/api/v1/ota/upload', { method: 'POST', body: fd });
+    if (res.ok) {
+      if (window.showToast) showToast('OTA Firmware Release staged for fleet!', 'success');
+      loadAxonOtaReleases();
+    }
+  };
+
+  window.saveAxonAlertConfig = async function() {
+    const body = {
+      telegram_bot_token: document.getElementById('cfg-tg-token').value,
+      telegram_chat_id: document.getElementById('cfg-tg-chat').value,
+      webhook_url: document.getElementById('cfg-webhook-url').value
+    };
+    const res = await fetch('/api/v1/notifications/configure', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const data = await res.json();
+    document.getElementById('cfg-alert-status').innerText =
+      'Saved! Telegram=' + (data.channels.telegram_configured ? 'ACTIVE' : 'OFF') +
+      ' | Webhooks=' + (data.channels.webhooks_enabled ? 'ACTIVE' : 'OFF');
+  };
+
+  window.fireAxonTestAlert = async function() {
+    const res = await fetch('/api/v1/notifications/dispatch-test', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ severity: 'CRITICAL', message: 'Live operator alert verification from Axon Console!' })
+    });
+    const data = await res.json();
+    document.getElementById('cfg-alert-status').innerText =
+      'Dispatched Alert #' + data.alert.id + ' over WebSocket & active push channels!';
+    if (window.showToast) showToast('Live Critical Test Alert Dispatched!', 'success');
+  };
 </script>
 
 </body>

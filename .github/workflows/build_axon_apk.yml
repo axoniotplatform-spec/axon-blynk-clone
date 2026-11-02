@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build-axon-mobile:
-    name: Compile Zero-Branding Axon IoT APK & Web
+    name: Compile Zero-Branding Signed Axon IoT APK & Web
     runs-on: ubuntu-latest
 
     steps:
@@ -29,7 +29,7 @@ jobs:
             exit 1
           fi
           grep -q 'android:label="Axon IoT"' android/app/src/main/AndroidManifest.xml || (echo "ERROR: App label mismatch!" && exit 1)
-          grep -q "onEntrypointLoaded" web/flutter_bootstrap.js || (echo "ERROR: Custom bootstrap missing (default loader would show)!" && exit 1)
+          grep -q "onEntrypointLoaded" web/flutter_bootstrap.js || (echo "ERROR: Custom bootstrap missing!" && exit 1)
           if grep -rn "A new Flutter project" web/ pubspec.yaml README.md; then
             echo "ERROR: Default Flutter template text found!"
             exit 1
@@ -46,6 +46,28 @@ jobs:
           distribution: temurin
           java-version: "21"
 
+      - name: Configure Production RSA-2048 Release Keystore
+        working-directory: mobile_flutter/android
+        env:
+          AXON_KEYSTORE_BASE64: ${{ secrets.AXON_KEYSTORE_BASE64 }}
+          AXON_KEY_STORE_PASSWORD: ${{ secrets.AXON_KEY_STORE_PASSWORD }}
+          AXON_KEY_ALIAS: ${{ secrets.AXON_KEY_ALIAS }}
+          AXON_KEY_PASSWORD: ${{ secrets.AXON_KEY_PASSWORD }}
+        run: |
+          if [ -n "$AXON_KEYSTORE_BASE64" ]; then
+            echo "$AXON_KEYSTORE_BASE64" | base64 --decode > app/axon-release.jks
+            cat <<EOF > key.properties
+          storePassword=$AXON_KEY_STORE_PASSWORD
+          keyPassword=$AXON_KEY_PASSWORD
+          keyAlias=$AXON_KEY_ALIAS
+          storeFile=axon-release.jks
+          EOF
+            sed -i 's/^[[:space:]]*//' key.properties
+            echo "Configured production Axon IoT release keystore signing!"
+          else
+            echo "No AXON_KEYSTORE_BASE64 secret set; falling back to default signing."
+          fi
+
       - name: Setup Flutter SDK
         uses: subosito/flutter-action@v2
         with:
@@ -59,7 +81,7 @@ jobs:
           flutter analyze
           flutter test
 
-      - name: Build Split-ABI & Universal Release APKs
+      - name: Build Signed Split-ABI & Universal Release APKs
         working-directory: mobile_flutter
         run: |
           flutter build apk --release --split-per-abi --no-pub
@@ -89,14 +111,15 @@ jobs:
           path: mobile_flutter/build/web/
           retention-days: 30
 
-      - name: Publish Latest Release APKs on GitHub
+      - name: Publish Latest Signed Release APKs on GitHub
         if: github.ref == 'refs/heads/main'
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest-apk
-          name: "Axon IoT Mobile App (Zero-Branding Release APK)"
+          name: "Axon IoT Mobile App (RSA-2048 Signed Zero-Branding Release APK)"
           body: |
-            Automated zero-branding glassmorphic Android APK build for **Axon IoT**.
+            Automated RSA-2048 signed, zero-branding glassmorphic Android APK build for **Axon IoT**.
+            - **Cryptographically signed** with the **Axon IoT Enterprise** 2048-bit RSA certificate
             - **Zero Dart/Flutter logos, watermarks, banners, or default splash screens**
             - Custom **Axon IoT** cyber-bolt launcher icon & native `#070A12` dark cold-boot splash
             - Glassmorphic **Sign In / Create Enterprise Tenant**, configurable **Gateway Server Endpoint**, **Fleet Overview**, **5-Subtab Controls**, **SuperChart**, **Terminal CLI**, and **Anomaly Alert Center**

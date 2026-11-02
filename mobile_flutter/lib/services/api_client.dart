@@ -13,6 +13,10 @@ class AxonApiClient {
 
   static String _resolveDefaultBaseUrl() {
     if (kIsWeb) {
+      final serverParam = Uri.base.queryParameters['server'];
+      if (serverParam != null && serverParam.trim().isNotEmpty) {
+        return serverParam.trim().replaceAll(RegExp(r'/+$'), '');
+      }
       final origin = Uri.base.origin;
       if (origin.isNotEmpty && !origin.contains("null") && origin != "file://") {
         return origin;

@@ -8,7 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from backend.database import engine, Base, SessionLocal, init_timescaledb_if_available
 from backend.telemetry_batcher import telemetry_batcher
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
-from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies, health
+from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies, health, ota
 from backend.websocket_hub import hub
 from backend.hardware_gateway import hardware_gateway
 import asyncio
@@ -25,7 +25,7 @@ app = FastAPI(
 # CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[origin.strip() for origin in os.getenv("AXON_CORS_ORIGINS", "http://127.0.0.1:8000,http://localhost:8000").split(",") if origin.strip()],
+    allow_origins=[origin.strip() for origin in os.getenv("AXON_CORS_ORIGINS", "*").split(",") if origin.strip()],
     allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -48,6 +48,7 @@ class ProductionAuthMiddleware(BaseHTTPMiddleware):
         public = (
             path.startswith("/api/v1/auth/")
             or path.startswith("/api/v1/health")
+            or path.startswith("/api/v1/system/")
             or path.startswith("/external/api/")
             or path.startswith("/static/")
             or path.startswith("/flutter")
@@ -78,6 +79,7 @@ app.include_router(mobile.router)
 app.include_router(platform_ops.router)
 app.include_router(anomalies.router)
 app.include_router(health.router)
+app.include_router(ota.router)
 
 @app.on_event("startup")
 async def on_startup():
