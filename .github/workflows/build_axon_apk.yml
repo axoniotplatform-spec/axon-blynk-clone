@@ -56,13 +56,8 @@ jobs:
         run: |
           if [ -n "$AXON_KEYSTORE_BASE64" ]; then
             echo "$AXON_KEYSTORE_BASE64" | base64 --decode > app/axon-release.jks
-            cat <<EOF > key.properties
-          storePassword=$AXON_KEY_STORE_PASSWORD
-          keyPassword=$AXON_KEY_PASSWORD
-          keyAlias=$AXON_KEY_ALIAS
-          storeFile=axon-release.jks
-          EOF
-            sed -i 's/^[[:space:]]*//' key.properties
+            printf "storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=axon-release.jks\n" \
+              "$AXON_KEY_STORE_PASSWORD" "$AXON_KEY_PASSWORD" "$AXON_KEY_ALIAS" > key.properties
             echo "Configured production Axon IoT release keystore signing!"
           else
             echo "No AXON_KEYSTORE_BASE64 secret set; falling back to default signing."
