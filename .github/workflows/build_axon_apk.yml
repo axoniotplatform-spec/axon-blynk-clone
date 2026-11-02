@@ -55,9 +55,12 @@ jobs:
           AXON_KEY_PASSWORD: ${{ secrets.AXON_KEY_PASSWORD }}
         run: |
           if [ -n "$AXON_KEYSTORE_BASE64" ]; then
-            echo "$AXON_KEYSTORE_BASE64" | base64 --decode > app/axon-release.jks
+            printf "%s" "$AXON_KEYSTORE_BASE64" | tr -d '[:space:]' | base64 -d > app/axon-release.jks
+            CLEAN_STORE_PASS=$(printf "%s" "$AXON_KEY_STORE_PASSWORD" | tr -d '\r\n')
+            CLEAN_KEY_PASS=$(printf "%s" "$AXON_KEY_PASSWORD" | tr -d '\r\n')
+            CLEAN_ALIAS=$(printf "%s" "$AXON_KEY_ALIAS" | tr -d '\r\n')
             printf "storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=axon-release.jks\n" \
-              "$AXON_KEY_STORE_PASSWORD" "$AXON_KEY_PASSWORD" "$AXON_KEY_ALIAS" > key.properties
+              "$CLEAN_STORE_PASS" "$CLEAN_KEY_PASS" "$CLEAN_ALIAS" > key.properties
             echo "Configured production Axon IoT release keystore signing!"
           else
             echo "No AXON_KEYSTORE_BASE64 secret set; falling back to default signing."
