@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  # ----------------------------------------------------------------------------
+  # Axon IoT Application Server (Dual Ingress: HTTP 8000 + Blynk TCP 8080)
+  # ----------------------------------------------------------------------------
+  axon-blynk-clone:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: axon-blynk-clone:latest
+    container_name: axon-blynk-clone-server
+    restart: unless-stopped
+    depends_on:
+      timescaledb:
+        condition: service_healthy
+    ports:
+      # HTTP Web Console, Mobile App, REST Endpoints & WebSocket Events
+      - "8000:8000"
+      # Blynk Binary Protocol Hardware Ingress Gateway (ESP32, Pico W, GSM Modems)
+      - "8080:8080"
+    environment:
+      # High-scale PostgreSQL / TimescaleDB Connection
+      - DATABASE_URL=postgresql://axon_admin:axon_production_secure_pass@timescaledb:5432/axon_iot
+      - PORT=8000
+      - AXON_HARDWARE_PORT=8080
+      - AXON_REQUIRE_AUTH=false
+      - AXON_CORS_ORIGINS=*
+      - AXON_DB_POOL_SIZE=30
+      - AXON_DB_MAX_OVERFLOW=50
+      # Notification Channels
+      - AXON_TELEGRAM_BOT_TOKEN=
+      - AXON_TELEGRAM_CHAT_ID=
+      - AXON_ALERT_RATE_LIMIT_SEC=30
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:8000/api/v1/health"]
+      interval: 20s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      - axon-net
+
+  # ----------------------------------------------------------------------------
+  # TimescaleDB (PostgreSQL 16 Engine for Millions of Devices & Billions of Rows)
+  # ----------------------------------------------------------------------------
+  timescaledb:
+    image: timescale/timescaledb-ha:pg16-latest
+    container_name: axon-timescaledb
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=axon_iot
+      - POSTGRES_USER=axon_admin
+      - POSTGRES_PASSWORD=axon_production_secure_pass
+      - TS_TUNE_MEMORY=2GB
+      - TS_TUNE_NUM_CPUS=2
+    ports:
+      # Exposed for external business intelligence tools (Grafana, PowerBI, Metabase)
+      - "5432:5432"
+    volumes:
+      - timescale-data:/home/postgres/pgdata/data
+      - ./backend/migrations/init_timescaledb.sql:/docker-entrypoint-initdb.d/init_timescaledb.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U axon_admin -d axon_iot"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - axon-net
+
+volumes:
+  timescale-data:
+    driver: local
+
+networks:
+  axon-net:
+    driver: bridge

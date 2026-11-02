@@ -15,6 +15,7 @@ from typing import Dict, Any, Optional, List
 from collections import defaultdict
 from sqlalchemy.orm import Session
 from backend.models.entities import Device, Datastream, AnomalyAlert
+from backend.notification_service import dispatch_anomaly_notification
 
 logger = logging.getLogger("axon.anomaly_engine")
 
@@ -41,6 +42,29 @@ def run_anomaly_checks(db: Session, device: Device, pin: int, value_str: str, hu
     if len(history) > _max_history_len:
         history.pop(0)
 
+    # 0. Unauthorized Ingress on Inactive / Maintenance Device
+    if getattr(device, "status", "") in ("INACTIVE", "DISABLED", "MAINTENANCE"):
+        alert = AnomalyAlert(
+            device_id=device_id,
+            anomaly_type="UNEXPECTED_INGRESS_WHILE_INACTIVE",
+            severity="CRITICAL",
+            message=f"Unauthorized telemetry ingress received while device status is '{device.status}'",
+            pin=pin,
+            value=val
+        )
+        db.add(alert)
+        db.commit()
+        try:
+            dispatch_anomaly_notification(db, device_id, "UNEXPECTED_INGRESS_WHILE_INACTIVE", "CRITICAL", alert.message, pin, val)
+        except Exception as e:
+            logger.warning(f"[AnomalyEngine] Failed to dispatch notification: {e}")
+        detected_anomalies.append({
+            "type": "UNEXPECTED_INGRESS_WHILE_INACTIVE",
+            "pin": pin,
+            "value": val
+        })
+        logger.warning(f"[AnomalyEngine] UNEXPECTED_INGRESS on Inactive Device {device_id}: status={device.status}")
+
     # 1. Totalizer Rollback Detection
     # If a datastream is a cumulative counter (e.g. volume, energy, total hours) and drops
     if len(history) >= 2:
@@ -57,6 +81,10 @@ def run_anomaly_checks(db: Session, device: Device, pin: int, value_str: str, hu
             )
             db.add(alert)
             db.commit()
+            try:
+                dispatch_anomaly_notification(db, device_id, "TOTALIZER_ROLLBACK", "CRITICAL", alert.message, pin, val)
+            except Exception as e:
+                logger.warning(f"[AnomalyEngine] Failed to dispatch notification: {e}")
             detected_anomalies.append({
                 "type": "TOTALIZER_ROLLBACK",
                 "pin": pin,
@@ -79,6 +107,10 @@ def run_anomaly_checks(db: Session, device: Device, pin: int, value_str: str, hu
             )
             db.add(alert)
             db.commit()
+            try:
+                dispatch_anomaly_notification(db, device_id, "VALUE_STALL", "WARNING", alert.message, pin, val)
+            except Exception as e:
+                logger.warning(f"[AnomalyEngine] Failed to dispatch notification: {e}")
             detected_anomalies.append({
                 "type": "VALUE_STALL",
                 "pin": pin,
@@ -89,9 +121,12 @@ def run_anomaly_checks(db: Session, device: Device, pin: int, value_str: str, hu
     # 3. Unexpected Flow / Current While Inactive
     # If Pin V3 (Fan / Relay / Pump) is 0, but Pin V2 (Temp/Power/Flow) indicates aggressive surging
     if pin == 2 and val > 45.0:
-        # Check actuator state (pin 3)
-        actuator_ds = db.query(Datastream).filter(Datastream.device_id == device_id, Datastream.pin == 3).first()
-        if actuator_ds and actuator_ds.current_value == "0":
+        # Check actuator state (pin 3) on device template
+        actuator_ds = db.query(Datastream).filter(
+            Datastream.template_id == device.template_id,
+            Datastream.pin.in_(["V3", "3"])
+        ).first()
+        if (not actuator_ds) or (actuator_ds.current_value in ("0", "0.0", "OFF")):
             alert = AnomalyAlert(
                 device_id=device_id,
                 anomaly_type="UNEXPECTED_INGRESS_WHILE_INACTIVE",
@@ -102,6 +137,10 @@ def run_anomaly_checks(db: Session, device: Device, pin: int, value_str: str, hu
             )
             db.add(alert)
             db.commit()
+            try:
+                dispatch_anomaly_notification(db, device_id, "UNEXPECTED_INGRESS_WHILE_INACTIVE", "CRITICAL", alert.message, pin, val)
+            except Exception as e:
+                logger.warning(f"[AnomalyEngine] Failed to dispatch notification: {e}")
             detected_anomalies.append({
                 "type": "UNEXPECTED_INGRESS_WHILE_INACTIVE",
                 "pin": pin,

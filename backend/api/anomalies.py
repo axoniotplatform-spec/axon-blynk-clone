@@ -4,6 +4,7 @@ from typing import List, Optional
 from datetime import datetime
 from backend.database import get_db
 from backend.models.entities import AnomalyAlert, AuditEvent, Device
+from backend.notification_service import get_channel_status, dispatch_anomaly_notification
 
 router = APIRouter(prefix="/api/v1", tags=["anomalies_and_audit"])
 
@@ -89,3 +90,23 @@ def create_audit_event(payload: dict, db: Session = Depends(get_db)):
     db.add(evt)
     db.commit()
     return {"status": "success", "eventId": evt.id}
+
+@router.get("/notifications/status")
+def notification_channels_status():
+    return get_channel_status()
+
+@router.post("/notifications/test")
+def send_test_notification(payload: dict = None, db: Session = Depends(get_db)):
+    payload = payload or {}
+    device_id = payload.get("deviceId", 1)
+    message = payload.get("message", "Manual test alert triggered from Axon Console")
+    res = dispatch_anomaly_notification(
+        db=db,
+        device_id=device_id,
+        anomaly_type="MANUAL_TEST_ALERT",
+        severity="INFO",
+        message=message,
+        pin=payload.get("pin", 2),
+        value=payload.get("value", 30.0)
+    )
+    return {"status": "success", "dispatch_result": res}

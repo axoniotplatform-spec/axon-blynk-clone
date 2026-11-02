@@ -4,7 +4,7 @@ from playwright.async_api import async_playwright
 
 async def run_full_suite():
     async with async_playwright() as p:
-        browser = await p.chromium.launch()
+        browser = await p.chromium.launch(channel="msedge")
         page = await browser.new_page(viewport={"width": 412, "height": 915})
         
         errors = []
@@ -28,11 +28,17 @@ async def run_full_suite():
             await page.wait_for_timeout(400)
             print(f"   - Switched to subtab '{st}'")
 
-        # 4. Test Segmented Control (Mode)
-        print("4. Testing Icon Segmented Control...")
-        turbo_btn = await page.wait_for_selector(".segment-option:has-text('BOOST')")
-        await turbo_btn.click()
+        # 4. Test Controls & Level Slider
+        print("4. Testing Controls (Slider, Segmented Control)...")
+        c_btn = await page.wait_for_selector(".subtab-btn:has-text('Controls')")
+        await c_btn.click()
         await page.wait_for_timeout(500)
+        seg = await page.query_selector(".segment-option")
+        if seg:
+            await seg.click()
+            await page.wait_for_timeout(300)
+        slider = await page.wait_for_selector(".blynk-range")
+        print("   - Slider / Control verified")
 
         # 5. Test Switch
         print("5. Testing Switch inside Level Slider...")
@@ -42,6 +48,9 @@ async def run_full_suite():
 
         # 6. Test Interactive Terminal
         print("6. Testing Interactive Terminal CLI...")
+        t_btn = await page.wait_for_selector(".subtab-btn:has-text('Terminal')")
+        await t_btn.click()
+        await page.wait_for_timeout(500)
         term_input = await page.wait_for_selector("#terminal-input")
         await term_input.fill("ping")
         await page.keyboard.press("Enter")

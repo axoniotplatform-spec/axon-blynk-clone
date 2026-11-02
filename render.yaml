@@ -1,0 +1,24 @@
+services:
+  - type: web
+    name: axon-blynk-clone
+    env: python
+    region: oregon
+    plan: standard
+    buildCommand: pip install -r requirements.txt
+    startCommand: python run_server.py
+    healthCheckPath: /api/v1/health
+    envVars:
+      - key: PORT
+        value: 8000
+      - key: AXON_HARDWARE_PORT
+        value: 8080
+      - key: DATABASE_URL
+        value: sqlite:////var/data/axon_iot.db
+      - key: AXON_REQUIRE_AUTH
+        value: false
+      - key: AXON_CORS_ORIGINS
+        value: "*"
+    disk:
+      name: axon-data
+      mountPath: /var/data
+      sizeGB: 10

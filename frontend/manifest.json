@@ -1,0 +1,24 @@
+{
+  "short_name": "Axon IoT",
+  "name": "Axon IoT Mobile Companion",
+  "description": "Enterprise Blynk-Compatible Industrial IoT Mobile Controller",
+  "icons": [
+    {
+      "src": "/static/icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/static/icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ],
+  "start_url": "/app.html",
+  "background_color": "#0b111e",
+  "theme_color": "#0375de",
+  "display": "standalone",
+  "orientation": "portrait"
+}

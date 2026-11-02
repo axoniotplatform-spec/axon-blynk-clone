@@ -59,12 +59,12 @@ async def blynk_external_update(request: Request, token: str, db: Session = Depe
                 "value": v
             })
 
-            # Evaluate automation rules
-            evaluate_rules_for_device(db, device.id, pin_name, v, hub=hub)
             try:
                 run_anomaly_checks(db, device, int(pin_name.replace('V', '').replace('v', '')), str(v), hub=hub)
             except Exception:
                 pass
+            # Evaluate automation rules
+            evaluate_rules_for_device(db, device.id, pin_name, v, hub=hub)
         elif k.lower() != "token":
             raise HTTPException(status_code=400, detail=f"Pin {pin_name} not found")
 

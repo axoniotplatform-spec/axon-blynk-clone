@@ -1,0 +1,15 @@
+{
+  "appId": "com.axoniot.blynkclone",
+  "appName": "Axon IoT",
+  "webDir": "frontend",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "http",
+    "cleartext": true
+  },
+  "android": {
+    "allowMixedContent": true,
+    "captureInput": true,
+    "webContentsDebuggingEnabled": true
+  }
+}

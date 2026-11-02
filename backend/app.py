@@ -5,9 +5,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.base import BaseHTTPMiddleware
-from backend.database import engine, Base, SessionLocal
+from backend.database import engine, Base, SessionLocal, init_timescaledb_if_available
+from backend.telemetry_batcher import telemetry_batcher
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
-from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies
+from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies, health
 from backend.websocket_hub import hub
 from backend.hardware_gateway import hardware_gateway
 import asyncio
@@ -46,6 +47,7 @@ class ProductionAuthMiddleware(BaseHTTPMiddleware):
         path = request.url.path
         public = (
             path.startswith("/api/v1/auth/")
+            or path.startswith("/api/v1/health")
             or path.startswith("/external/api/")
             or path.startswith("/static/")
             or path in {"/", "/app", "/app.html", "/docs", "/openapi.json"}
@@ -73,9 +75,12 @@ app.include_router(auth.users_router)
 app.include_router(mobile.router)
 app.include_router(platform_ops.router)
 app.include_router(anomalies.router)
+app.include_router(health.router)
 
 @app.on_event("startup")
 async def on_startup():
+    telemetry_batcher.start()
+    init_timescaledb_if_available()
     hardware_gateway.hub = hub
     if hardware_gateway.server is None:
         asyncio.create_task(hardware_gateway.start())
