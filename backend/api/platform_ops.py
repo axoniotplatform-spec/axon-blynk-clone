@@ -484,3 +484,32 @@ def ask_iot_ai(payload: dict = Body(...), db: Session = Depends(get_db)):
         "query": query,
         "answer": ans
     }
+
+
+# ==========================================
+# 9. PLATFORM STATS OVERVIEW
+# ==========================================
+@router.get("/platform/stats")
+def get_platform_stats(db: Session = Depends(get_db)):
+    """Aggregated platform-level statistics for the console header."""
+    from backend.models.entities import AutomationRule, AnomalyAlert
+    total_devices = db.query(Device).count()
+    online_devices = db.query(Device).filter(Device.status == "ONLINE").count()
+    total_templates = db.query(DeviceTemplate).count()
+    total_automations = db.query(AutomationRule).count()
+    unresolved_anomalies = db.query(AnomalyAlert).filter(AnomalyAlert.is_resolved == False).count()
+    total_telemetry = db.query(TelemetryTimeSeries).count()
+
+    return {
+        "platform": "Axon IoT",
+        "version": "2.2.0-enterprise",
+        "devices": {
+            "total": total_devices,
+            "online": online_devices,
+            "offline": total_devices - online_devices
+        },
+        "templates": total_templates,
+        "automations": total_automations,
+        "anomalies": {"unresolved": unresolved_anomalies},
+        "telemetry": {"totalSamples": total_telemetry}
+    }

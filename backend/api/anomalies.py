@@ -8,6 +8,7 @@ from backend.notification_service import get_channel_status, dispatch_anomaly_no
 
 router = APIRouter(prefix="/api/v1", tags=["anomalies_and_audit"])
 
+@router.get("/anomalies/events")
 @router.get("/anomalies")
 def list_anomaly_alerts(
     device_id: Optional[int] = None,
@@ -46,6 +47,7 @@ def resolve_anomaly_alert(alert_id: int, db: Session = Depends(get_db)):
     db.commit()
     return {"status": "success", "message": f"Alert {alert_id} resolved"}
 
+@router.get("/enterprise/audit-log")
 @router.get("/audit")
 def list_audit_events(
     limit: int = Query(50, ge=1, le=200),
