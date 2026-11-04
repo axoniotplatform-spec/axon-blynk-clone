@@ -8,7 +8,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from backend.database import engine, Base, SessionLocal, init_timescaledb_if_available
 from backend.telemetry_batcher import telemetry_batcher
 from backend.models.entities import Organization, User, DeviceTemplate, Device, Datastream, DashboardWidget, AutomationRule
-from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies, health, ota
+from backend.api import devices, templates, automations, external, auth, mobile, platform_ops, anomalies, health, ota, enterprise_rbac
 from backend.websocket_hub import hub
 from backend.hardware_gateway import hardware_gateway
 import asyncio
@@ -80,6 +80,7 @@ app.include_router(platform_ops.router)
 app.include_router(anomalies.router)
 app.include_router(health.router)
 app.include_router(ota.router)
+app.include_router(enterprise_rbac.router)
 
 @app.on_event("startup")
 async def on_startup():

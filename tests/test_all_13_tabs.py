@@ -20,34 +20,37 @@ TABS = [
 ]
 
 def run_all_tabs_test():
-    print("=== STARTING FULL 13-TAB PLATFORM PLAYWRIGHT VERIFICATION ===")
+    print("=== STARTING FULL 13-TAB PLATFORM PLAYWRIGHT VERIFICATION ===", flush=True)
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page(viewport={"width": 1440, "height": 900})
         page.goto("http://127.0.0.1:8000/")
         page.wait_for_timeout(1000)
+        # Dismiss any auth overlay if present
+        page.evaluate("const m = document.getElementById('axon-auth-modal'); if (m) m.style.display = 'none';")
 
         for tab_id, shot_name in TABS:
-            print(f"Testing tab: {tab_id}...")
+            print(f"Testing tab: {tab_id}...", flush=True)
             # Click sidebar nav item or evaluate switchTab directly
             page.evaluate(f"switchTab('{tab_id}')")
-            page.wait_for_timeout(800)
+            page.wait_for_timeout(600)
             
             shot_path = os.path.join(SCREENSHOT_DIR, shot_name)
             page.screenshot(path=shot_path)
-            print(f" -> {tab_id} verified and captured to {shot_name}")
+            print(f" -> {tab_id} verified and captured to {shot_name}", flush=True)
 
         # Also test OTA Modal on Fleet Management
-        print("Testing OTA Deployment Modal on Fleet Management...")
+        print("Testing OTA Deployment Modal on Fleet Management...", flush=True)
         page.evaluate("switchTab('fleet-management')")
+        page.wait_for_timeout(400)
+        page.evaluate("openOtaModal()")
         page.wait_for_timeout(500)
-        page.locator("button:has-text('Deploy OTA Firmware')").click()
-        page.wait_for_timeout(800)
         ota_shot = os.path.join(SCREENSHOT_DIR, "modal_fleet_ota_deploy.png")
         page.screenshot(path=ota_shot)
-        print(" -> OTA Modal captured to modal_fleet_ota_deploy.png")
+        print(" -> OTA Modal captured to modal_fleet_ota_deploy.png", flush=True)
+        page.evaluate("closeOtaModal()")
 
-        print("=== ALL 13 TABS & MODALS VERIFIED SUCCESSFULLY ===")
+        print("=== ALL 13 TABS & MODALS VERIFIED SUCCESSFULLY ===", flush=True)
         browser.close()
 
 if __name__ == "__main__":

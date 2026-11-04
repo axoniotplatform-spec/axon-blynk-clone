@@ -46,6 +46,9 @@ class AxonApiClient {
     if (authToken != null && authToken!.isNotEmpty) {
       h['Authorization'] = 'Bearer $authToken';
     }
+    if (currentUser != null && currentUser!['role'] != null) {
+      h['X-Axon-Role'] = currentUser!['role'].toString();
+    }
     return h;
   }
 
@@ -201,5 +204,126 @@ class AxonApiClient {
     } catch (_) {
       return false;
     }
+  }
+
+  // --- Step 1: Mobile Developer Mode & Widgets ---
+
+  Future<Map<String, dynamic>?> createDevice(String name, {String mcu = "ESP32", String connectionType = "WI_FI"}) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/v1/devices'),
+        headers: _headers(),
+        body: json.encode({'name': name, 'hardware_mcu': mcu, 'connection_type': connectionType}),
+      ).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<bool> deleteDevice(int deviceId) async {
+    try {
+      final res = await http.delete(Uri.parse('$baseUrl/api/v1/devices/$deviceId'), headers: _headers()).timeout(const Duration(seconds: 4));
+      return res.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<List<dynamic>> fetchDeviceWidgets(int deviceId) async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/api/v1/devices/$deviceId/widgets'), headers: _headers()).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>?> createWidget(int deviceId, {
+    required String widgetType,
+    required String label,
+    required String pin,
+    double min = 0.0,
+    double max = 100.0,
+    String units = "",
+  }) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/v1/devices/$deviceId/widgets'),
+        headers: _headers(),
+        body: json.encode({
+          'widget_type': widgetType,
+          'label': label,
+          'pin': pin,
+          'min_value': min,
+          'max_value': max,
+          'units': units,
+        }),
+      ).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  // --- Step 3: Fleet Telemetry Simulator ---
+
+  Future<Map<String, dynamic>> fetchSimulatorStatus() async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/api/v1/simulator/status')).timeout(const Duration(seconds: 4));
+      if (res.statusCode == 200) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return {'running': false, 'frames_sent': 0};
+  }
+
+  Future<bool> toggleSimulator(bool start) async {
+    try {
+      final endpoint = start ? '$baseUrl/api/v1/simulator/start' : '$baseUrl/api/v1/simulator/stop';
+      final res = await http.post(Uri.parse(endpoint), headers: _headers(), body: json.encode({'interval_sec': 2.0})).timeout(const Duration(seconds: 4));
+      return res.statusCode == 200;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  // --- Step 4: Enterprise Team & Reports ---
+
+  Future<List<dynamic>> fetchTeamMembers() async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/api/v1/team/members'), headers: _headers()).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return [];
+  }
+
+  Future<Map<String, dynamic>?> inviteTeamMember({required String email, required String name, required String role}) async {
+    try {
+      final res = await http.post(
+        Uri.parse('$baseUrl/api/v1/team/invite'),
+        headers: _headers(),
+        body: json.encode({'email': email, 'name': name, 'role': role}),
+      ).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200 || res.statusCode == 201) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return null;
+  }
+
+  Future<Map<String, dynamic>> fetchExecutiveDigest() async {
+    try {
+      final res = await http.get(Uri.parse('$baseUrl/api/v1/reports/digest'), headers: _headers()).timeout(const Duration(seconds: 5));
+      if (res.statusCode == 200) {
+        return json.decode(res.body);
+      }
+    } catch (_) {}
+    return {};
   }
 }
